@@ -19,5 +19,9 @@ class Trip extends Model
   private $id_departure;
 
 
-
+  private function save()
+  {
+    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    
+  }
 }

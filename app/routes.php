@@ -8,5 +8,6 @@ $router->define([
   'register' => 'ConnectionController@register',
   'registerParse' => 'ConnectionController@registerParse',
   'tripAdd' => 'TripAddController',
-  'tripAddParse' => 'TripAddController@tripAddParse'
+  'tripAddParse' => 'TripAddController@tripAddParse',
+  'test' => 'TripAddController@test'
 ]);

@@ -1,5 +1,5 @@
 <?php
-    $title = "Login";
+    $title = "Trip add";
     require('partials/header.php')
 ?>
 
@@ -9,7 +9,7 @@
     <div class="card-body">
       <form action="tripAddParse" method="post">
         <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" required autocomplete="off"/><br/>
-        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  autocomplete="off"/><br/>
+        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  required autocomplete="off"/><br/>
         <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" required autocomplete="off"/><br/>
         <div class="row">
           <div class="col">
@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col">
             <label for="trip_state">Trip state : </label>
-            <select class="form-control" id="trip_state" name="number_people"  autocomplete="off"/>
+            <select class="form-control" id="trip_state" name="trip_state"  required autocomplete="off"/>
               <option value="realized">Realized</option>
               <option value="reserved">Reserved</option>
               <option value="planned">Planned</option>
