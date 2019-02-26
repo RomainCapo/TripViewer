@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
-<!-- Active URL: http://ondras.zarovi.cz/sql/demo/?keyword=default -->
+<!-- Active URL: http://ondras.zarovi.cz/sql/demo/?keyboard=default -->
 <sql>
 <datatypes db="mssql">
 	<group color="rgb(238,238,170)" label="Integer">
@@ -54,7 +54,7 @@
 		<type label="Uniqueidentifier" quote="" sql="uniqueidentifier" length="1" note="GUID" bytes="16"/>
 	</group>
 </datatypes><table x="320" y="112" name="user">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
 <row name="pseudo" null="0" autoincrement="0">
@@ -70,14 +70,14 @@
 <datatype>timestamp</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 <table x="573" y="121" name="trip">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
-<row name="nom" null="1" autoincrement="0">
+<row name="name" null="1" autoincrement="0">
 <datatype>varchar(50)</datatype>
 <default>NULL</default></row>
 <row name="description" null="1" autoincrement="0">
@@ -98,45 +98,42 @@
 <row name="total_price" null="1" autoincrement="0">
 <datatype>int</datatype>
 <default>NULL</default></row>
-<row name="duration" null="1" autoincrement="0">
-<datatype>varchar</datatype>
-<default>NULL</default></row>
 <row name="trip_state" null="1" autoincrement="0">
 <datatype>text</datatype>
 <default>NULL</default></row>
-<row name="id_user" null="1" autoincrement="0">
-<datatype>int</datatype>
-<default>NULL</default><relation table="user" row="id" />
-</row>
-<row name="id_transport_type" null="1" autoincrement="0">
-<datatype>int</datatype>
-<default>NULL</default><relation table="transport" row="id" />
-</row>
-<row name="id_destination" null="1" autoincrement="0">
+<row name="id_user (fk)" null="1" autoincrement="0">
 <datatype>tinyint</datatype>
-<default>NULL</default><relation table="destination" row="id" />
+<default>NULL</default><relation table="user" row="id (pk)" />
 </row>
-<row name="id_departure" null="1" autoincrement="0">
+<row name="id_transport_type (fk)" null="1" autoincrement="0">
 <datatype>tinyint</datatype>
-<default>NULL</default><relation table="destination_1" row="id" />
+<default>NULL</default><relation table="transport" row="id (pk)" />
+</row>
+<row name="id_destination (fk)" null="1" autoincrement="0">
+<datatype>int</datatype>
+<default>NULL</default><relation table="destination" row="id (pk)" />
+</row>
+<row name="id_departure (fk)" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default><relation table="destination_1" row="id (pk)" />
 </row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 <table x="1114" y="79" name="company">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>varchar</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 <table x="954" y="364" name="destination">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>int</datatype>
 <default>NULL</default></row>
 <row name="destination" null="1" autoincrement="0">
@@ -149,26 +146,26 @@
 <datatype>int</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 <table x="812" y="202" name="transport">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
 <row name="transport" null="1" autoincrement="0">
 <datatype>varchar</datatype>
 <default>NULL</default></row>
-<row name="id_plane_company" null="1" autoincrement="0">
+<row name="id_company (fk)" null="1" autoincrement="0">
 <datatype>tinyint</datatype>
-<default>NULL</default><relation table="company" row="id" />
+<default>NULL</default><relation table="company" row="id (pk)" />
 </row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 <table x="260" y="479" name="destination_1">
-<row name="id" null="1" autoincrement="1">
+<row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
 <row name="destination" null="1" autoincrement="0">
@@ -181,7 +178,7 @@
 <datatype>int</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
-<part>id</part>
+<part>id (pk)</part>
 </key>
 </table>
 </sql>
