@@ -6,7 +6,7 @@
 <div class="background">
 
   <div class="card border-secondary mb-3 card-form">
-    <div class="card-header">Register</div>
+    <div class="card-header"><h2>Register</h2></div>
     <div class="card-body">
       <form action="registerParse" method="post">
           <label for="username">Username</label><input class="form-control" id="username" type="text" name="username" required autocomplete="off"/><br/>
