@@ -5,7 +5,7 @@
 <h1>Home</h1>
 
 <p>
-     Nothing to do here go to <a href="tasks">Task</a>
+    Welcome to TripViewer. <a href="login">Go to Login</a>
 </p>
 
 <?php require('partials/footer.php') ?>
