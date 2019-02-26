@@ -1,8 +1,7 @@
 <?php
 
 $router->define([
-  'index' => 'ConnectionController',
   '' => 'ConnectionController',
-
+  'index' => 'ConnectionController',
   'login' => 'ConnectionController@parseLogin'
 ]);
