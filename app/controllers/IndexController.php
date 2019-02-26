@@ -4,7 +4,7 @@ class IndexController
 {
     public function index()
     {
-        return Helper::view("index");
+        echo 'index';
     }
 
 }
