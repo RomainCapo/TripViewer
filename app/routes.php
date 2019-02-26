@@ -6,5 +6,7 @@ $router->define([
   'login' => 'ConnectionController@login',
   'loginParse' => 'ConnectionController@loginParse',
   'register' => 'ConnectionController@register',
-  'registerParse' => 'ConnectionController@registerParse'
+  'registerParse' => 'ConnectionController@registerParse',
+  'tripAdd' => 'TripAddController',
+  'tripAddParse' => 'TripAddController@tripAddParse'
 ]);

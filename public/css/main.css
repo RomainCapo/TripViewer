@@ -1,4 +1,12 @@
-/* LOGIN - REGISTER */ 
+/* GLOBAL */
+.block-btn {
+  display: block;
+  width: 100%;
+  border: none;
+  text-align: center;
+}
+
+/* LOGIN - REGISTER */
 
 .background {
     position: absolute;
