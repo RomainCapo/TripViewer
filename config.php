@@ -12,4 +12,5 @@ return [
     ]
   ],
   'install_prefix' => 'tripviewer',
+  'google_map_api_key' => 'AIzaSyARzT7-H1PY8YapJo-Os6iJE1AU7QWLb8s', 
 ];
