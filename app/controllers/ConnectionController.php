@@ -1,5 +1,7 @@
 <?php
 
+require '/models/User.php';
+
 class ConnectionController
 {
     public function index()
@@ -24,6 +26,17 @@ class ConnectionController
 
     public function registerParse()
     {
-      echo "registerParse";
+        if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password']))
+        {
+            if(User::pseudoAlreadyTaken($_POST['username']))
+            {
+
+            }
+        }
+        else
+        {
+            header('Location : register');
+            exit();
+        }
     }
 }
