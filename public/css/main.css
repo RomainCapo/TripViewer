@@ -24,3 +24,9 @@
     margin-top: 5%;
     width: 30%;
 }
+
+.card-form-add {
+    position: absolute;
+    margin: auto;
+    width: 100%;
+}
