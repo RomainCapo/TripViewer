@@ -1,10 +1,10 @@
 <?php
     $title = "Trip add";
-    require('partials/header.php')
+    require('partials/header.php');
+    require('partials/nav.php');
 ?>
 
-<div class="background">
-  <div class="card border-secondary mb-3 card-form">
+  <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Add a trip</h2></div>
     <div class="card-body">
       <form action="tripAddParse" method="post">
@@ -52,6 +52,5 @@
         <button type="submit" class="btn btn-success block-btn" >Add the trip</button>
     </form>
   </div>
-</div>
 
 </div>
