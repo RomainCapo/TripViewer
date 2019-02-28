@@ -23,4 +23,14 @@ class User extends Model
   {
     
   }
+
+  public static function nbUser()
+  {
+      $statement = App::get('dbh')->prepare("SELECT COUNT(*) FROM user");
+  }
+
+  public static function pseudoAlreadyTaken($pesudo)
+  {
+
+  }
 }
