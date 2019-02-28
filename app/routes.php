@@ -9,9 +9,8 @@ $router->define([
   'registerParse' => 'ConnectionController@registerParse',
   'tripAdd' => 'TripAddController',
   'tripAddParse' => 'TripAddController@tripAddParse',
-  'test' => 'TripAddController@test',
-  'tripView' => '',
-  'mapView' => '',
+  'tripViewList' => 'TripController',
+  'tripViewMap' => '',
   'about' => '',
   'profil' => '',
 ]);

@@ -4,13 +4,12 @@ class Destination extends Model
 {
   //Attributes
   private $id;
-  private $destination;
   private $latitude;
   private $longitude;
   private $country;
 
 
-  public function setDestination($des)
+  public function setDestination($dest)
   {
     $this->destination = $dest;
   }
@@ -39,5 +38,17 @@ class Destination extends Model
     $statement->bindParam(4, $this->country);
 
     $statement->execute();
+  }
+
+  public static function saveDestination($destName, $arrayDest)
+  {
+    $dest = new Destination;
+    $dest->setDestination($destName);
+    $dest->setLatitude($arrayDest['latitude']);
+    $dest->setLongitude($arrayDest['longitude']);
+    $dest->setCountry($arrayDest['country']);
+    $dest->save();
+
+    return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
   }
 }

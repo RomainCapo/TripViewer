@@ -17,11 +17,95 @@ class Trip extends Model
   private $id_transport_type;
   private $id_destination;
   private $id_departure;
+  private $id_company;
 
-
-  private function save()
+  public function setName($name)
   {
-    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    
+    $this->name = $name;
+  }
+
+  public function setDescription($description)
+  {
+    $this->description = $description;
+  }
+
+  public function setDepartureDate($departureDate)
+  {
+    $this->departure_date = $departureDate;
+  }
+
+  public function setReturnDate($returnDate)
+  {
+    $this->return_date = $returnDate;
+  }
+
+  public function setKmTraveled($kmTraveled)
+  {
+    $this->km_traveled = $kmTraveled;
+  }
+
+  public function setTotalPrice($totalPrice)
+  {
+    $this->total_price = $totalPrice;
+  }
+
+  public function setTripState($tripState)
+  {
+    $this->trip_state = $tripState;
+  }
+
+  public function setIdUser($id)
+  {
+    $this->id_user = $id;
+  }
+
+  public function setNumberPeople($numberPeople)
+  {
+    $this->numberPeople = $numberPeople;
+  }
+
+  public function setIdTransportType($id)
+  {
+    $this->id_transport_type = $id;
+  }
+
+  public function setIdDestination($id)
+  {
+    $this->id_destination = $id;
+  }
+
+  public function setIdDeparture($id)
+  {
+    $this->id_departure = $id;
+  }
+
+  public function setIdCompany($id)
+  {
+    $this->id_company = $id;
+  }
+
+  public static function fetchAllTrips()
+  {
+    return parent::fetchAll('trip', 'Trip');
+  }
+
+  public function save()
+  {
+    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $statement->bindValue(1, $this->name);
+    $statement->bindValue(2, $this->description);
+    $statement->bindValue(3, $this->departure_date);
+    $statement->bindValue(4, $this->return_date);
+    $statement->bindValue(5, $this->km_traveled);
+    $statement->bindValue(6, $this->total_price);
+    $statement->bindValue(7, $this->trip_state);
+    $statement->bindValue(8, $this->id_user);
+    $statement->bindValue(9, $this->id_transport_type);
+    $statement->bindValue(10, $this->id_destination);
+    $statement->bindValue(11, $this->id_departure);
+    $statement->bindValue(12, $this->number_people);
+    $statement->bindValue(13, $this->id_company);
+    $statement->execute();
   }
 }

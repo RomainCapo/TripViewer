@@ -14,10 +14,10 @@
 					<a class="nav-link" href="tripAdd">Add Trip</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tripView">View Trips</a>
+					<a class="nav-link" href="tripViewList">View Trips</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tripMap">Maps</a>
+					<a class="nav-link" href="tripViewMap">Maps</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="about">About</a>

@@ -39,12 +39,7 @@
           <div class="col">
             <label for="transport_type">Transport type : </label>
             <select class="form-control" id="transport_type" name="transport_type" required autocomplete="off"/>
-              <option value="plane">Plane</option>
-              <option value="car">Car</option>
-              <option value="boat">Boat</option>
-              <option value="bike">Bike</option>
-              <option value="on_foot">On foot</option>
-              <option value="on_foot">Others</option>
+              <?php echo Transport::fetchAllTransportsName(); ?>
             </select><br/>
           </div>
         </div>
@@ -52,5 +47,13 @@
         <button type="submit" class="btn btn-success block-btn" >Add the trip</button>
     </form>
   </div>
-
 </div>
+<?php if(isset($error))
+      { ?>
+
+
+<div class="alert alert-dismissible alert-danger">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Error : </strong> <?php echo $error; ?>
+</div>
+<?php } ?>

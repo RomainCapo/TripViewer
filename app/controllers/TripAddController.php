@@ -7,11 +7,6 @@ class TripAddController
       return Helper::view("tripAdd");
   }
 
-  public function test()
-  {
-    GoogleMapsApiHelper::getGPSCoord('Sydney');
-  }
-
   public function tripAddParse()
   {
     $destination;
@@ -21,11 +16,14 @@ class TripAddController
     $trip_state;
     $transport_type;
 
-    $name;
-    $description;
+    $name = 'NULL';
+    $description = 'NULL';
+    $total_price = 'NULL';
+    $number_people = 'NULL';
     $km_traveled;
-    $total_price;
-    $number_people;
+
+    $error = '';
+    $isProcessingError = false;
 
     //Data processing
     if(isset($_POST['destination']) && !empty($_POST['destination']))
@@ -36,12 +34,11 @@ class TripAddController
       {
         $departure = $_POST['departure'];
 
-
         if(isset($_POST['departure_date']) && !empty($_POST['departure_date']))
         {
           $departure_date = $_POST['departure_date'];
 
-          if(isset($_POST['return_date']) && !empty($_POST['return_date']))
+          if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])))
           {
             $return_date = $_POST['return_date'];
 
@@ -50,7 +47,7 @@ class TripAddController
               $trip_state = $_POST['trip_state'];
 
 
-              if(isset($_POST['transport_type']) && !empty($_POST['transport_type']))
+              if(isset($_POST['transport_type']) && !empty($_POST['transport_type']) && Transport::transportInDb($_POST['transport_type']))
               {
                   $transport_type = $_POST['transport_type'];
 
@@ -63,13 +60,83 @@ class TripAddController
 
                     echo 'data processing okay';
 
+                    $Trip = new Trip;
+                    $Trip->setName($name);
+                    $Trip->setDescription($description);
+                    $Trip->setDepartureDate($departure_date);
+                    $Trip->setReturnDate($return_date);
+                    $Trip->setTotalPrice($total_price);
+                    $Trip->setTripState($trip_state);
+                    $Trip->setNumberPeople($number_people);
 
+                    $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
+                    $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
+
+                    echo 'dest lat : ' . $dest_gps_coord['latitude'];
+                    echo 'dest lng : ' . $dest_gps_coord['longitude'];
+                    echo 'depa lat : ' .$depa_gps_coord['latitude'];
+                    echo 'depa lng : ' . $depa_gps_coord['longitude'];
+
+                    $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+
+                    $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
+                    $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
+
+                    $Trip->setIdUser(1);
+                    $Trip->setIdTransportType(Transport::getTransportId($transport_type));
+                    $Trip->setIdCompany(1);
+                    $Trip->save();
+                  }
+                  else
+                  {
+                    $isProcessingError = true;
+                    $error = 'error with trip_name, description, total_price or number_people';
                   }
               }
+              else
+              {
+                $isProcessingError = true;
+                $error = 'error with the transport_type';
+              }
+            }
+            else
+            {
+              $isProcessingError = true;
+              $error = 'error with the trip_state';
             }
           }
+          else
+          {
+            $isProcessingError = true;
+            $error = 'error with the return_date';
+          }
+        }
+        else
+        {
+          $isProcessingError = true;
+          $error = 'error with the departure_date';
         }
       }
+      else
+      {
+        $isProcessingError = true;
+        $error = 'error with the departure';
+      }
+    }
+    else
+    {
+      $isProcessingError = true;
+      $error = 'error with the destination';
+    }
+
+
+    if($isProcessingError)
+    {
+      return Helper::view("tripAdd", ['error' => $error]);
+    }
+    else
+    {
+      header('Location: tripViewList');
     }
   }
 }
