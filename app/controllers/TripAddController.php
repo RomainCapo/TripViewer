@@ -72,11 +72,6 @@ class TripAddController
                     $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                     $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
 
-                    echo 'dest lat : ' . $dest_gps_coord['latitude'];
-                    echo 'dest lng : ' . $dest_gps_coord['longitude'];
-                    echo 'depa lat : ' .$depa_gps_coord['latitude'];
-                    echo 'depa lng : ' . $depa_gps_coord['longitude'];
-
                     $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
 
                     $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
