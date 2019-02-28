@@ -9,7 +9,7 @@ class TripAddController
 
   public function test()
   {
-    GoogleMapsApiHelper::getGPSCoord('London');
+    GoogleMapsApiHelper::getGPSCoord('Sydney');
   }
 
   public function tripAddParse()

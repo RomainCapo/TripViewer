@@ -8,19 +8,30 @@ class GoogleMapsApiHelper
 {
   public static function getGPSCoord($destination)
   {
-    //$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. $destination .'&key=' . App::get('config')['google_map_api_key'];
-    //$content = file_get_contents('test.json');
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. $destination .'&key=' . App::get('config')['google_map_api_key'];
+    $content = file_get_contents($url);
 
-    $content = fopen('test.json', 'r');
-    echo fgets($content);
     $data = json_decode($content, false);
 
-    var_dump($data);
+    $latitude = $data->results[0]->geometry->location->lat;
+    $longitude = $data->results[0]->geometry->location->lng;
+    $countryName = getCountryName($data);
 
-    //$latitude = $data->results[0]->geometry->location->lat;
-    //$longitude = $data->results[0]->geometry->location->lng;
-
-    echo $latitude . ' - ' . $longitude;
+    echo $latitude . ' - ' . $longitude . ' - ' . $countryName;
   }
 
+
+public static function getCountryName($data)
+{
+  $country = 'NULL';
+
+  foreach($data->results[0]->address_components as $key => $value)
+  {
+  	if($value->types[0] == "country")
+  	{
+  			$country = $value->long_name;
+  	}
+  }
+  echo $country;
+  }
 }
