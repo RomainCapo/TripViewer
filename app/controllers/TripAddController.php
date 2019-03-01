@@ -2,9 +2,12 @@
 
 class TripAddController
 {
+
+  private $error;
+
   public function index()
   {
-      return Helper::view("tripAdd");
+      return Helper::view("tripAdd", ['error' => $this->error]);
   }
 
   public function tripAddParse()
@@ -22,8 +25,8 @@ class TripAddController
     $number_people = 'NULL';
     $km_traveled;
 
-    $error = '';
-    $isProcessingError = false;
+    $isProcessingError = true;
+    $this->error = '';
 
     //Data processing
     if(isset($_POST['destination']) && !empty($_POST['destination']))
@@ -72,7 +75,7 @@ class TripAddController
                     $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                     $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
 
-                    $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+                    //$Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
 
                     $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
                     $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
@@ -85,53 +88,57 @@ class TripAddController
                   else
                   {
                     $isProcessingError = true;
-                    $error = 'error with trip_name, description, total_price or number_people';
+                    $this->error  = 'error with trip_name, description, total_price or number_people';
                   }
               }
               else
               {
                 $isProcessingError = true;
-                $error = 'error with the transport_type';
+                $this->error = 'error with the transport_type';
               }
             }
             else
             {
               $isProcessingError = true;
-              $error = 'error with the trip_state';
+              $this->error = 'error with the trip_state';
             }
           }
           else
           {
             $isProcessingError = true;
-            $error = 'error with the return_date';
+            $this->error = 'error with the return_date';
           }
         }
         else
         {
           $isProcessingError = true;
-          $error = 'error with the departure_date';
+          $this->error = 'error with the departure_date';
         }
       }
       else
       {
         $isProcessingError = true;
-        $error = 'error with the departure';
+        $this->error = 'error with the departure';
       }
     }
     else
     {
       $isProcessingError = true;
-      $error = 'error with the destination';
+      $this->error  = 'error with the destination';
     }
-
 
     if($isProcessingError)
     {
-      return Helper::view("tripAdd", ['error' => $error]);
+      return $this->index();
     }
     else
     {
       header('Location: tripViewList');
     }
+  }
+
+  public function test()
+  {
+    var_dump(Destination::getLatLngCouFromDest('Buenos Aires'));
   }
 }

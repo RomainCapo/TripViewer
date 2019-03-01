@@ -9,17 +9,24 @@ class GoogleMapsApiHelper
 
   public static function getGPSCoord($destination)
   {
-    $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. str_replace(' ','', $destination ) .'&key=' . App::get('config')['google_map_api_key'];
-    $content = file_get_contents($url);
+    if(!Destination::destinationInDb($destination))
+    {
+      $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='. str_replace(' ','', $destination ) .'&key=' . App::get('config')['google_map_api_key'];
+      $content = file_get_contents($url);
 
-    $data = json_decode($content, false);
+      $data = json_decode($content, false);
 
 
-    $latitude = $data->results[0]->geometry->location->lat;
-    $longitude = $data->results[0]->geometry->location->lng;
-    $countryName = GoogleMapsApiHelper::getCountryName($data);
+      $latitude = $data->results[0]->geometry->location->lat;
+      $longitude = $data->results[0]->geometry->location->lng;
+      $countryName = GoogleMapsApiHelper::getCountryName($data);
 
-    return array('latitude' =>  $latitude, 'longitude' => $longitude, 'country' => $countryName);
+      return array('latitude' =>  $latitude, 'longitude' => $longitude, 'country' => $countryName);
+    }
+    else
+    {
+      return Destination::getLatLngCouFromDest($destination);
+    }
   }
 
   public static function getCountryName($data)

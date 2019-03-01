@@ -48,7 +48,7 @@
     </form>
   </div>
 </div>
-<?php if(isset($error))
+<?php if(isset($error) && $error != '')
       { ?>
 
 

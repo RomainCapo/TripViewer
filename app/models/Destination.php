@@ -19,14 +19,52 @@ class Destination extends Model
     $this->latitude= $lat;
   }
 
-  public function setLongitude($lon)
+  public function setLongitude($lng)
   {
-    $this->longitude= $lon;
+    $this->longitude= $lng;
   }
 
   public function setCountry($cou)
   {
     $this->country= $cou;
+  }
+
+  public static function destinationInDb($dest)
+  {
+    $statement = App::get('dbh')->prepare('SELECT id FROM destination WHERE destination=:destination');
+    $statement->bindParam(':destination', $dest);
+    $statement->execute();
+
+    if(empty($statement->fetchAll()))
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+  }
+
+  public static function fetchAllDestinations()
+  {
+    return parent::fetchAll('destination', 'Destination');
+  }
+
+  public static function getLatLngCouFromDest($dest)
+  {
+    $statement = App::get('dbh')->prepare('SELECT latitude, longitude, country FROM destination WHERE destination=:destination');
+    $statement->bindParam(':destination', $dest);
+    $statement->execute();
+
+    $data = $statement->fetchAll()[0];
+
+    $lat = $data['latitude'];
+    $lng = $data['longitude'];
+    $cou = $data['country'];
+
+    $array = array('latitude' => $lat, 'longitude' => $lng, 'country' => $cou);
+
+    return $array;
   }
 
   public function save()

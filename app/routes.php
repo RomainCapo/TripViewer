@@ -13,4 +13,5 @@ $router->define([
   'tripViewMap' => '',
   'about' => '',
   'profil' => '',
+  'debug' => 'TripAddController@test'
 ]);
