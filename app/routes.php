@@ -7,11 +7,12 @@ $router->define([
   'loginParse' => 'ConnectionController@loginParse',
   'register' => 'ConnectionController@register',
   'registerParse' => 'ConnectionController@registerParse',
+  'logout' => 'ConnectionController@logout',
   'tripAdd' => 'TripAddController',
   'tripAddParse' => 'TripAddController@tripAddParse',
   'tripViewList' => 'TripController',
   'tripViewMap' => '',
   'about' => '',
   'profil' => '',
-  'debug' => 'TripAddController@test'
+  'debug' => 'TripAddController@test',
 ]);

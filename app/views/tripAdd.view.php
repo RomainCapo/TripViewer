@@ -57,3 +57,5 @@
   <strong>Error : </strong> <?php echo $error; ?>
 </div>
 <?php } ?>
+
+<?php require('partials/footer.php') ?>

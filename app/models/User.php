@@ -19,9 +19,46 @@ class User extends Model
     return parent::fetchById($id,'user','User');
   }
 
-  public function save()
+  public function save() {}
+
+  public function setId($value)
   {
-    
+      $this->id = $value;
+  }
+
+  public function getId()
+  {
+      return $this->id;
+  }
+
+  public function setPseudo($value)
+  {
+      $this->pseudo = $value;
+  }
+
+  public function getPseudo()
+  {
+      return $this->pseudo;
+  }
+
+  public function setEmail($value)
+  {
+      $this->email = $value;
+  }
+
+  public function getEmail()
+  {
+      return $this->email;
+  }
+
+  public function setCreationDate($value)
+  {
+      $this->creation_date = $value;
+  }
+
+  public function getCreationDate()
+  {
+      return $this->creation_date;
   }
 
   public static function userPassLinked($pseudo, $password)
@@ -30,8 +67,6 @@ class User extends Model
       $statement->bindParam(':pseudo', $pseudo);
       $statement->execute();
       $res = $statement->fetchAll();  
-
-      //die(var_dump($res));
 
       if($res[0][0] == 1)
       {

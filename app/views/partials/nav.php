@@ -25,6 +25,7 @@
 			</ul>
 			<div class="my-2 my-lg-0">
 				<a class="btn btn-primary btn-sm" href="profil" role="button">Profil</a>
+				<a class="btn btn-secondary btn-sm" href="logout" role="button">Logout</a>
 			</div>
 		</div>
 	</div>

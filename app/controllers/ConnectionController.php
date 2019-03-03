@@ -23,6 +23,10 @@ class ConnectionController
         {
             if(User::userPassLinked($_POST['username'], $_POST['password']))
             {
+                $user = new User();
+                $user->setPseudo($_POST['username']);
+                $_SESSION['login'] = serialize($user);
+
                 header('Location: index');
                 exit();
             } else { die('user invalid or incorrect password'); }
@@ -58,5 +62,10 @@ class ConnectionController
             header('Location: register');
             exit();
         }
+    }
+
+    public function logout()
+    {
+        session_destroy();
     }
 }
