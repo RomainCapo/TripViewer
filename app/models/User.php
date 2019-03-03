@@ -24,9 +24,23 @@ class User extends Model
     
   }
 
-  public static function nbUser()
+  public static function userPassLinked($pseudo, $password)
   {
-      //$statement = App::get('dbh')->prepare("SELECT COUNT(*) FROM user");
+      $statement = App::get('dbh')->prepare("SELECT COUNT(id), password FROM user WHERE pseudo = :pseudo");
+      $statement->bindParam(':pseudo', $pseudo);
+      $statement->execute();
+      $res = $statement->fetchAll();  
+
+      //die(var_dump($res));
+
+      if($res[0][0] == 1)
+      {
+          return password_verify($password, $res[0]['password']);
+      }
+      else
+      {
+          return false;
+      }
   }
 
   public static function pseudoAlreadyTaken($pseudo)
@@ -47,8 +61,6 @@ class User extends Model
       $statement->bindParam(':pseudo', $pseudo);
       $statement->bindParam(':email', $email);
       $statement->bindParam(':password', $hash_pass);
-      $res = $statement->execute();
-
-      return $res;
+      return $statement->execute();
   }
 }

@@ -19,7 +19,19 @@ class ConnectionController
 
     public function loginParse()
     {
-      echo "loginParse";
+        if(isset($_POST['username']) && isset($_POST['password']))
+        {
+            if(User::userPassLinked($_POST['username'], $_POST['password']))
+            {
+                header('Location: index');
+                exit();
+            } else { die('user invalid or incorrect password'); }
+        }
+        else
+        {
+            header('Location: login');
+            exit();
+        }
     }
 
     public function registerParse()
