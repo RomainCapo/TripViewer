@@ -20,7 +20,7 @@ class ConnectionController
 
     public function register()
     {
-        return Helper::view("register");
+        return Helper::view("register", ['error_register' => $this->error_register]);
     }
 
     public function loginParse()
@@ -39,7 +39,7 @@ class ConnectionController
             else 
             { 
                 $isProcessingError_login = true;
-                $error_login['user'] = "user invalid or incorrect password"; 
+                $this->error_login['user'] = "User invalid or incorrect password"; 
             }
         }
         else
@@ -70,29 +70,38 @@ class ConnectionController
                             exit();
                         } 
                         else 
-                        { 
-                            die('error during register'); 
+                        {
+                            $isProcessingError_register = true;
+                            $this->error_register['register'] = "Error during registration";
                         }
                     } 
                     else 
                     { 
-                        die('invalid email'); 
+                        $isProcessingError_register = true;
+                        $this->error_register['email'] = "Invalid email"; 
                     }
                 } 
                 else 
                 { 
-                    die("pseudo already taken"); 
+                    $isProcessingError_register = true;
+                    $this->error_register['pseudo'] = "Pseudo already taken";
                 }
             } 
             else 
             { 
-                die('passwords are differents'); 
+                $isProcessingError_register = true;
+                $this->error_register['password'] = "Passwords are differents"; 
             }
         }
         else
         {
             header('Location: register');
             exit();
+        }
+
+        if($isProcessingError_register)
+        {
+            return $this->register();
         }
     }
 

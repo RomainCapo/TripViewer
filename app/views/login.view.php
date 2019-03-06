@@ -9,9 +9,6 @@
     <div class="card-header"><h2>Login</h2></div>
     <div class="card-body">
       <?php
-
-var_dump($error_login);
-
       if(isset($error_login) && !empty($error_login))
       {
       ?>
