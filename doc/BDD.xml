@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
-<!-- Active URL: http://ondras.zarovi.cz/sql/demo/?keyboard=default -->
+<!-- Active URL: https://ondras.zarovi.cz/sql/demo/?keyboard=default -->
 <sql>
 <datatypes db="mssql">
 	<group color="rgb(238,238,170)" label="Integer">
@@ -117,11 +117,15 @@
 <datatype>tinyint</datatype>
 <default>NULL</default><relation table="destination_1" row="id (pk)" />
 </row>
+<row name="id_company (fk)" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default><relation table="company" row="id (pk)" />
+</row>
 <key type="PRIMARY" name="">
 <part>id (pk)</part>
 </key>
 </table>
-<table x="1114" y="79" name="company">
+<table x="836" y="578" name="company">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
@@ -132,7 +136,7 @@
 <part>id (pk)</part>
 </key>
 </table>
-<table x="954" y="364" name="destination">
+<table x="893" y="291" name="destination">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>int</datatype>
 <default>NULL</default></row>
@@ -145,11 +149,14 @@
 <row name="longitude" null="1" autoincrement="0">
 <datatype>int</datatype>
 <default>NULL</default></row>
+<row name="country" null="1" autoincrement="0">
+<datatype>varchar</datatype>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id (pk)</part>
 </key>
 </table>
-<table x="812" y="202" name="transport">
+<table x="811" y="89" name="transport">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
@@ -158,8 +165,7 @@
 <default>NULL</default></row>
 <row name="id_company (fk)" null="1" autoincrement="0">
 <datatype>tinyint</datatype>
-<default>NULL</default><relation table="company" row="id (pk)" />
-</row>
+<default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id (pk)</part>
 </key>
@@ -176,6 +182,9 @@
 <default>NULL</default></row>
 <row name="longitude" null="1" autoincrement="0">
 <datatype>int</datatype>
+<default>NULL</default></row>
+<row name="country" null="1" autoincrement="0">
+<datatype>varchar</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id (pk)</part>

@@ -25,7 +25,7 @@ class TripAddController
     $number_people = 'NULL';
     $km_traveled;
 
-    $isProcessingError = true;
+    $isProcessingError = false;
     $this->error = '';
 
     //Data processing
@@ -59,7 +59,9 @@ class TripAddController
                     $name = $_POST['trip_name'];
                     $description = $_POST['description'];
                     $total_price = $_POST['total_price'];
-                    $number_people= $_POST['number_people'];
+                    $number_people = $_POST['number_people'];
+
+                    var_dump($_POST);
 
                     echo 'data processing okay';
 
@@ -75,7 +77,7 @@ class TripAddController
                     $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                     $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
 
-                    //$Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+                    $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
 
                     $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
                     $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
