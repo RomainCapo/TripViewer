@@ -31,8 +31,8 @@ class Destination extends Model
 
   public static function destinationInDb($dest)
   {
-    $statement = App::get('dbh')->prepare('SELECT id FROM destination WHERE destination=:destination');
-    $statement->bindParam(':destination', $dest);
+    $statement = App::get('dbh')->prepare('SELECT id FROM destination WHERE LOWER(destination)=:destination');
+    $statement->bindParam(':destination', strtolower($dest));
     $statement->execute();
 
     if(empty($statement->fetchAll()))
@@ -81,7 +81,7 @@ class Destination extends Model
   public static function saveDestination($destName, $arrayDest)
   {
     $dest = new Destination;
-    $dest->setDestination($destName);
+    $dest->setDestination(strtolower($destName));
     $dest->setLatitude($arrayDest['latitude']);
     $dest->setLongitude($arrayDest['longitude']);
     $dest->setCountry($arrayDest['country']);
