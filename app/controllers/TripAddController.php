@@ -25,7 +25,7 @@ class TripAddController
     $number_people = 'NULL';
     $km_traveled;
 
-    $isProcessingError = true;
+    $isProcessingError = false;
     $this->error = '';
 
     //Data processing
