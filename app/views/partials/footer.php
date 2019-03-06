@@ -3,9 +3,10 @@
     <br>
     <br>
     
-    <div class="footer">
+
+    <!--<div class="footer">
         <p class="footer-content">Copyright © TripViewer 2019 - Romain Capocasale et Vincent Moulin</p>
-    </div>
+    </div>-->
 
 </body>
 </html>

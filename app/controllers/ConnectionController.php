@@ -2,6 +2,12 @@
 
 class ConnectionController
 {
+    private $error_login = [];
+    private $error_register = [];
+
+    private $isProcessingError_login = false;
+    private $isProcessingError_register = false;
+
     public function index()
     {
         return Helper::view("index");
@@ -9,12 +15,12 @@ class ConnectionController
 
     public function login()
     {
-        return Helper::view("login");
+        return Helper::view("login", ['error_login' => $this->error_login]);
     }
 
     public function register()
     {
-        return Helper::view("register");
+        return Helper::view("register", ['error_register' => $this->error_register]);
     }
 
     public function loginParse()
@@ -29,12 +35,22 @@ class ConnectionController
 
                 header('Location: index');
                 exit();
-            } else { die('user invalid or incorrect password'); }
+            } 
+            else 
+            { 
+                $isProcessingError_login = true;
+                $this->error_login['user'] = "User invalid or incorrect password"; 
+            }
         }
         else
         {
             header('Location: login');
             exit();
+        }
+
+        if($isProcessingError_login)
+        {
+            return $this->login();
         }
     }
 
@@ -52,20 +68,57 @@ class ConnectionController
                         {
                             header('Location: login');
                             exit();
-                        } else { die('error during register'); }
-                    } else { die('invalid email'); }
-                } else { die("pseudo already taken"); }
-            } else { die('passwords are differents'); }
+                        } 
+                        else 
+                        {
+                            $isProcessingError_register = true;
+                            $this->error_register['register'] = "Error during registration";
+                        }
+                    } 
+                    else 
+                    { 
+                        $isProcessingError_register = true;
+                        $this->error_register['email'] = "Invalid email"; 
+                    }
+                } 
+                else 
+                { 
+                    $isProcessingError_register = true;
+                    $this->error_register['pseudo'] = "Pseudo already taken";
+                }
+            } 
+            else 
+            { 
+                $isProcessingError_register = true;
+                $this->error_register['password'] = "Passwords are differents"; 
+            }
         }
         else
         {
             header('Location: register');
             exit();
         }
+
+        if($isProcessingError_register)
+        {
+            return $this->register();
+        }
     }
 
     public function logout()
     {
         session_destroy();
+    }
+
+    public function test()
+    {
+        $a;
+
+        $a['test'] = '123';
+        $a['okok'] = 'zip';
+        
+        
+        //var_dump($a);
+        echo $a['test'];
     }
 }

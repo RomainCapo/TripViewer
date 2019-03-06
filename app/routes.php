@@ -15,4 +15,5 @@ $router->define([
   'about' => '',
   'profil' => '',
   'debug' => 'TripAddController@test',
+  'test' => 'ConnectionController@test',
 ]);
