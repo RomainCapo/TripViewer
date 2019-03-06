@@ -53,7 +53,7 @@
 		<type label="SQL Variant" quote="" sql="sql_variant" length="1" note="Stores any datatype except text, ntext, image, timestamp" bytes=""/>
 		<type label="Uniqueidentifier" quote="" sql="uniqueidentifier" length="1" note="GUID" bytes="16"/>
 	</group>
-</datatypes><table x="320" y="112" name="user">
+</datatypes><table x="281" y="271" name="user">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
@@ -136,7 +136,7 @@
 <part>id (pk)</part>
 </key>
 </table>
-<table x="893" y="291" name="destination">
+<table x="920" y="318" name="destination">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>int</datatype>
 <default>NULL</default></row>
@@ -156,7 +156,7 @@
 <part>id (pk)</part>
 </key>
 </table>
-<table x="811" y="89" name="transport">
+<table x="918" y="137" name="transport">
 <row name="id (pk)" null="1" autoincrement="1">
 <datatype>tinyint</datatype>
 <default>NULL</default></row>
@@ -188,6 +188,21 @@
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>id (pk)</part>
+</key>
+</table>
+<table x="312" y="130" name="photo">
+<row name="id" null="1" autoincrement="1">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="name" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default></row>
+<row name="id_user (fk)" null="1" autoincrement="0">
+<datatype>tinyint</datatype>
+<default>NULL</default><relation table="trip" row="id (pk)" />
+</row>
+<key type="PRIMARY" name="">
+<part>id</part>
 </key>
 </table>
 </sql>
