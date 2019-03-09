@@ -32,7 +32,8 @@ class Destination extends Model
   public static function destinationInDb($dest)
   {
     $statement = App::get('dbh')->prepare('SELECT id FROM destination WHERE LOWER(destination)=:destination');
-    $statement->bindParam(':destination', strtolower($dest));
+    $dest = strtolower($dest);
+    $statement->bindParam(':destination', $dest);
     $statement->execute();
 
     if(empty($statement->fetchAll()))
@@ -52,19 +53,26 @@ class Destination extends Model
 
   public static function getLatLngCouFromDest($dest)
   {
-    $statement = App::get('dbh')->prepare('SELECT latitude, longitude, country FROM destination WHERE destination=:destination');
+    $statement = App::get('dbh')->prepare('SELECT id, latitude, longitude, country FROM destination WHERE LOWER(destination)=:destination');
+    $dest = strtolower($dest);
     $statement->bindParam(':destination', $dest);
     $statement->execute();
 
-    $data = $statement->fetchAll()[0];
+    $data = $statement->fetchAll();
 
-    $lat = $data['latitude'];
-    $lng = $data['longitude'];
-    $cou = $data['country'];
+    if(!empty($data))
+    {
+      $id = $data[0]['id'];
+      $lat = $data[0]['latitude'];
+      $lng = $data[0]['longitude'];
+      $cou = $data[0]['country'];
 
-    $array = array('latitude' => $lat, 'longitude' => $lng, 'country' => $cou);
-
-    return $array;
+      return array('latitude' => $lat, 'longitude' => $lng, 'country' => $cou, 'id' =>$id);
+    }
+    else
+    {
+      return false;
+    }
   }
 
   public function save()

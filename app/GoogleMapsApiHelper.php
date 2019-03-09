@@ -6,7 +6,6 @@ ini_set('xdebug.var_display_max_data', '1024');
 
 class GoogleMapsApiHelper
 {
-
   public static function getGPSCoord($destination)
   {
     if(!Destination::destinationInDb($destination))
@@ -18,20 +17,37 @@ class GoogleMapsApiHelper
 
         $data = json_decode($content, false);
 
+        if($data->status == 'OK')
+        {
+          $latitude = $data->results[0]->geometry->location->lat;
+          $longitude = $data->results[0]->geometry->location->lng;
+          $countryName = GoogleMapsApiHelper::getCountryName($data);
 
-        $latitude = $data->results[0]->geometry->location->lat;
-        $longitude = $data->results[0]->geometry->location->lng;
-        $countryName = GoogleMapsApiHelper::getCountryName($data);
-
-        return array('latitude' =>  $latitude, 'longitude' => $longitude, 'country' => $countryName);
-      } catch (Exception $e)
+          return array('latitude' =>  $latitude, 'longitude' => $longitude, 'country' => $countryName, 'state' => 'OK');
+        }
+        else
+        {
+            return array('state' => 'ERROR');
+        }
+      }
+      catch (Exception $e)
       {
-          echo $e;
+          return array('state' => 'ERROR');
       }
     }
     else
     {
-      return Destination::getLatLngCouFromDest($destination);
+      $reponse = Destination::getLatLngCouFromDest($destination);
+      if($reponse)
+      {
+        $reponse['state'] = 'IN_DATABASE';
+        return $reponse;
+      }
+      else
+      {
+        $reponse['state'] = 'ERROR';
+        return $reponse;
+      }
     }
   }
 

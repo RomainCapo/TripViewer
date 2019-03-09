@@ -7,6 +7,8 @@ require 'helpers/Helper.php';
 require 'core/database/Model.php';
 require 'app/GoogleMapsApiHelper.php';
 
+require 'vendor/autoload.php';
+
 require 'app/models/Destination.php';
 require 'app/models/Trip.php';
 require 'app/models/User.php';

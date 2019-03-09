@@ -21,10 +21,10 @@
         </div>
         <div class="row">
           <div class="col">
-            <label for="number_people">Number of people : </label><input class="form-control" id="number_people" type="number" name="number_people" placeholder="Enter the number of people"  autocomplete="off"/>
+            <label for="number_people">Number of people : </label><input class="form-control" id="number_people" type="number" name="number_people" placeholder="Enter the number of people" min="0" value="0" autocomplete="off"/>
           </div>
           <div class="col">
-            <label for="total_price">Total trip price : </label><input class="form-control" id="total_price" type="number" name="total_price" placeholder="Enter the trip total price"  autocomplete="off"/><br/>
+            <label for="total_price">Total trip price : </label><input class="form-control" id="total_price" type="number" name="total_price" placeholder="Enter the trip total price"  min="0" value="0" autocomplete="off"/><br/>
           </div>
         </div>
         <div class="row">
