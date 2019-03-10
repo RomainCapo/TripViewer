@@ -89,6 +89,22 @@ class Trip extends Model
     return parent::fetchAll('trip', 'Trip');
   }
 
+  public static function getAllUserTripLatLng($id_user)
+  {
+    $statement = App::get('dbh')->prepare('SELECT id_destination FROM trip WHERE id_user=:id_user');
+    $statement->bindParam(':id_user', $id_user);
+    $statement->execute();
+
+    $array = array();
+    $i = 0;
+
+    foreach ($statement->fetchAll() as $key => $value) {
+      $array[$i] = Destination::getLatLngFromId($value['id_destination']);
+      $i++;
+    }
+    return $array;
+  }
+
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)

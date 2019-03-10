@@ -6,4 +6,14 @@ class TripController
   {
     var_dump(Trip::fetchAllTrips());
   }
+
+  public function mapView()
+  {
+    return Helper::view("tripMap");
+  }
+
+  public function getAllUserTripCoord()
+  {
+    echo json_encode(Trip::getAllUserTripLatLng(1));
+  }
 }

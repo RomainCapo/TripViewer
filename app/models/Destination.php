@@ -75,6 +75,23 @@ class Destination extends Model
     }
   }
 
+  public static function getLatLngFromId($id)
+  {
+    $statement = App::get('dbh')->prepare('SELECT destination, latitude, longitude, country FROM destination WHERE id=:id');
+    $statement->bindParam(':id', $id);
+    $statement->execute();
+
+    $array = array();
+    $data = $statement->fetchAll()[0];
+
+    $array['dest'] = $data['destination'];
+    $array['lat'] = $data['latitude'];
+    $array['lng'] = $data['longitude'];
+    $array['coun'] = $data['country'];
+
+    return $array;
+  }
+
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO destination (destination, latitude, longitude, country) VALUES (?, ?, ?, ?)');
