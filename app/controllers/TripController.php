@@ -14,6 +14,6 @@ class TripController
 
   public function getAllUserTripCoord()
   {
-    echo json_encode(Trip::getAllUserTripLatLng(1));
+    echo json_encode(Trip::getUserTripInfo(1));
   }
 }

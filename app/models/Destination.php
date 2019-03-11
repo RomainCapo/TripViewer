@@ -75,7 +75,7 @@ class Destination extends Model
     }
   }
 
-  public static function getLatLngFromId($id)
+  public static function getDestInfo($id)
   {
     $statement = App::get('dbh')->prepare('SELECT destination, latitude, longitude, country FROM destination WHERE id=:id');
     $statement->bindParam(':id', $id);

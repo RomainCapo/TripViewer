@@ -3,7 +3,7 @@
     require('partials/header.php');
     require('partials/nav.php');
 ?>
-
+<div class="container">
   <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Add a trip</h2></div>
     <div class="card-body">
@@ -57,5 +57,5 @@
   <strong>Error : </strong> <?php echo $error; ?>
 </div>
 <?php } ?>
-
+</div>
 <?php require('partials/footer.php') ?>
