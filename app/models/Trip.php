@@ -19,6 +19,24 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
+  public function asCardShow()
+  {
+      $str = "";
+
+      $str .= "<div class=\"card\"><div class=\"card-body\"><h1 class=\"card-title\">";
+      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination)));
+      $str .= " <span style=\"font-size:15px\">Du ";
+      $str .= $this->departure_date . " au " . $this->return_date;
+      $str .= "</span>";
+      $str .= "</h1><h4 class=\"card-subtitle mb-2 text-muted\">";
+      $str .= $this->name;
+      $str .= "</h4><p class=\"card-text\">";
+      $str .= $this->description;
+      $str .= "</p><a href=\"#\" class=\"card-link\">Read more</a><br><br><button type=\"button\" class=\"btn btn-success\">Modifier</button><span>&nbsp;&nbsp;&nbsp;</span><button type=\"button\" class=\"btn btn-danger\">Supprimer</button></div></div><br>";
+
+      return $str;
+  }
+
   public function setName($name)
   {
     $this->name = $name;
@@ -107,5 +125,14 @@ class Trip extends Model
     $statement->bindValue(12, $this->number_people);
     $statement->bindValue(13, $this->id_company);
     $statement->execute();
+  }
+
+  public function getDestinationById($id)
+  {
+      $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id = ?');
+      $statement->bindValue(1, $id);
+      $statement->execute();
+      $res = $statement->fetchAll();
+      return $res[0]['destination'];
   }
 }
