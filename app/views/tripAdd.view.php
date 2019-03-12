@@ -43,7 +43,16 @@
             </select><br/>
           </div>
         </div>
-        <label for="description">Trip description : </label><textarea class="form-control" id="description" name="description" placeholder="Enter your trip description"  autocomplete="off"/></textarea><br/>
+        <div class="row">
+          <div class="col">
+            <label for="description">Trip description : </label>
+            <textarea class="form-control" id="description" name="description" placeholder="Enter your trip description"  autocomplete="off"/></textarea><br/>
+          </div>
+          <div class="col">
+            <label for="photos">Select your 3 best photos : </label><br/>
+            <input id="photos" type="file" name="photos" class="form-control-file" multiple accept=".png, .jpeg, .jpg, .gif"/><br/><br/>
+          </div>
+        </div>
         <button type="submit" class="btn btn-success block-btn" >Add the trip</button>
     </form>
   </div>
@@ -58,4 +67,5 @@
 </div>
 <?php } ?>
 </div>
+<script type="text/javascript" src="public/javascript/addForm.js"></script>
 <?php require('partials/footer.php') ?>

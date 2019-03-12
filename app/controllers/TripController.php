@@ -4,7 +4,8 @@ class TripController
 {
   public function index()
   {
-    var_dump(Trip::fetchAllTrips());
+    $trip = Trip::fetchAllTrips();
+    var_dump($trip[0]->getName());
   }
 
   public function mapView()

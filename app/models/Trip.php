@@ -19,6 +19,10 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
+  public function getName(){
+    return $this->name;
+  }
+
   public function setName($name)
   {
     $this->name = $name;
