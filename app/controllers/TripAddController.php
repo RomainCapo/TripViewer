@@ -10,6 +10,33 @@ class TripAddController
       return Helper::view("tripAdd", ['error' => $this->error]);
   }
 
+  public function editTrip()
+  {
+
+  }
+
+  public function deleteTrip()
+  {
+    if(isset($_POST['deleteTripId']))
+    {
+      $id = $_POST['deleteTripId'];
+
+      $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id = ?');
+      $statement->bindValue(1, $id);
+
+      if($statement->execute())
+      {
+        header('Location: tripViewList'); // TODO add success messages
+        exit(0);
+      }
+      else
+      {
+        header('Location: tripViewList'); // TODO add errors messages
+        exit(0);
+      }
+    }
+  }
+
   public function tripAddParse()
   {
     $destination;

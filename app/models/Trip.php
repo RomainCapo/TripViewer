@@ -23,16 +23,24 @@ class Trip extends Model
   {
       $str = "";
 
-      $str .= "<div class=\"card\"><div class=\"card-body\"><h1 class=\"card-title\">";
-      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination)));
-      $str .= " <span style=\"font-size:15px\">Du ";
-      $str .= $this->departure_date . " au " . $this->return_date;
-      $str .= "</span>";
-      $str .= "</h1><h4 class=\"card-subtitle mb-2 text-muted\">";
-      $str .= $this->name;
-      $str .= "</h4><p class=\"card-text\">";
-      $str .= $this->description;
-      $str .= "</p><a href=\"#\" class=\"card-link\">Read more</a><br><br><button type=\"button\" class=\"btn btn-success\">Modifier</button><span>&nbsp;&nbsp;&nbsp;</span><button type=\"button\" class=\"btn btn-danger\">Supprimer</button></div></div><br>";
+      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>"; 
+      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination))); // TODO add htmlentities quand utf-8 ok 
+      $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
+      $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
+      $str .= "</em></span>";
+      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
+      $str .= htmlentities($this->name);
+      $str .= "</h4><p class='card-text'>";
+      $str .= htmlentities($this->description);
+      $str .= "</p><a href='tripView?id=";
+      $str .= urlencode($this->id);
+      $str .= "' class='card-link'>Read more about ";
+      $str .= htmlentities($this->name);
+      $str .= "</a><br><br>";
+      $str .= "<form action='tripViewListEdit' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
+      $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
+      $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
+      $str .= "</div></div><br>";
 
       return $str;
   }
@@ -127,12 +135,17 @@ class Trip extends Model
     $statement->execute();
   }
 
-  public function getDestinationById($id)
+  public static function getDestinationById($id)
   {
       $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id = ?');
       $statement->bindValue(1, $id);
       $statement->execute();
       $res = $statement->fetchAll();
       return $res[0]['destination'];
+  }
+
+  public function fetchTripById($id)
+  {
+      
   }
 }
