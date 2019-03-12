@@ -84,7 +84,7 @@ class Destination extends Model
     $array = array();
     $data = $statement->fetchAll()[0];
 
-    $array['dest'] = $data['destination'];
+    $array['dest'] = ucfirst($data['destination']);
     $array['lat'] = $data['latitude'];
     $array['lng'] = $data['longitude'];
     $array['coun'] = $data['country'];
