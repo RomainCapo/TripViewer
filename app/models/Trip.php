@@ -23,8 +23,8 @@ class Trip extends Model
   {
       $str = "";
 
-      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>"; 
-      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination))); // TODO add htmlentities quand utf-8 ok 
+      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
+      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination))); // TODO add htmlentities quand utf-8 ok
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
@@ -72,7 +72,14 @@ class Trip extends Model
 
   public function setTotalPrice($totalPrice)
   {
-    $this->total_price = $totalPrice;
+    if($totalPrice != '')
+    {
+      $this->total_price = $totalPrice;
+    }
+    else
+    {
+      $this->total_price = 0;
+    }
   }
 
   public function setTripState($tripState)
@@ -87,7 +94,14 @@ class Trip extends Model
 
   public function setNumberPeople($numberPeople)
   {
-    $this->numberPeople = $numberPeople;
+    if($numberPeople != '')
+    {
+      $this->number_people = $numberPeople;
+    }
+    else
+    {
+      $this->number_people = 0;
+    }
   }
 
   public function setIdTransportType($id)
@@ -146,6 +160,6 @@ class Trip extends Model
 
   public function fetchTripById($id)
   {
-      
+
   }
 }
