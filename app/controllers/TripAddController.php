@@ -10,48 +10,8 @@ class TripAddController
       return Helper::view("tripAdd", ['error' => $this->error]);
   }
 
-  public function editTrip()
-  {
-
-  }
-
-  public function deleteTrip()
-  {
-    if(isset($_POST['deleteTripId']))
-    {
-      $id = $_POST['deleteTripId'];
-
-      $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id = ?');
-      $statement->bindValue(1, $id);
-
-      if($statement->execute())
-      {
-        header('Location: tripViewList'); // TODO add success messages
-        exit(0);
-      }
-      else
-      {
-        header('Location: tripViewList'); // TODO add errors messages
-        exit(0);
-      }
-    }
-  }
-
   public function tripAddParse()
   {
-    $destination;
-    $departure;
-    $name;
-    $departure_date;
-    $return_date;
-    $trip_state;
-    $transport_type;
-
-    $description = NULL;
-    $total_price = NULL;
-    $number_people = NULL;
-    $km_traveled;
-
     $isProcessingError = false;
     $this->error = '';
 
@@ -198,7 +158,7 @@ class TripAddController
     }
     else
     {
-      header('Location: tripViewList');
+      //header('Location: tripViewList');
     }
   }
 

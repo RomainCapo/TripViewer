@@ -7,6 +7,7 @@ class TripController
     //var_dump(Trip::fetchAllTrips());
 
     return Helper::view("viewList", ['trips' => Trip::fetchTripById(unserialize($_SESSION['login'])->getId())]);
+
   }
 
   public function showTrip()

@@ -72,7 +72,14 @@ class Trip extends Model
 
   public function setTotalPrice($totalPrice)
   {
-    $this->total_price = $totalPrice;
+    if($totalPrice != '')
+    {
+      $this->total_price = $totalPrice;
+    }
+    else
+    {
+      $this->total_price = 0;
+    }
   }
 
   public function setTripState($tripState)
@@ -87,7 +94,14 @@ class Trip extends Model
 
   public function setNumberPeople($numberPeople)
   {
-    $this->numberPeople = $numberPeople;
+    if($numberPeople != '')
+    {
+      $this->number_people = $numberPeople;
+    }
+    else
+    {
+      $this->number_people = 0;
+    }
   }
 
   public function setIdTransportType($id)
