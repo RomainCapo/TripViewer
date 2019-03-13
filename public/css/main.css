@@ -8,7 +8,7 @@
 
 /* Trip Add Form */
 #photos {
-  
+
 }
 
 /* Trip Map View*/
@@ -21,6 +21,17 @@ html, body {
         margin: 0;
         padding: 0;
       }
+
+#markerInfo {
+  list-style:none;
+  margin-left: -40px;
+
+}
+
+#markerInfo li{
+    display:inline;
+}
+
 
 /* LOGIN - REGISTER */
 

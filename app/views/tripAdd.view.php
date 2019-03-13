@@ -7,16 +7,16 @@
   <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Add a trip</h2></div>
     <div class="card-body">
-      <form action="tripAddParse" method="post">
-        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" required autocomplete="off"/><br/>
-        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  required autocomplete="off"/><br/>
-        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" required autocomplete="off"/><br/>
+      <form action="tripAddParse" method="post" enctype="multipart/form-data">
+        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination"   autocomplete="off"/><br/>
+        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"    autocomplete="off"/><br/>
+        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name"   autocomplete="off"/><br/>
         <div class="row">
           <div class="col">
-            <label for="departure_date">Departure date : </label><input class="form-control" id="departure_date" type="date" name="departure_date" placeholder="Enter the departure date" required autocomplete="off"/>
+            <label for="departure_date">Departure date : </label><input class="form-control" id="departure_date" type="date" name="departure_date" placeholder="Enter the departure date"   autocomplete="off"/>
           </div>
           <div class="col">
-            <label for="return_date">Return date : </label><input class="form-control" id="return_date" type="date" name="return_date" placeholder="Enter the return date" required autocomplete="off"/><br/>
+            <label for="return_date">Return date : </label><input class="form-control" id="return_date" type="date" name="return_date" placeholder="Enter the return date"   autocomplete="off"/><br/>
           </div>
         </div>
         <div class="row">
@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col">
             <label for="trip_state">Trip state : </label>
-            <select class="form-control" id="trip_state" name="trip_state"  required autocomplete="off"/>
+            <select class="form-control" id="trip_state" name="trip_state"    autocomplete="off"/>
               <option value="realized">Realized</option>
               <option value="reserved">Reserved</option>
               <option value="planned">Planned</option>
@@ -38,7 +38,7 @@
           </div>
           <div class="col">
             <label for="transport_type">Transport type : </label>
-            <select class="form-control" id="transport_type" name="transport_type" required autocomplete="off"/>
+            <select class="form-control" id="transport_type" name="transport_type"   autocomplete="off"/>
               <?php echo Transport::fetchAllTransportsName(); ?>
             </select><br/>
           </div>
@@ -50,7 +50,7 @@
           </div>
           <div class="col">
             <label for="photos">Select your 3 best photos : </label><br/>
-            <input id="photos" type="file" name="photos" class="form-control-file" multiple accept=".png, .jpeg, .jpg, .gif"/><br/><br/>
+            <input id="photos" type="file" name="photos[]" class="form-control-file" multiple accept=".png, .jpeg, .jpg, .gif"/><br/><br/>
           </div>
         </div>
         <button type="submit" class="btn btn-success block-btn" >Add the trip</button>

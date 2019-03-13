@@ -12,18 +12,10 @@ class TripAddController
 
   public function tripAddParse()
   {
-    $destination;
-    $departure;
-    $name;
-    $departure_date;
-    $return_date;
-    $trip_state;
-    $transport_type;
-
+    //$this->fileProcessing();
     $description = NULL;
     $total_price = NULL;
     $number_people = NULL;
-    $km_traveled;
 
     $isProcessingError = false;
     $this->error = '';
@@ -121,7 +113,7 @@ class TripAddController
                     else
                     {
                       $isProcessingError = true;
-                      $this->error  = 'error with trip_name, description, total_price or number_people';
+                      $this->error  = 'error with description, total_price or number_people';
                     }
                 }
                 else
@@ -150,7 +142,8 @@ class TripAddController
         }
         else
         {
-
+          $isProcessingError = true;
+          $this->error = 'error with the trip name';
         }
       }
       else
@@ -172,6 +165,33 @@ class TripAddController
     else
     {
       header('Location: tripViewList');
+    }
+  }
+
+  private function fileProcessing()
+  {
+    $fileError = false;
+    print_r($_FILES);
+
+    $target_dir = "uploads/";
+    $total = count($_FILES['photos']['name']);
+    for($i = 0; $i < $total; $i++)
+    {
+      $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
+      $newFilePath = $target_dir . $_FILES['photos']['name'][$i];
+
+      echo $tmpFilePath .'<br/>';
+      echo $newFilePath;
+
+      if(move_uploaded_file($tmpFilePath, $newFilePath))
+      {
+        echo 'OK';
+      }
+      else
+      {
+        echo 'Ko';
+        $fileError = true;
+      }
     }
   }
 

@@ -106,14 +106,14 @@ class Trip extends Model
 
       $array[$i] = Destination::getDestInfo($value['id_destination']);
       $array[$i]['departure'] = Destination::getDestInfo($value['id_departure'])['dest'];
-      $array[$i]['name'] = $value['name'];
-      $array[$i]['description'] = $value['description'];
-      $array[$i]['departure_date'] = $value['departure_date'];
-      $array[$i]['return_date'] = $value['return_date'];
-      $array[$i]['km_traveled'] = $value['km_traveled'];
-      $array[$i]['total_price'] = $value['total_price'];
-      $array[$i]['trip_state'] = $value['trip_state'];
-      $array[$i]['number_people'] = $value['number_people'];
+      $array[$i]['name'] = htmlentities($value['name']);
+      $array[$i]['description'] = htmlentities($value['description']);
+      $array[$i]['departure_date'] = htmlentities($value['departure_date']);
+      $array[$i]['return_date'] = htmlentities($value['return_date']);
+      $array[$i]['km_traveled'] = htmlentities($value['km_traveled']);
+      $array[$i]['total_price'] = htmlentities($value['total_price']);
+      $array[$i]['trip_state'] = htmlentities($value['trip_state']);
+      $array[$i]['number_people'] = htmlentities($value['number_people']);
 
       $i++;
     }
