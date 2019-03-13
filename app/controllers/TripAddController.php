@@ -12,7 +12,7 @@ class TripAddController
 
   public function tripAddParse()
   {
-    //$this->fileProcessing();
+    $this->fileProcessing('Zurich', 'Romain');
     $description = NULL;
     $total_price = NULL;
     $number_people = NULL;
@@ -99,10 +99,18 @@ class TripAddController
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
 
-                        $Trip->setIdUser(1);
-                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));
-                        $Trip->setIdCompany(1);
-                        $Trip->save();
+                        if($this->fileProcessing($destination, 'Romain'))
+                        {
+                          $Trip->setIdUser(1);
+                          $Trip->setIdTransportType(Transport::getTransportId($transport_type));
+                          $Trip->setIdCompany(1);
+                          $Trip->save();
+                        }
+                        else
+                        {
+                          $isProcessingError = true;
+                          $this->error = 'error with the file upload';
+                        }
                       }
                       else
                       {
@@ -168,37 +176,33 @@ class TripAddController
     }
   }
 
-  private function fileProcessing()
+  private function fileProcessing($destination, $username)
   {
     $fileError = false;
-    print_r($_FILES);
 
     $target_dir = "uploads/";
     $total = count($_FILES['photos']['name']);
     for($i = 0; $i < $total; $i++)
     {
       $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
-      $newFilePath = $target_dir . $_FILES['photos']['name'][$i];
-
-      echo $tmpFilePath .'<br/>';
-      echo $newFilePath;
+      $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
 
       if(move_uploaded_file($tmpFilePath, $newFilePath))
       {
-        echo 'OK';
+        //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
+        $definitiveFilePath = $target_dir . $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+        rename($newFilePath, $definitiveFilePath);
       }
       else
       {
-        echo 'Ko';
         $fileError = true;
       }
     }
+    return $fileError;
   }
 
   public function test()
   {
-    $reponse = Destination::getLatLngCouFromDest('Zurich');
-    $reponse['state'] = 'in';
-    var_dump($reponse);
+    echo date("d-m-Y_h:i:s");
   }
 }
