@@ -1,8 +1,8 @@
 <?php
 
 $router->define([
-  '' => 'ConnectionController',
-  'index' => 'ConnectionController',
+  '' => 'IndexController',
+  'index' => 'IndexController',
   'login' => 'ConnectionController@login',
   'loginParse' => 'ConnectionController@loginParse',
   'register' => 'ConnectionController@register',
@@ -15,7 +15,6 @@ $router->define([
   'tripViewListEdit' => 'TripAddController@editTrip',
   'tripViewListDelete' => 'TripAddController@deleteTrip',
   'tripViewMap' => '',
-  'about' => '',
   'profil' => '',
   'debug' => 'TripAddController@test',
   'test' => 'ConnectionController@test',

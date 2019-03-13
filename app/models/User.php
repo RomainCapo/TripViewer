@@ -98,4 +98,13 @@ class User extends Model
       $statement->bindParam(':password', $hash_pass);
       return $statement->execute();
   }
+
+  public static function getIdByPseudo($pseudo)
+  {
+      $statement = App::get('dbh')->prepare("SELECT id FROM user WHERE pseudo = :pseudo");
+      $statement->bindParam(':pseudo', $pseudo);
+      $statement->execute();
+      $res = $statement->fetchAll();
+      return $res[0]['id'];
+  }
 }

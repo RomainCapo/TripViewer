@@ -134,7 +134,7 @@ class TripAddController
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
 
-                        $Trip->setIdUser(1);
+                        $Trip->setIdUser(unserialize($_SESSION['login'])->getId());
                         $Trip->setIdTransportType(Transport::getTransportId($transport_type));
                         $Trip->setIdCompany(1);
                         $Trip->save();

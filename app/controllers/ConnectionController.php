@@ -31,10 +31,12 @@ class ConnectionController
             {
                 $user = new User();
                 $user->setPseudo($_POST['username']);
+                $id = $user->getIdByPseudo($_POST['username']);
+                $user->setId($id);
                 $_SESSION['login'] = serialize($user);
 
                 header('Location: index');
-                exit();
+                exit(0);
             } 
             else 
             { 
@@ -45,7 +47,7 @@ class ConnectionController
         else
         {
             header('Location: login');
-            exit();
+            exit(0);
         }
 
         if($isProcessingError_login)
@@ -67,7 +69,7 @@ class ConnectionController
                         if(User::registerUser($_POST['username'], $_POST['email'], $_POST['password']))
                         {
                             header('Location: login');
-                            exit();
+                            exit(0);
                         } 
                         else 
                         {
@@ -96,7 +98,7 @@ class ConnectionController
         else
         {
             header('Location: register');
-            exit();
+            exit(0);
         }
 
         if($isProcessingError_register)
@@ -108,6 +110,8 @@ class ConnectionController
     public function logout()
     {
         session_destroy();
+        header('Location: login');
+        exit(0);
     }
 
     public function test()
