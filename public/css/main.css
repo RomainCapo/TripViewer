@@ -6,6 +6,11 @@
   text-align: center;
 }
 
+/* Trip Add Form */
+#photos {
+
+}
+
 /* Trip Map View*/
 #map {
   height: 100%;
@@ -16,6 +21,17 @@ html, body {
         margin: 0;
         padding: 0;
       }
+
+#markerInfo {
+  list-style:none;
+  margin-left: -40px;
+
+}
+
+#markerInfo li{
+    display:inline;
+}
+
 
 /* LOGIN - REGISTER */
 

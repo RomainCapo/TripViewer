@@ -12,18 +12,10 @@ class TripAddController
 
   public function tripAddParse()
   {
-    $destination;
-    $departure;
-    $name;
-    $departure_date;
-    $return_date;
-    $trip_state;
-    $transport_type;
-
+    $this->fileProcessing('Zurich', 'Romain');
     $description = NULL;
     $total_price = NULL;
     $number_people = NULL;
-    $km_traveled;
 
     $isProcessingError = false;
     $this->error = '';
@@ -107,10 +99,18 @@ class TripAddController
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
 
-                        $Trip->setIdUser(1);
-                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));
-                        $Trip->setIdCompany(1);
-                        $Trip->save();
+                        if($this->fileProcessing($destination, 'Romain'))
+                        {
+                          $Trip->setIdUser(1);
+                          $Trip->setIdTransportType(Transport::getTransportId($transport_type));
+                          $Trip->setIdCompany(1);
+                          $Trip->save();
+                        }
+                        else
+                        {
+                          $isProcessingError = true;
+                          $this->error = 'error with the file upload';
+                        }
                       }
                       else
                       {
@@ -121,7 +121,7 @@ class TripAddController
                     else
                     {
                       $isProcessingError = true;
-                      $this->error  = 'error with trip_name, description, total_price or number_people';
+                      $this->error  = 'error with description, total_price or number_people';
                     }
                 }
                 else
@@ -150,7 +150,8 @@ class TripAddController
         }
         else
         {
-
+          $isProcessingError = true;
+          $this->error = 'error with the trip name';
         }
       }
       else
@@ -175,10 +176,33 @@ class TripAddController
     }
   }
 
+  private function fileProcessing($destination, $username)
+  {
+    $fileError = false;
+
+    $target_dir = "uploads/";
+    $total = count($_FILES['photos']['name']);
+    for($i = 0; $i < $total; $i++)
+    {
+      $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
+      $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
+
+      if(move_uploaded_file($tmpFilePath, $newFilePath))
+      {
+        //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
+        $definitiveFilePath = $target_dir . $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+        rename($newFilePath, $definitiveFilePath);
+      }
+      else
+      {
+        $fileError = true;
+      }
+    }
+    return $fileError;
+  }
+
   public function test()
   {
-    $reponse = Destination::getLatLngCouFromDest('Zurich');
-    $reponse['state'] = 'in';
-    var_dump($reponse);
+    echo date("d-m-Y_h:i:s");
   }
 }

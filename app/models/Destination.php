@@ -84,10 +84,10 @@ class Destination extends Model
     $array = array();
     $data = $statement->fetchAll()[0];
 
-    $array['dest'] = $data['destination'];
-    $array['lat'] = $data['latitude'];
-    $array['lng'] = $data['longitude'];
-    $array['coun'] = $data['country'];
+    $array['dest'] = htmlentities(ucfirst($data['destination']));
+    $array['lat'] = htmlentities($data['latitude']);
+    $array['lng'] = htmlentities($data['longitude']);
+    $array['coun'] = htmlentities($data['country']);
 
     return $array;
   }
