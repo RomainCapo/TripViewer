@@ -7,14 +7,13 @@ class TripAddController
 
   public function index()
   {
-    var_dump($_SESSION['login']);
     if(isset($_SESSION['login']))
     {
       return Helper::view("tripAdd", ['error' => $this->error]);
     }
     else
     {
-      //header('Location: login');
+      header('Location: login');
     }
   }
 
@@ -115,11 +114,6 @@ class TripAddController
                           $isProcessingError = true;
                           $this->error = 'error with the geocoding API';
                         }
-
-                        $Trip->setIdUser(unserialize($_SESSION['login'])->getId());
-                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));
-                        $Trip->setIdCompany(1);
-                        $Trip->save();
                       }
                       else
                       {
@@ -181,6 +175,33 @@ class TripAddController
     else
     {
       header('Location: login');
+    }
+  }
+
+  public function updateTrip()
+  {
+
+  }
+
+  public function deleteTrip()
+  {
+    if(isset($_POST['deleteTripId']))
+    {
+      $id = $_POST['deleteTripId'];
+
+      $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id = ?');
+      $statement->bindValue(1, $id);
+
+      if($statement->execute())
+      {
+        header('Location: tripViewList'); // TODO add success messages
+        exit(0);
+      }
+      else
+      {
+        header('Location: tripViewList'); // TODO add errors messages
+        exit(0);
+      }
     }
   }
 

@@ -12,7 +12,7 @@ $router->define([
   'tripAddParse' => 'TripAddController@tripAddParse',
   'tripViewList' => 'TripController',
   'tripView' => 'TripController@showTrip',
-  'tripViewListEdit' => 'TripAddController@editTrip',
+  'tripViewListUpdate' => 'TripAddController@updateTrip',
   'tripViewListDelete' => 'TripAddController@deleteTrip',
   'tripViewMap' => '',
   'profil' => '',
