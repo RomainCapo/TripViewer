@@ -12,7 +12,6 @@ class TripAddController
 
   public function tripAddParse()
   {
-    //$this->fileProcessing(2, 'new-york', 'Romain');
     $description = NULL;
     $total_price = NULL;
     $number_people = NULL;
@@ -55,8 +54,6 @@ class TripAddController
                       $total_price = $_POST['total_price'];
                       $number_people = $_POST['number_people'];
 
-                      var_dump($_POST);
-
                       echo 'data processing okay';
 
                       $Trip = new Trip;
@@ -70,9 +67,6 @@ class TripAddController
 
                       $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                       $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
-
-                      var_dump($dest_gps_coord);
-                      var_dump($depa_gps_coord);
 
                       if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
                       {
@@ -99,13 +93,11 @@ class TripAddController
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
 
-
-
-                          $Trip->setIdUser(1);
+                          $Trip->setIdUser(3);
                           $Trip->setIdTransportType(Transport::getTransportId($transport_type));
                           $Trip->setIdCompany(1);
-
                           $idTrip = $Trip->save();
+
                           if($this->fileProcessing($idTrip, $destination, 'Romain'))
                           {
                             echo 'trip added';
@@ -182,37 +174,45 @@ class TripAddController
 
   private function fileProcessing($tripId, $destination, $username)
   {
-    $fileError = false;
-
-    $target_dir = "uploads/";
-    $total = count($_FILES['photos']['name']);
-    for($i = 0; $i < $total; $i++)
+    if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
     {
-      $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
-      $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
+      $noFileError = true;
 
-      if(move_uploaded_file($tmpFilePath, $newFilePath))
+      $target_dir = "uploads/";
+      $total = count($_FILES['photos']['name']);
+      for($i = 0; $i < $total; $i++)
       {
-        //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
-        $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
-        $definitiveFilePath = $target_dir . $filename;
-        rename($newFilePath, $definitiveFilePath);
+        $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
+        $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
 
-        $photo = new Photo;
-        $photo->setFileName($filename);
-        $photo->setIdTrip($tripId);
-        $photo->save();
+        if(move_uploaded_file($tmpFilePath, $newFilePath))
+        {
+          //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
+          $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+          $definitiveFilePath = $target_dir . $filename;
+          rename($newFilePath, $definitiveFilePath);
+
+          $photo = new Photo;
+          $photo->setFileName($filename);
+          $photo->setIdTrip($tripId);
+          $photo->save();
+        }
+        else
+        {
+          $noFileError = false;
+        }
       }
-      else
-      {
-        $fileError = true;
-      }
+
+      return $noFileError;
     }
-    return $fileError;
+    else
+    {
+      return true;
+    }
   }
 
   public function test()
   {
-    echo date("d-m-Y_h:i:s");
+    var_dump(Photo::getPhotosFromTrip(29));
   }
 }

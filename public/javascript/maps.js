@@ -26,7 +26,7 @@ function initMap() {
       }
 
       let contentString = '<div id="content">' +
-      '<h2>' + data[key]['dest'] + '</h2>' + 
+      '<h2>' + data[key]['dest'] + '</h2>' +
       '<p><ul style="list-style:none;"><li><strong>Trip name : </strong>' + data[key]['name'] +  '</li>' +
       '<li><strong>Trip description : </strong>' + data[key]['description'] +  '</li>' +
       '<li><strong>Departure place : </strong>' + data[key]['departure'] +  '</li>' +
