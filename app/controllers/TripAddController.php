@@ -12,7 +12,7 @@ class TripAddController
 
   public function tripAddParse()
   {
-    $this->fileProcessing('Zurich', 'Romain');
+    //$this->fileProcessing(2, 'new-york', 'Romain');
     $description = NULL;
     $total_price = NULL;
     $number_people = NULL;
@@ -99,18 +99,22 @@ class TripAddController
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
 
-                        if($this->fileProcessing($destination, 'Romain'))
-                        {
+
+
                           $Trip->setIdUser(1);
                           $Trip->setIdTransportType(Transport::getTransportId($transport_type));
                           $Trip->setIdCompany(1);
-                          $Trip->save();
-                        }
-                        else
-                        {
-                          $isProcessingError = true;
-                          $this->error = 'error with the file upload';
-                        }
+
+                          $idTrip = $Trip->save();
+                          if($this->fileProcessing($idTrip, $destination, 'Romain'))
+                          {
+                            echo 'trip added';
+                          }
+                          else
+                          {
+                            $isProcessingError = true;
+                            $this->error = 'error with file processing';
+                          }
                       }
                       else
                       {
@@ -176,7 +180,7 @@ class TripAddController
     }
   }
 
-  private function fileProcessing($destination, $username)
+  private function fileProcessing($tripId, $destination, $username)
   {
     $fileError = false;
 
@@ -190,8 +194,14 @@ class TripAddController
       if(move_uploaded_file($tmpFilePath, $newFilePath))
       {
         //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
-        $definitiveFilePath = $target_dir . $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+        $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+        $definitiveFilePath = $target_dir . $filename;
         rename($newFilePath, $definitiveFilePath);
+
+        $photo = new Photo;
+        $photo->setFileName($filename);
+        $photo->setIdTrip($tripId);
+        $photo->save();
       }
       else
       {

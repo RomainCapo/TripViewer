@@ -138,5 +138,7 @@ class Trip extends Model
     $statement->bindValue(12, $this->number_people);
     $statement->bindValue(13, $this->id_company);
     $statement->execute();
+
+    return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
   }
 }
