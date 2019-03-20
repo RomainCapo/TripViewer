@@ -185,7 +185,7 @@ class TripAddController
 
   public function deleteTrip()
   {
-    if(isset($_POST['deleteTripId']))
+    if(isset($_POST['deleteTripId']) && (Trip::getIdUserByTripId($_POST['deleteTripId']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_POST['deleteTripId'];
 

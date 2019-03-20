@@ -15,11 +15,10 @@ if(empty($trips))
 else
 {
     echo "<h1>That's all your trips...</h1><a href=\"tripAdd\">Add an another trip !</a><br><br>";
-}
-
-foreach($trips as $trip)
-{
-    echo $trip->asCardShow();
+    foreach($trips as $trip)
+    {
+        echo $trip->asCardShow();
+    }
 }
 
 ?>

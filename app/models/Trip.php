@@ -165,4 +165,20 @@ class Trip extends Model
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_CLASS, 'trip');
   }
+
+  public static function getIdUserByTripId($id_trip)
+  {
+    $statement = App::get('dbh')->prepare('SELECT id_user FROM trip WHERE id = ?');
+    $statement->bindValue(1, $id_trip);
+    $statement->execute();
+    $res = $statement->fetchAll();
+    if(!empty($res))
+    {
+      return $res[0]['id_user'];
+    }
+    else
+    {
+      return 0;
+    }
+  }
 }

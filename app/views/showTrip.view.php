@@ -17,8 +17,16 @@
     <li>Trip state : <?php echo htmlentities($trip['trip_state']) ?></li>
 </ul>
 
-<h3>Description of the trip</h3>
-<hr>
-<p><?php echo htmlentities($trip['description']) ?></p>
+
+<?php
+if(!empty($trip['description']))
+{
+?>
+    <h3>Description of the trip</h3>
+    <hr>
+    <p><?php echo htmlentities($trip['description']) ?></p>
+<?php
+}
+?>
 
 <?php require('partials/footer.php') ?>
