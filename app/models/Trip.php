@@ -23,8 +23,8 @@ class Trip extends Model
   {
       $str = "";
 
-      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
-      $str .= ucfirst(strtolower($this->getDestinationById($this->id_destination))); // TODO add htmlentities quand utf-8 ok
+      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>"; 
+      $str .= htmlentities(ucfirst(strtolower($this->getDestinationById($this->id_destination))));
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
@@ -158,8 +158,11 @@ class Trip extends Model
       return $res[0]['destination'];
   }
 
-  public function fetchTripById($id)
+  public static function fetchTripById($id_user)
   {
-
+    $statement = App::get('dbh')->prepare('SELECT * FROM trip WHERE id_user = ?');
+    $statement->bindValue(1, $id_user);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_CLASS, 'trip');
   }
 }

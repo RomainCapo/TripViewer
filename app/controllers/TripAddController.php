@@ -115,6 +115,11 @@ class TripAddController
                           $isProcessingError = true;
                           $this->error = 'error with the geocoding API';
                         }
+
+                        $Trip->setIdUser(unserialize($_SESSION['login'])->getId());
+                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));
+                        $Trip->setIdCompany(1);
+                        $Trip->save();
                       }
                       else
                       {

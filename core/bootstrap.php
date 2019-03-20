@@ -14,6 +14,8 @@ require 'app/models/Trip.php';
 require 'app/models/User.php';
 require 'app/models/Transport.php';
 
+session_start();
+
 App::load_config("config.php");
 
 App::set('dbh', Connection::make(App::get('config')['database']));
