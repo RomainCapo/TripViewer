@@ -129,6 +129,47 @@ class Trip extends Model
       return $str;
   }
 
+  public function displayInfos()
+  {
+    $str = "";
+
+    $str .= "<h1>";
+    $str .= htmlentities(strtoupper(Trip::getDestinationById($this->id_destination)));
+    $str .= "</h1><h3 style='color:grey'>";
+    $str .= htmlentities($this->name);
+    $str .= "</h3><p style='color:grey'><strong>From</strong><em>";
+    $str .= htmlentities($this->departure_date);
+    $str .= "</em> <strong>to</strong><em>";
+    $str .= htmlentities($this->return_date);
+    $str .= "</em></p>";
+
+    $str .= "<ul>";
+    $str .= "<li>Price : ";
+    $str .= htmlentities($this->total_price);
+    $str .= ".-</li>";
+    $str .= "<li>Number of people : ";
+    $str .= htmlentities($this->number_people);
+    $str .= "</li>";
+    $str .= "<li>Number of Km : ";
+    $str .= htmlentities($this->km_traveled);
+    $str .= " Km</li>";
+    $str .= "<li>Departure town : ";
+    $str .= htmlentities(Trip::getDestinationById($this->id_departure));
+    $str .= "</li>";
+    $str .= "<li>Trip state : ";
+    $str .= htmlentities($this->trip_state);
+    $str .= "</li></ul>";
+
+    if(!empty($this->description))
+    {
+        $str .= "<h3>Description of the trip</h3><hr><p>";
+        $str .= htmlentities($this->description);
+        $str .= "</p>";
+    }
+
+    return $str;
+  }
+
   //@summary retourne toutes les voyages de la base de données
   //@return Trip : objet contenant les informations de voyages
   public static function fetchAllTrips()
@@ -198,5 +239,10 @@ class Trip extends Model
     {
       return 0;
     }
+  }
+
+  public static function fetchById($id, $table, $intoClass)
+  {
+    return parent::fetchById($id, $table, $intoClass);
   }
 }

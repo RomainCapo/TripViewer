@@ -23,7 +23,7 @@ class Transport extends Model
     $string = '';
     foreach ($statement->fetchAll() as $key => $value)
     {
-      $string.= "<option value='". $value[0] ."'>" . $value[0] . '</option>' . PHP_EOL;
+      $string.= "<option value='". htmlentities($value[0]) ."'>" . htmlentities($value[0]) . '</option>' . PHP_EOL;
     }
     return $string;
   }

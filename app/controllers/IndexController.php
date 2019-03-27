@@ -5,4 +5,9 @@ class IndexController {
     {
         return Helper::view("index");
     }
+
+    public function routeNotDefined()
+    {
+        return Helper::view("routeNotDefined");
+    }
 }

@@ -5,6 +5,7 @@ class TripController
   //@summary Affiche la liste des voyages, selon l'id de l'utilisateur
   public function index()
   {
+    User::userIsConnected();
     return Helper::view("viewList", ['trips' => Trip::fetchTripById(unserialize($_SESSION['login'])->getId())]);
   }
 
@@ -12,19 +13,12 @@ class TripController
   //@return la vue pour visualiser le voyage, on redirection s'il y a une erreur
   public function showTrip()
   {
+    User::userIsConnected();
     if(isset($_GET["id"]) && ctype_digit($_GET["id"]) && (Trip::getIdUserByTripId($_GET['id']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_GET['id'];
 
-      $statement = App::get('dbh')->prepare('SELECT * FROM trip WHERE id = ?');
-      $statement->bindValue(1, $id);
-      $statement->execute();
-      $res = $statement->fetchAll();
-      $trip = $res[0];
-
-      return Helper::view("showTrip",[
-        'trip' => $trip,
-      ]);
+      return Helper::view("showTrip",['trips' => Trip::fetchById($id, 'trip', 'Trip')]);
     }
     else {
       header('Location: tripViewList');

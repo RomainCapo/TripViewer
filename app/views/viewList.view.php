@@ -6,7 +6,6 @@
 
 <?php 
 
-//var_dump($trips); 
 
 if(empty($trips))
 {

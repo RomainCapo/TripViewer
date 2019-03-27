@@ -16,4 +16,5 @@ $router->define([
   'tripViewListDelete' => 'TripAddController@deleteTrip',
   'tripViewMap' => '',
   'profil' => '',
+  'routeNotDefined' => 'IndexController@routeNotDefined'
 ]);
