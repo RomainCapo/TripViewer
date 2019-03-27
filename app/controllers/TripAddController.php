@@ -204,11 +204,4 @@ class TripAddController
       }
     }
   }
-
-  public function test()
-  {
-    $reponse = Destination::getLatLngCouFromDest('Zurich');
-    $reponse['state'] = 'in';
-    var_dump($reponse);
-  }
 }

@@ -16,6 +16,4 @@ $router->define([
   'tripViewListDelete' => 'TripAddController@deleteTrip',
   'tripViewMap' => '',
   'profil' => '',
-  'debug' => 'TripAddController@test',
-  'test' => 'ConnectionController@test',
 ]);

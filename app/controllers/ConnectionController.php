@@ -13,16 +13,22 @@ class ConnectionController
         return Helper::view("index");
     }
 
+    //@summary 
+    //@return la vue de login
     public function login()
     {
         return Helper::view("login", ['error_login' => $this->error_login]);
     }
 
+    //@summary appelle la vue register et lui passe en paramètre un tableau d'erreur
+    //@return la vue d'inscription
     public function register()
     {
         return Helper::view("register", ['error_register' => $this->error_register]);
     }
 
+    //@summary Fonction de login, on teste l'existence des variables post et les différentes informations
+    //@return this->login() si il y a eu des erreurs durant le parsing, sinon redirection sur une page appropriée
     public function loginParse()
     {
         if(isset($_POST['username']) && isset($_POST['password']))
@@ -56,6 +62,8 @@ class ConnectionController
         }
     }
 
+    //@summary Fonction qui s'occupe du parsing des données lors d'une inscription
+    //@return int : this->register() si il y a eu des erreurs durant le parsing, sinon redirection sur une page appropriée
     public function registerParse()
     {
         if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password']))
@@ -107,22 +115,12 @@ class ConnectionController
         }
     }
 
+    //@summary Permet de déconnecter l'utilisateur
+    //@return header sur le login
     public function logout()
     {
         session_destroy();
         header('Location: login');
         exit(0);
-    }
-
-    public function test()
-    {
-        $a;
-
-        $a['test'] = '123';
-        $a['okok'] = 'zip';
-        
-        
-        //var_dump($a);
-        echo $a['test'];
     }
 }
