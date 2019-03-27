@@ -17,7 +17,7 @@ class Transport extends Model
   //@return string : retourne l'html de la liste déroulante sous forme de string
   public static function fetchAllTransportsName()
   {
-    $statement = App::get('dbh')->prepare("select transport from Transport");
+    $statement = App::get('dbh')->prepare("select transport from transport");
     $statement->execute();
 
     $string = '';
@@ -33,7 +33,7 @@ class Transport extends Model
   //@return boolean : indique si le transport est dans la base de donnée ou non
   public static function transportInDb($transport)
   {
-    $statement = App::get('dbh')->prepare("select * from Transport where transport=:transport");
+    $statement = App::get('dbh')->prepare("select * from transport where transport=:transport");
     $statement->bindParam(':transport', $transport);
     $statement->execute();
 
@@ -52,7 +52,7 @@ class Transport extends Model
   //@return int : retourne l'id du moyen de transport
   public static function getTransportId($transport)
   {
-    $statement = App::get('dbh')->prepare("select id from Transport where transport=:transport");
+    $statement = App::get('dbh')->prepare("select id from transport where transport=:transport");
     $statement->bindParam(':transport', $transport);
     $statement->execute();
 

@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col">
             <label for="trip_state">Trip state : </label>
-            <select class="form-control" id="trip_state" name="trip_state"  required autocomplete="off"/>
+            <select class="form-control" id="trip_state" name="trip_state"  required autocomplete="off">
               <option value="realized">Realized</option>
               <option value="reserved">Reserved</option>
               <option value="planned">Planned</option>
@@ -38,12 +38,12 @@
           </div>
           <div class="col">
             <label for="transport_type">Transport type : </label>
-            <select class="form-control" id="transport_type" name="transport_type" required autocomplete="off"/>
+            <select class="form-control" id="transport_type" name="transport_type" required autocomplete="off">
               <?php echo Transport::fetchAllTransportsName(); ?>
             </select><br/>
           </div>
         </div>
-        <label for="description">Trip description : </label><textarea class="form-control" id="description" name="description" placeholder="Enter your trip description"  autocomplete="off"/></textarea><br/>
+        <label for="description">Trip description : </label><textarea class="form-control" id="description" name="description" placeholder="Enter your trip description"  autocomplete="off"></textarea><br/>
         <button type="submit" class="btn btn-success block-btn" >Add the trip</button>
     </form>
   </div>
