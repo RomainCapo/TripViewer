@@ -19,32 +19,7 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
-  public function asCardShow()
-  {
-      $str = "";
-
-      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>"; 
-      $str .= htmlentities(ucfirst(strtolower($this->getDestinationById($this->id_destination))));
-      $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
-      $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
-      $str .= "</em></span>";
-      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
-      $str .= htmlentities($this->name);
-      $str .= "</h4><p class='card-text'>";
-      $str .= htmlentities($this->description);
-      $str .= "</p><a href='tripView?id=";
-      $str .= urlencode($this->id);
-      $str .= "' class='card-link'>Read more about ";
-      $str .= htmlentities($this->name);
-      $str .= "</a><br><br>";
-      $str .= "<form action='tripViewListEdit' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
-      $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
-      $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
-      $str .= "</div></div><br>";
-
-      return $str;
-  }
-
+//Setters
   public function setName($name)
   {
     $this->name = $name;
@@ -70,6 +45,7 @@ class Trip extends Model
     $this->km_traveled = $kmTraveled;
   }
 
+//valeur par défaut 0
   public function setTotalPrice($totalPrice)
   {
     if($totalPrice != '')
@@ -92,6 +68,7 @@ class Trip extends Model
     $this->id_user = $id;
   }
 
+//valeur par défaut 0
   public function setNumberPeople($numberPeople)
   {
     if($numberPeople != '')
@@ -124,11 +101,42 @@ class Trip extends Model
     $this->id_company = $id;
   }
 
+  //@summary retourne les informations d'un voyage dans le but d'être affiché dans une vue
+  //@return string : retourne l'html contenant les informations de voyage sous forme de string
+  public function asCardShow()
+  {
+      $str = "";
+
+      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
+      $str .= htmlentities(ucfirst(strtolower($this->getDestinationById($this->id_destination))));
+      $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
+      $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
+      $str .= "</em></span>";
+      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
+      $str .= htmlentities($this->name);
+      $str .= "</h4><p class='card-text'>";
+      $str .= htmlentities($this->description);
+      $str .= "</p><a href='tripView?id=";
+      $str .= urlencode($this->id);
+      $str .= "' class='card-link'>Read more about ";
+      $str .= htmlentities($this->name);
+      $str .= "</a><br><br>";
+      $str .= "<form action='tripViewListEdit' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
+      $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
+      $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
+      $str .= "</div></div><br>";
+
+      return $str;
+  }
+
+  //@summary retourne toutes les voyages de la base de données
+  //@return Trip : objet contenant les informations de voyages
   public static function fetchAllTrips()
   {
     return parent::fetchAll('trip', 'Trip');
   }
 
+  //@summary sauve les voyages dans la base de données
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)
@@ -149,6 +157,9 @@ class Trip extends Model
     $statement->execute();
   }
 
+  //@summary retourne la destination a partir d'un id
+  //@param $id : id de la destination
+  //@return int : id de la destination
   public static function getDestinationById($id)
   {
       $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id = ?');
@@ -158,6 +169,9 @@ class Trip extends Model
       return $res[0]['destination'];
   }
 
+  //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur
+  //@param $id_user : id de l'utilisateur
+  //@return Trip : objet contentant les informations de voyages
   public static function fetchTripById($id_user)
   {
     $statement = App::get('dbh')->prepare('SELECT * FROM trip WHERE id_user = ?');
@@ -166,6 +180,10 @@ class Trip extends Model
     return $statement->fetchAll(PDO::FETCH_CLASS, 'trip');
   }
 
+  //@summary retourne l'id de l'utilisateur a partir d'un id de voyage
+  //@param $id_trip : id du voyage
+  //@return 0 : dans le cas ou aucun voyage ne corresponds à l'utilisateur
+  //@return int : id de l'utilisateur
   public static function getIdUserByTripId($id_trip)
   {
     $statement = App::get('dbh')->prepare('SELECT id_user FROM trip WHERE id = ?');
