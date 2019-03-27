@@ -76,7 +76,7 @@ class User extends Model
       $statement = App::get('dbh')->prepare("SELECT COUNT(id), password FROM user WHERE pseudo = :pseudo");
       $statement->bindParam(':pseudo', $pseudo);
       $statement->execute();
-      $res = $statement->fetchAll();  
+      $res = $statement->fetchAll();
 
       if($res[0][0] == 1)
       {
@@ -97,8 +97,8 @@ class User extends Model
       $statement = App::get('dbh')->prepare("SELECT COUNT(id) FROM user WHERE pseudo = :pseudo");
       $statement->bindParam(':pseudo', $pseudo);
       $statement->execute();
-      $res = $statement->fetchAll();  
-      
+      $res = $statement->fetchAll();
+
       return ($res[0][0] == 1) ? true : false;
   }
 
@@ -126,5 +126,15 @@ class User extends Model
       $statement->execute();
       $res = $statement->fetchAll();
       return $res[0]['id'];
+  }
+
+  //@summary test si l'utilisateur est connecté sinon le redirige sur le formulaire de login
+  public static function userIsConnected()
+  {
+    if(!isset($_SESSION['login']))
+    {
+      header('Location: login');
+      exit(0);
+    }
   }
 }

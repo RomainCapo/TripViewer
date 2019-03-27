@@ -79,6 +79,12 @@ class GoogleMapsApiHelper
     }
 
     //function de https://stackoverflow.com/questions/365826/calculate-distance-between-2-gps-coordinates
+    //@summary permet d'obtenir la distance entre 2 coordonnées GPS
+    //@param $lat1 : latitude de la destination 1
+    //@param $lng1 : longitude de la destination 1
+    //@param $lat2 : latitude de la destination 2
+    //@param $lng2 : longitude de la destination 2
+    //@return double : distance entre 2 destination
     public static function getDistBetweenTwoGPSPoint($lat1, $lng1, $lat2, $lng2)
     {
       $earth_rad = 6371;
@@ -95,6 +101,9 @@ class GoogleMapsApiHelper
       return $earth_rad * $c;
     }
 
+    //@summary permet de convertir des degrées en radian
+    //@param $deg : angle en degré
+    //@return double : angle en degré
     private static function degToRad($deg)
     {
       return $deg * pi() / 180;
