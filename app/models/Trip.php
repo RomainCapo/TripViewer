@@ -108,7 +108,7 @@ class Trip extends Model
       $str = "";
 
       $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
-      $str .= htmlentities(ucfirst(strtolower($this->getDestinationById($this->id_destination))));
+      $str .= htmlentities(ucfirst(strtolower(Destination::getDestinationById($this->id_destination))));
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
@@ -134,7 +134,7 @@ class Trip extends Model
     $str = "";
 
     $str .= "<h1>";
-    $str .= htmlentities(strtoupper(Trip::getDestinationById($this->id_destination)));
+    $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
     $str .= "</h1><h3 style='color:grey'>";
     $str .= htmlentities($this->name);
     $str .= "</h3><p style='color:grey'><strong>From</strong><em>";
@@ -154,7 +154,7 @@ class Trip extends Model
     $str .= htmlentities($this->km_traveled);
     $str .= " Km</li>";
     $str .= "<li>Departure town : ";
-    $str .= htmlentities(Trip::getDestinationById($this->id_departure));
+    $str .= htmlentities(Destination::getDestinationById($this->id_departure));
     $str .= "</li>";
     $str .= "<li>Trip state : ";
     $str .= htmlentities($this->trip_state);
@@ -196,18 +196,6 @@ class Trip extends Model
     $statement->bindValue(12, $this->number_people);
     $statement->bindValue(13, $this->id_company);
     $statement->execute();
-  }
-
-  //@summary retourne la destination a partir d'un id
-  //@param $id : id de la destination
-  //@return int : id de la destination
-  public static function getDestinationById($id)
-  {
-      $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id = ?');
-      $statement->bindValue(1, $id);
-      $statement->execute();
-      $res = $statement->fetchAll();
-      return $res[0]['destination'];
   }
 
   //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur

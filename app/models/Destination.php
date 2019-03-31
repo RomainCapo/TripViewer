@@ -85,6 +85,18 @@ class Destination extends Model
     }
   }
 
+  //@summary retourne la destination a partir d'un id
+  //@param $id : id de la destination
+  //@return int : id de la destination
+  public static function getDestinationById($id)
+  {
+      $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id = ?');
+      $statement->bindValue(1, $id);
+      $statement->execute();
+      $res = $statement->fetchAll();
+      return $res[0]['destination'];
+  }
+
   //@summary sauve la destination dans la base de données
   public function save()
   {

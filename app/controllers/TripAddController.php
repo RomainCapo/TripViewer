@@ -197,5 +197,10 @@ class TripAddController
         exit(0);
       }
     }
+    else
+    {
+      header('Location: tripViewList');
+      exit(0);
+    }
   }
 }
