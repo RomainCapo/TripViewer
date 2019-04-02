@@ -15,6 +15,7 @@ class TripController
 
   public function getAllUserTripCoord()
   {
-    echo json_encode(Trip::getUserTripInfo(3));
+    //ne pas oublier de changer l'id de l'utilisateur
+    echo json_encode(Trip::getUserTripInfo(4));
   }
 }

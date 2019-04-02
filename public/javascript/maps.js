@@ -51,5 +51,5 @@ function initMap() {
           infoWindow.open(map, marker);
         });
     }
-  });
+  }).error;
 }
