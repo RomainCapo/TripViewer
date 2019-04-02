@@ -1,5 +1,10 @@
 <?php
     $title = "Home";
+
+if(isset($_SESSION['login']))
+{
+  require('partials/nav.php');
+}
     require('partials/header.php');
 ?>
 
@@ -20,6 +25,11 @@
     <footer class="blockquote-footer">Samuel Johnson</footer>
   </blockquote>
   <br><br>
-  <a href="login">Login here</a><br>
-  <a href="register">Register here</a>
+  <?php
+  if(!isset($_SESSION['login']))
+  {
+    echo '<a href="login">Login here</a><br>';
+    echo '<a href="register">Register here</a>';
+  }
+  ?>
 </div>

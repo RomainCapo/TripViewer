@@ -13,7 +13,7 @@ class ConnectionController
         return Helper::view("index");
     }
 
-    //@summary 
+    //@summary
     //@return la vue de login
     public function login()
     {
@@ -43,11 +43,11 @@ class ConnectionController
 
                 header('Location: index');
                 exit(0);
-            } 
+            }
             else 
-            { 
+            {
                 $isProcessingError_login = true;
-                $this->error_login['user'] = "User invalid or incorrect password"; 
+                $this->error_login['user'] = "User invalid or incorrect password";
             }
         }
         else
@@ -78,29 +78,29 @@ class ConnectionController
                         {
                             header('Location: login');
                             exit(0);
-                        } 
-                        else 
+                        }
+                        else
                         {
                             $isProcessingError_register = true;
                             $this->error_register['register'] = "Error during registration";
                         }
-                    } 
-                    else 
-                    { 
-                        $isProcessingError_register = true;
-                        $this->error_register['email'] = "Invalid email"; 
                     }
-                } 
-                else 
-                { 
+                    else
+                    {
+                        $isProcessingError_register = true;
+                        $this->error_register['email'] = "Invalid email";
+                    }
+                }
+                else
+                {
                     $isProcessingError_register = true;
                     $this->error_register['pseudo'] = "Pseudo already taken";
                 }
-            } 
-            else 
-            { 
+            }
+            else
+            {
                 $isProcessingError_register = true;
-                $this->error_register['password'] = "Passwords are differents"; 
+                $this->error_register['password'] = "Passwords are differents";
             }
         }
         else
