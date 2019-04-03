@@ -184,6 +184,18 @@ class TripAddController
     }
   }
 
+  private function validateDate($date, $format = 'dd.mm.YYYY')
+  {
+    $d = DateTime::createFromFormat($format, $date);
+    // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
+    return $d && $d->format($format) === $date;
+  }
+
+  public function debug()
+  {
+    var_dump($this->validateDate('03.10.2020'));
+  }
+
   private function fileProcessing($tripId, $destination, $username)
   {
     if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
