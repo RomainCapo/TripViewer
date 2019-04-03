@@ -42,7 +42,9 @@ class Router
         );
     }
 
-    throw new Exception("Not routes defined for this URI.", 1);
+    header('Location: routeNotDefined');
+    exit(0);
+    //throw new Exception("Not routes defined for this URI.", 1);
 
   }
 

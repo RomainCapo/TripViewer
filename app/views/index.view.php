@@ -1,259 +1,35 @@
 <?php
     $title = "Home";
+
+if(isset($_SESSION['login']))
+{
+  require('partials/nav.php');
+}
     require('partials/header.php');
-    require('partials/nav.php');
 
 ?>
 <div class="container">
-<h1>Home</h1>
+  <br>
+  <br>
+  <?php if(isset($_SESSION['login'])) { ?>
 
-<p><strong>Welcome to TripViewer.</strong></p>
+      <h1>Hi <?php echo unserialize($_SESSION['login'])->getPseudo(); ?> !</h1>
 
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
+  <?php } ?>
 
+  <h3 style="color:grey"><strong>Welcome to TripViewer.</strong></h3>
 
-
-
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
-<h1>Home</h1>
-
-<p><strong>Welcome to TripViewer.</strong></p>
-
-<p>liens utiles au projet</p>
-<ul>
-    <li><a href="login">Go to Login</a></li>
-    <li><a href="register">Go to Register</a></li>
-</ul>
+  <br><br>
+  <blockquote class="blockquote text-center">
+    <p class="mb-0">"The use of traveling is to regulate imagination by reality, and instead of thinking how things may be, to see them as they are"</p>
+    <footer class="blockquote-footer">Samuel Johnson</footer>
+  </blockquote>
+  <br><br>
+  <?php
+  if(!isset($_SESSION['login']))
+  {
+    echo '<a href="login">Login here</a><br>';
+    echo '<a href="register">Register here</a>';
+  }
+  ?>
 </div>
-
-<?php require('partials/footer.php') ?>

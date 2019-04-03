@@ -1,8 +1,8 @@
 <?php
 
 $router->define([
-  '' => 'ConnectionController',
-  'index' => 'ConnectionController',
+  '' => 'IndexController',
+  'index' => 'IndexController',
   'login' => 'ConnectionController@login',
   'loginParse' => 'ConnectionController@loginParse',
   'register' => 'ConnectionController@register',
@@ -12,9 +12,10 @@ $router->define([
   'tripAddParse' => 'TripAddController@tripAddParse',
   'tripViewList' => 'TripController',
   'tripViewMap' => 'TripController@mapView',
-  'about' => '',
   'profil' => '',
-  'debug' => 'TripAddController@test',
-  'test' => 'ConnectionController@test',
   'ajax' => 'TripController@getAllUserTripCoord',
+  'tripView' => 'TripController@showTrip',
+  'tripViewListUpdate' => 'TripAddController@updateTrip',
+  'tripViewListDelete' => 'TripAddController@deleteTrip',
+  'routeNotDefined' => 'IndexController@routeNotDefined'
 ]);

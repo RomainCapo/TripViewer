@@ -13,16 +13,22 @@ class ConnectionController
         return Helper::view("index");
     }
 
+    //@summary
+    //@return la vue de login
     public function login()
     {
         return Helper::view("login", ['error_login' => $this->error_login]);
     }
 
+    //@summary appelle la vue register et lui passe en paramètre un tableau d'erreur
+    //@return la vue d'inscription
     public function register()
     {
         return Helper::view("register", ['error_register' => $this->error_register]);
     }
 
+    //@summary Fonction de login, on teste l'existence des variables post et les différentes informations
+    //@return this->login() si il y a eu des erreurs durant le parsing, sinon redirection sur une page appropriée
     public function loginParse()
     {
         if(isset($_POST['username']) && isset($_POST['password']))
@@ -31,21 +37,23 @@ class ConnectionController
             {
                 $user = new User();
                 $user->setPseudo($_POST['username']);
+                $id = $user->getIdByPseudo($_POST['username']);
+                $user->setId($id);
                 $_SESSION['login'] = serialize($user);
 
                 header('Location: index');
-                exit();
-            } 
+                exit(0);
+            }
             else 
-            { 
+            {
                 $isProcessingError_login = true;
-                $this->error_login['user'] = "User invalid or incorrect password"; 
+                $this->error_login['user'] = "User invalid or incorrect password";
             }
         }
         else
         {
             header('Location: login');
-            exit();
+            exit(0);
         }
 
         if($isProcessingError_login)
@@ -54,6 +62,8 @@ class ConnectionController
         }
     }
 
+    //@summary Fonction qui s'occupe du parsing des données lors d'une inscription
+    //@return int : this->register() si il y a eu des erreurs durant le parsing, sinon redirection sur une page appropriée
     public function registerParse()
     {
         if(isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password']))
@@ -67,36 +77,36 @@ class ConnectionController
                         if(User::registerUser($_POST['username'], $_POST['email'], $_POST['password']))
                         {
                             header('Location: login');
-                            exit();
-                        } 
-                        else 
+                            exit(0);
+                        }
+                        else
                         {
                             $isProcessingError_register = true;
                             $this->error_register['register'] = "Error during registration";
                         }
-                    } 
-                    else 
-                    { 
-                        $isProcessingError_register = true;
-                        $this->error_register['email'] = "Invalid email"; 
                     }
-                } 
-                else 
-                { 
+                    else
+                    {
+                        $isProcessingError_register = true;
+                        $this->error_register['email'] = "Invalid email";
+                    }
+                }
+                else
+                {
                     $isProcessingError_register = true;
                     $this->error_register['pseudo'] = "Pseudo already taken";
                 }
-            } 
-            else 
-            { 
+            }
+            else
+            {
                 $isProcessingError_register = true;
-                $this->error_register['password'] = "Passwords are differents"; 
+                $this->error_register['password'] = "Passwords are differents";
             }
         }
         else
         {
             header('Location: register');
-            exit();
+            exit(0);
         }
 
         if($isProcessingError_register)
@@ -105,20 +115,12 @@ class ConnectionController
         }
     }
 
+    //@summary Permet de déconnecter l'utilisateur
+    //@return header sur le login
     public function logout()
     {
         session_destroy();
-    }
-
-    public function test()
-    {
-        $a;
-
-        $a['test'] = '123';
-        $a['okok'] = 'zip';
-        
-        
-        //var_dump($a);
-        echo $a['test'];
+        header('Location: login');
+        exit(0);
     }
 }
