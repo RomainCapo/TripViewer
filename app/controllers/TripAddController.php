@@ -7,19 +7,21 @@ class TripAddController
 
   public function index()
   {
-      return Helper::view("tripAdd", ['error' => $this->error]);
+    User::userIsConnected();//on teste si le user est connecté
+    return Helper::view("tripAdd", ['error' => $this->error]);//on affiche la vue
   }
 
+//permet de parser le formulaire d'ajout de voyage
   public function tripAddParse()
   {
-    $description = NULL;
-    $total_price = NULL;
-    $number_people = NULL;
-
-    $isProcessingError = false;
-    $this->error = '';
 
     //Data processing
+    User::userIsConnected();
+
+    $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
+    $this->error = '';//pour stocker le message d'erreur
+
+    //on fait des tests sur toute les champs du formulaire d'ajout de voyage
     if(isset($_POST['destination']) && !empty($_POST['destination']))
     {
       $destination = $_POST['destination'];
@@ -36,6 +38,7 @@ class TripAddController
           {
             $departure_date = $_POST['departure_date'];
 
+            //on teste également que la date de debut est plus petite que la date de fin
             if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])))
             {
               $return_date = $_POST['return_date'];
@@ -44,6 +47,7 @@ class TripAddController
               {
                 $trip_state = $_POST['trip_state'];
 
+                //on teste également si le transport est dans la base de données
                 if(isset($_POST['transport_type']) && !empty($_POST['transport_type']) && Transport::transportInDb($_POST['transport_type']))
                 {
                     $transport_type = $_POST['transport_type'];
@@ -56,6 +60,7 @@ class TripAddController
 
                       echo 'data processing okay';
 
+                      //on créé un objet voyage
                       $Trip = new Trip;
                       $Trip->setName($name);
                       $Trip->setDescription($description);
@@ -65,13 +70,17 @@ class TripAddController
                       $Trip->setTripState($trip_state);
                       $Trip->setNumberPeople($number_people);
 
+                      //on géolocalise la destination et le déaprt
                       $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                       $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
 
+                      //selon le status de la requete on effectue différent traitement
                       if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
                       {
+                        //on recupere la distance entre les 2 destinations
                         $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
 
+                        //on sauvegarde les destinations avec leur informations dans l'object voyage
                         if($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'OK')
                         {
                           $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
@@ -92,21 +101,21 @@ class TripAddController
                           $Trip->setIdDestination($dest_gps_coord['id']);
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
+                        $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
+                        $Trip->setIdUser($userId);
+                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
+                        $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
+                        $idTrip = $Trip->save();
 
-                          $Trip->setIdUser(3);
-                          $Trip->setIdTransportType(Transport::getTransportId($transport_type));
-                          $Trip->setIdCompany(1);
-                          $idTrip = $Trip->save();
-
-                          if($this->fileProcessing($idTrip, $destination, 'Romain'))
-                          {
-                            echo 'trip added';
-                          }
-                          else
-                          {
-                            $isProcessingError = true;
-                            $this->error = 'error with file processing';
-                          }
+                        if($this->fileProcessing($idTrip, $destination, 'Romain'))
+                        {
+                          echo 'trip added';
+                        }
+                        else
+                        {
+                          $isProcessingError = true;
+                          $this->error = 'error with file processing';
+                        }
                       }
                       else
                       {
@@ -162,6 +171,8 @@ class TripAddController
       $this->error  = 'error with the destination';
     }
 
+    //si il y a eu des erreur on raffiche le formulaire d'ajout de voyage avec le message d'erreur
+    //sinon on redirige vers l'affichage des voyages
     if($isProcessingError)
     {
       return $this->index();
@@ -169,6 +180,7 @@ class TripAddController
     else
     {
       header('Location: tripViewList');
+      exit(0);
     }
   }
 
@@ -211,8 +223,33 @@ class TripAddController
     }
   }
 
-  public function test()
+//permet de supprimer un voyage
+  public function deleteTrip()
   {
-    var_dump(Photo::getPhotosFromTrip(29));
+    User::userIsConnected();
+
+    if(isset($_POST['deleteTripId']) && (Trip::getIdUserByTripId($_POST['deleteTripId']) == unserialize($_SESSION['login'])->getId()))
+    {
+      $id = $_POST['deleteTripId'];
+
+      $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id = ?');
+      $statement->bindValue(1, $id);
+
+      if($statement->execute())
+      {
+        header('Location: tripViewList'); // TODO add success messages
+        exit(0);
+      }
+      else
+      {
+        header('Location: tripViewList'); // TODO add errors messages
+        exit(0);
+      }
+    }
+    else
+    {
+      header('Location: tripViewList');
+      exit(0);
+    }
   }
 }

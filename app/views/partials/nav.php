@@ -19,9 +19,6 @@
 				<li class="nav-item">
 					<a class="nav-link" href="tripViewMap">Maps</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="about">About</a>
-				</li>
 			</ul>
 			<div class="my-2 my-lg-0">
 				<a class="btn btn-primary btn-sm" href="profil" role="button">Profil</a>
@@ -33,3 +30,4 @@
 
 <br>
 <br>
+<button onclick="topFunction()" id="btnToTop" title="Go to top">To top</button>

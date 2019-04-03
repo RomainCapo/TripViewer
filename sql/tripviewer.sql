@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.9
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 28 fév. 2019 à 21:06
--- Version du serveur :  5.7.21
--- Version de PHP :  5.6.35
+-- Hôte : 127.0.0.1
+-- Généré le :  mer. 27 mars 2019 à 09:23
+-- Version du serveur :  5.7.17
+-- Version de PHP :  7.1.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,12 +28,10 @@ SET time_zone = "+00:00";
 -- Structure de la table `company`
 --
 
-DROP TABLE IF EXISTS `company`;
-CREATE TABLE IF NOT EXISTS `company` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=158 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE `company` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `company`
@@ -204,23 +202,25 @@ INSERT INTO `company` (`id`, `name`) VALUES
 -- Structure de la table `destination`
 --
 
-DROP TABLE IF EXISTS `destination`;
-CREATE TABLE IF NOT EXISTS `destination` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `destination` (
+  `id` int(11) NOT NULL,
   `destination` varchar(255) COLLATE utf8_bin NOT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
-  `country` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `country` varchar(255) COLLATE utf8_bin DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
 
 --
--- Déchargement des données de la table `destination`
+-- Structure de la table `photo`
 --
 
-INSERT INTO `destination` (`id`, `destination`, `latitude`, `longitude`, `country`) VALUES
-(1, 'Buenos Aires', -35, -58, 'Argentina'),
-(2, 'Lima', -12.0463731, -77.042754, 'Peru');
+CREATE TABLE `photo` (
+  `id` int(11) NOT NULL,
+  `file_name` varchar(255) COLLATE utf8_bin NOT NULL,
+  `id_trip` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -228,12 +228,10 @@ INSERT INTO `destination` (`id`, `destination`, `latitude`, `longitude`, `countr
 -- Structure de la table `transport`
 --
 
-DROP TABLE IF EXISTS `transport`;
-CREATE TABLE IF NOT EXISTS `transport` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `transport` varchar(255) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+CREATE TABLE `transport` (
+  `id` int(11) NOT NULL,
+  `transport` varchar(255) COLLATE utf8_bin NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Déchargement des données de la table `transport`
@@ -253,9 +251,8 @@ INSERT INTO `transport` (`id`, `transport`) VALUES
 -- Structure de la table `trip`
 --
 
-DROP TABLE IF EXISTS `trip`;
-CREATE TABLE IF NOT EXISTS `trip` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `trip` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `description` text COLLATE utf8_bin,
   `departure_date` datetime NOT NULL,
@@ -268,13 +265,7 @@ CREATE TABLE IF NOT EXISTS `trip` (
   `id_destination` int(11) NOT NULL,
   `id_departure` int(11) NOT NULL,
   `number_people` int(11) DEFAULT NULL,
-  `id_company` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_user` (`id_user`),
-  KEY `FK_transport_type` (`id_transport_type`),
-  KEY `FK_destination` (`id_destination`),
-  KEY `FK_departure` (`id_departure`),
-  KEY `FK_company` (`id_company`)
+  `id_company` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -283,26 +274,103 @@ CREATE TABLE IF NOT EXISTS `trip` (
 -- Structure de la table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
   `pseudo` varchar(255) COLLATE utf8_bin NOT NULL,
   `email` varchar(255) COLLATE utf8_bin NOT NULL,
   `password` varchar(255) COLLATE utf8_bin NOT NULL,
-  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+  `creation_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Déchargement des données de la table `user`
+-- Index pour les tables déchargées
 --
 
-INSERT INTO `user` (`id`, `pseudo`, `email`, `password`, `creation_date`) VALUES
-(1, 'Romain', 'romain.capocasale@gmail.com', '1234', '2019-02-28 20:49:04');
+--
+-- Index pour la table `company`
+--
+ALTER TABLE `company`
+  ADD PRIMARY KEY (`id`);
 
+--
+-- Index pour la table `destination`
+--
+ALTER TABLE `destination`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `photo`
+--
+ALTER TABLE `photo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_trip` (`id_trip`);
+
+--
+-- Index pour la table `transport`
+--
+ALTER TABLE `transport`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `trip`
+--
+ALTER TABLE `trip`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_user` (`id_user`),
+  ADD KEY `FK_transport_type` (`id_transport_type`),
+  ADD KEY `FK_destination` (`id_destination`),
+  ADD KEY `FK_departure` (`id_departure`),
+  ADD KEY `FK_company` (`id_company`);
+
+--
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `company`
+--
+ALTER TABLE `company`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
+--
+-- AUTO_INCREMENT pour la table `destination`
+--
+ALTER TABLE `destination`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+--
+-- AUTO_INCREMENT pour la table `photo`
+--
+ALTER TABLE `photo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT pour la table `transport`
+--
+ALTER TABLE `transport`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT pour la table `trip`
+--
+ALTER TABLE `trip`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+--
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `photo`
+--
+ALTER TABLE `photo`
+  ADD CONSTRAINT `FK_trip` FOREIGN KEY (`id_trip`) REFERENCES `trip` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `trip`

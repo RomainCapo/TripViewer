@@ -19,10 +19,12 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
+
   public function getName(){
     return $this->name;
   }
 
+//Setters
   public function setName($name)
   {
     $this->name = $name;
@@ -48,9 +50,17 @@ class Trip extends Model
     $this->km_traveled = $kmTraveled;
   }
 
+//valeur par défaut 0
   public function setTotalPrice($totalPrice)
   {
-    $this->total_price = $totalPrice;
+    if($totalPrice != '')
+    {
+      $this->total_price = $totalPrice;
+    }
+    else
+    {
+      $this->total_price = 0;
+    }
   }
 
   public function setTripState($tripState)
@@ -63,9 +73,17 @@ class Trip extends Model
     $this->id_user = $id;
   }
 
+//valeur par défaut 0
   public function setNumberPeople($numberPeople)
   {
-    $this->numberPeople = $numberPeople;
+    if($numberPeople != '')
+    {
+      $this->number_people = $numberPeople;
+    }
+    else
+    {
+      $this->number_people = 0;
+    }
   }
 
   public function setIdTransportType($id)
@@ -88,6 +106,77 @@ class Trip extends Model
     $this->id_company = $id;
   }
 
+  //@summary retourne les informations d'un voyage dans le but d'être affiché dans une vue
+  //@return string : retourne l'html contenant les informations de voyage sous forme de string
+  public function asCardShow()
+  {
+      $str = "";
+
+      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
+      $str .= htmlentities(ucfirst(strtolower(Destination::getDestinationById($this->id_destination))));
+      $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
+      $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
+      $str .= "</em></span>";
+      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
+      $str .= htmlentities($this->name);
+      $str .= "</h4><p class='card-text'>";
+      $str .= htmlentities($this->description);
+      $str .= "</p><a href='tripView?id=";
+      $str .= urlencode($this->id);
+      $str .= "' class='card-link'>Read more about ";
+      $str .= htmlentities($this->name);
+      $str .= "</a><br><br>";
+      $str .= "<form action='tripViewListEdit' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
+      $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
+      $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
+      $str .= "</div></div><br>";
+
+      return $str;
+  }
+
+  public function displayInfos()
+  {
+    $str = "";
+
+    $str .= "<h1>";
+    $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
+    $str .= "</h1><h3 style='color:grey'>";
+    $str .= htmlentities($this->name);
+    $str .= "</h3><p style='color:grey'><strong>From</strong><em>";
+    $str .= htmlentities($this->departure_date);
+    $str .= "</em> <strong>to</strong><em>";
+    $str .= htmlentities($this->return_date);
+    $str .= "</em></p>";
+
+    $str .= "<ul>";
+    $str .= "<li>Price : ";
+    $str .= htmlentities($this->total_price);
+    $str .= ".-</li>";
+    $str .= "<li>Number of people : ";
+    $str .= htmlentities($this->number_people);
+    $str .= "</li>";
+    $str .= "<li>Number of Km : ";
+    $str .= htmlentities($this->km_traveled);
+    $str .= " Km</li>";
+    $str .= "<li>Departure town : ";
+    $str .= htmlentities(Destination::getDestinationById($this->id_departure));
+    $str .= "</li>";
+    $str .= "<li>Trip state : ";
+    $str .= htmlentities($this->trip_state);
+    $str .= "</li></ul>";
+
+    if(!empty($this->description))
+    {
+        $str .= "<h3>Description of the trip</h3><hr><p>";
+        $str .= htmlentities($this->description);
+        $str .= "</p>";
+    }
+
+    return $str;
+  }
+
+  //@summary retourne toutes les voyages de la base de données
+  //@return Trip : objet contenant les informations de voyages
   public static function fetchAllTrips()
   {
     return parent::fetchAll('trip', 'Trip');
@@ -120,6 +209,7 @@ class Trip extends Model
     return $array;
   }
 
+  //@summary sauve les voyages dans la base de données
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)
@@ -140,5 +230,41 @@ class Trip extends Model
     $statement->execute();
 
     return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
+  }
+
+  //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur
+  //@param $id_user : id de l'utilisateur
+  //@return Trip : objet contentant les informations de voyages
+  public static function fetchTripById($id_user)
+  {
+    $statement = App::get('dbh')->prepare('SELECT * FROM trip WHERE id_user = ?');
+    $statement->bindValue(1, $id_user);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_CLASS, 'trip');
+  }
+
+  //@summary retourne l'id de l'utilisateur a partir d'un id de voyage
+  //@param $id_trip : id du voyage
+  //@return 0 : dans le cas ou aucun voyage ne corresponds à l'utilisateur
+  //@return int : id de l'utilisateur
+  public static function getIdUserByTripId($id_trip)
+  {
+    $statement = App::get('dbh')->prepare('SELECT id_user FROM trip WHERE id = ?');
+    $statement->bindValue(1, $id_trip);
+    $statement->execute();
+    $res = $statement->fetchAll();
+    if(!empty($res))
+    {
+      return $res[0]['id_user'];
+    }
+    else
+    {
+      return 0;
+    }
+  }
+
+  public static function fetchById($id, $table, $intoClass)
+  {
+    return parent::fetchById($id, $table, $intoClass);
   }
 }
