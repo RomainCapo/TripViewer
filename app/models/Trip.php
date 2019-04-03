@@ -137,9 +137,9 @@ class Trip extends Model
     $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
     $str .= "</h1><h3 style='color:grey'>";
     $str .= htmlentities($this->name);
-    $str .= "</h3><p style='color:grey'><strong>From</strong><em>";
+    $str .= "</h3><p style='color:grey'><strong>From </strong><em>";
     $str .= htmlentities($this->departure_date);
-    $str .= "</em> <strong>to</strong><em>";
+    $str .= "</em> <strong>to </strong><em>";
     $str .= htmlentities($this->return_date);
     $str .= "</em></p>";
 
