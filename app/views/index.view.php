@@ -1,11 +1,11 @@
 <?php
-    $title = "Home";
+  $title = "Home";
 
-if(isset($_SESSION['login']))
-{
-  require('partials/nav.php');
-}
-    require('partials/header.php');
+  if(isset($_SESSION['login']))
+  {
+    require('partials/nav.php');
+  }
+  require('partials/header.php');
 ?>
 
 <div class="container">
@@ -33,3 +33,7 @@ if(isset($_SESSION['login']))
   }
   ?>
 </div>
+
+<?php
+  require('partials/footer.php');
+?>
