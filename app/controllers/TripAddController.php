@@ -14,7 +14,6 @@ class TripAddController
 //permet de parser le formulaire d'ajout de voyage
   public function tripAddParse()
   {
-
     //Data processing
     User::userIsConnected();
 
@@ -34,12 +33,12 @@ class TripAddController
         {
           $name = $_POST['trip_name'];
 
-          if(isset($_POST['departure_date']) && !empty($_POST['departure_date']))
+          if(isset($_POST['departure_date']) && !empty($_POST['departure_date']) && $this->validateDate($_POST['departure_date']))
           {
             $departure_date = $_POST['departure_date'];
 
             //on teste également que la date de debut est plus petite que la date de fin
-            if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])))
+            if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])) && $this->validateDate($_POST['return_date']))
             {
               $return_date = $_POST['return_date'];
 
@@ -184,16 +183,15 @@ class TripAddController
     }
   }
 
-  private function validateDate($date, $format = 'dd.mm.YYYY')
+  function validateDate($date, $format = 'Y-m-d')
   {
     $d = DateTime::createFromFormat($format, $date);
-    // The Y ( 4 digits year ) returns TRUE for any integer with any number of digits so changing the comparison from == to === fixes the issue.
     return $d && $d->format($format) === $date;
   }
 
   public function debug()
   {
-    var_dump($this->validateDate('03.10.2020'));
+    var_dump($this->validateDate('2000-53-03'));
   }
 
   private function fileProcessing($tripId, $destination, $username)
