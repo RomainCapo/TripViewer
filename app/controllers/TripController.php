@@ -11,13 +11,16 @@ class TripController
 
   public function mapView()
   {
+    User::userIsConnected();
     return Helper::view("tripMap");
   }
 
   public function getAllUserTripCoord()
   {
     //ne pas oublier de changer l'id de l'utilisateur
-    echo json_encode(Trip::getUserTripInfo(4));
+    User::userIsConnected();
+    $userId = unserialize($_SESSION['login'])->getId();
+    echo json_encode(Trip::getUserTripInfo($userId));
   }
 
   //@summary permet d'afficher un voyage sur une page individuelle
