@@ -107,14 +107,14 @@ class Trip extends Model
   {
       $str = "";
 
-      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
+      $str .= "<div class='card'><div class='card-body'><h3 class='card-title'>";
       $str .= htmlentities(ucfirst(strtolower(Destination::getDestinationById($this->id_destination))));
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
-      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
+      $str .= "</h3><h5 class='card-subtitle mb-2 text-muted'>";
       $str .= htmlentities($this->name);
-      $str .= "</h4><p class='card-text'>";
+      $str .= "</h5><p class='card-text'>";
       $str .= htmlentities($this->description);
       $str .= "</p><a href='tripView?id=";
       $str .= urlencode($this->id);

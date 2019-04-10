@@ -9,11 +9,11 @@
 
 if(empty($trips))
 {
-    echo "<h1>You don't have any trip...</h1><a href=\"tripAdd\">Add one</a>";
+    echo "<h3>You don't have any trip...</h3><a href=\"tripAdd\">Add one</a>";
 }
 else
 {
-    echo "<h1>That's all your trips...</h1><a href=\"tripAdd\">Add an another trip !</a><br><br>";
+    echo "<h3>That's all your trips...</h3><a href=\"tripAdd\">Add an another trip !</a><br><br>";
     foreach($trips as $trip)
     {
         echo $trip->asCardShow();
