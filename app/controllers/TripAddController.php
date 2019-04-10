@@ -11,12 +11,8 @@ class TripAddController
     return Helper::view("tripAdd", ['error' => $this->error]);//on affiche la vue
   }
 
-//permet de parser le formulaire d'ajout de voyage
-  public function tripAddParse()
+  private function tripCheck($post)
   {
-    //Data processing
-    User::userIsConnected();
-
     $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
     $this->error = '';//pour stocker le message d'erreur
 
@@ -53,74 +49,7 @@ class TripAddController
 
                     if(isset($_POST['description']) && isset($_POST['total_price']) && isset($_POST['number_people']))
                     {
-                      $description = $_POST['description'];
-                      $total_price = $_POST['total_price'];
-                      $number_people = $_POST['number_people'];
-
-                      echo 'data processing okay';
-
-                      //on créé un objet voyage
-                      $Trip = new Trip;
-                      $Trip->setName($name);
-                      $Trip->setDescription($description);
-                      $Trip->setDepartureDate($departure_date);
-                      $Trip->setReturnDate($return_date);
-                      $Trip->setTotalPrice($total_price);
-                      $Trip->setTripState($trip_state);
-                      $Trip->setNumberPeople($number_people);
-
-                      //on géolocalise la destination et le déaprt
-                      $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
-                      $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
-
-                      //selon le status de la requete on effectue différent traitement
-                      if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
-                      {
-                        //on recupere la distance entre les 2 destinations
-                        $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
-
-                        //on sauvegarde les destinations avec leur informations dans l'object voyage
-                        if($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'OK')
-                        {
-                          $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
-                          $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
-                        }
-                        elseif ($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'IN_DATABASE')
-                        {
-                          $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
-                          $Trip->setIdDeparture($depa_gps_coord['id']);
-                        }
-                        elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'OK')
-                        {
-                          $Trip->setIdDestination($dest_gps_coord['id']);
-                          $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
-                        }
-                        elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'IN_DATABASE')
-                        {
-                          $Trip->setIdDestination($dest_gps_coord['id']);
-                          $Trip->setIdDeparture($depa_gps_coord['id']);
-                        }
-                        $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
-                        $Trip->setIdUser($userId);
-                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
-                        $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
-                        $idTrip = $Trip->save();
-
-                        if($this->fileProcessing($idTrip, $destination, 'Romain'))
-                        {
-                          echo 'trip added';
-                        }
-                        else
-                        {
-                          $isProcessingError = true;
-                          $this->error = 'error with file processing';
-                        }
-                      }
-                      else
-                      {
-                        $isProcessingError = true;
-                        $this->error = 'error with the geocoding API';
-                      }
+                      //no errors
                     }
                     else
                     {
@@ -169,6 +98,86 @@ class TripAddController
       $isProcessingError = true;
       $this->error  = 'error with the destination';
     }
+
+    return $isProcessingError;
+  }
+
+//permet de parser le formulaire d'ajout de voyage
+  public function tripAddParse()
+  {
+    //Data processing
+    User::userIsConnected();
+
+
+    $description = $_POST['description'];
+    $total_price = $_POST['total_price'];
+    $number_people = $_POST['number_people'];
+
+    echo 'data processing okay';
+
+    //on créé un objet voyage
+    $Trip = new Trip;
+    $Trip->setName($name);
+    $Trip->setDescription($description);
+    $Trip->setDepartureDate($departure_date);
+    $Trip->setReturnDate($return_date);
+    $Trip->setTotalPrice($total_price);
+    $Trip->setTripState($trip_state);
+    $Trip->setNumberPeople($number_people);
+
+    //on géolocalise la destination et le déaprt
+    $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
+    $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
+
+    //selon le status de la requete on effectue différent traitement
+    if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
+    {
+      //on recupere la distance entre les 2 destinations
+      $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+
+      //on sauvegarde les destinations avec leur informations dans l'object voyage
+      if($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'OK')
+      {
+        $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
+        $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
+      }
+      elseif ($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'IN_DATABASE')
+      {
+        $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
+        $Trip->setIdDeparture($depa_gps_coord['id']);
+      }
+      elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'OK')
+      {
+        $Trip->setIdDestination($dest_gps_coord['id']);
+        $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
+      }
+      elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'IN_DATABASE')
+      {
+        $Trip->setIdDestination($dest_gps_coord['id']);
+        $Trip->setIdDeparture($depa_gps_coord['id']);
+      }
+      $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
+      $Trip->setIdUser($userId);
+      $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
+      $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
+      $idTrip = $Trip->save();
+
+      if($this->fileProcessing($idTrip, $destination, 'Romain'))
+      {
+        echo 'trip added';
+      }
+      else
+      {
+        $isProcessingError = true;
+        $this->error = 'error with file processing';
+      }
+    }
+    else
+    {
+      $isProcessingError = true;
+      $this->error = 'error with the geocoding API';
+    }
+
 
     //si il y a eu des erreur on raffiche le formulaire d'ajout de voyage avec le message d'erreur
     //sinon on redirige vers l'affichage des voyages
