@@ -3,8 +3,8 @@
     require('partials/header.php');
     require('partials/nav.php');
 ?>
-
-<?php 
+<div class="container">
+<?php
 
 
 if(empty($trips))
@@ -21,5 +21,5 @@ else
 }
 
 ?>
-
+</div>
 <?php require('partials/footer.php') ?>

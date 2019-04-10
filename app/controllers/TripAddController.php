@@ -14,6 +14,7 @@ class TripAddController
 //permet de parser le formulaire d'ajout de voyage
   public function tripAddParse()
   {
+    //Data processing
     User::userIsConnected();
 
     $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
@@ -32,12 +33,12 @@ class TripAddController
         {
           $name = $_POST['trip_name'];
 
-          if(isset($_POST['departure_date']) && !empty($_POST['departure_date']))
+          if(isset($_POST['departure_date']) && !empty($_POST['departure_date']) && $this->validateDate($_POST['departure_date']))
           {
             $departure_date = $_POST['departure_date'];
 
             //on teste également que la date de debut est plus petite que la date de fin
-            if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])))
+            if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])) && $this->validateDate($_POST['return_date']))
             {
               $return_date = $_POST['return_date'];
 
@@ -72,7 +73,6 @@ class TripAddController
                       $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
                       $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
 
-
                       //selon le status de la requete on effectue différent traitement
                       if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
                       {
@@ -100,12 +100,21 @@ class TripAddController
                           $Trip->setIdDestination($dest_gps_coord['id']);
                           $Trip->setIdDeparture($depa_gps_coord['id']);
                         }
-
                         $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
                         $Trip->setIdUser($userId);
                         $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
                         $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
-                        $Trip->save();
+                        $idTrip = $Trip->save();
+
+                        if($this->fileProcessing($idTrip, $destination, 'Romain'))
+                        {
+                          echo 'trip added';
+                        }
+                        else
+                        {
+                          $isProcessingError = true;
+                          $this->error = 'error with file processing';
+                        }
                       }
                       else
                       {
@@ -116,7 +125,7 @@ class TripAddController
                     else
                     {
                       $isProcessingError = true;
-                      $this->error  =  'error with description, total_price or number_people';
+                      $this->error  = 'error with description, total_price or number_people';
                     }
                 }
                 else
@@ -146,7 +155,7 @@ class TripAddController
         else
         {
           $isProcessingError = true;
-          $this->error  =  'error with trip name';
+          $this->error = 'error with the trip name';
         }
       }
       else
@@ -171,6 +180,56 @@ class TripAddController
     {
       header('Location: tripViewList');
       exit(0);
+    }
+  }
+
+  function validateDate($date, $format = 'Y-m-d')
+  {
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) === $date;
+  }
+
+  public function debug()
+  {
+    var_dump($this->validateDate('2000-53-03'));
+  }
+
+  private function fileProcessing($tripId, $destination, $username)
+  {
+    if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
+    {
+      $noFileError = true;
+
+      $target_dir = "uploads/";
+      $total = count($_FILES['photos']['name']);
+      for($i = 0; $i < $total; $i++)
+      {
+        $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
+        $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
+
+        if(move_uploaded_file($tmpFilePath, $newFilePath))
+        {
+          //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
+          $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+          $definitiveFilePath = $target_dir . $filename;
+          rename($newFilePath, $definitiveFilePath);
+
+          $photo = new Photo;
+          $photo->setFileName($filename);
+          $photo->setIdTrip($tripId);
+          $photo->save();
+        }
+        else
+        {
+          $noFileError = false;
+        }
+      }
+
+      return $noFileError;
+    }
+    else
+    {
+      return true;
     }
   }
 

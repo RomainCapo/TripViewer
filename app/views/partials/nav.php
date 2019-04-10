@@ -32,6 +32,4 @@
 <br>
 
 
-<button onclick="topFunction()" id="btnToTop" title="Go to t op"type="button" class="btn btn-success">To top</button>
-
-<div class="container">
+<button onclick="topFunction()" id="btnToTop" type="button" class="btn btn-success">To top</button>

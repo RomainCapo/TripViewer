@@ -9,6 +9,17 @@ class TripController
     return Helper::view("viewList", ['trips' => Trip::fetchTripById(unserialize($_SESSION['login'])->getId())]);
   }
 
+  public function mapView()
+  {
+    return Helper::view("tripMap");
+  }
+
+  public function getAllUserTripCoord()
+  {
+    //ne pas oublier de changer l'id de l'utilisateur
+    echo json_encode(Trip::getUserTripInfo(1));
+  }
+
   //@summary permet d'afficher un voyage sur une page individuelle
   //@return la vue pour visualiser le voyage, on redirection s'il y a une erreur
   public function showTrip()
@@ -23,6 +34,6 @@ class TripController
     else {
       header('Location: tripViewList');
       exit(0);
-    } 
+    }
   }
 }
