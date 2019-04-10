@@ -6,6 +6,33 @@
   text-align: center;
 }
 
+/* Trip Add Form */
+#photos {
+
+}
+
+/* Trip Map View*/
+#map {
+  height: 100%;
+}
+
+html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+#markerInfo {
+  list-style:none;
+  margin-left: -40px;
+
+}
+
+#markerInfo li{
+    display:inline;
+}
+
+
 /* LOGIN - REGISTER */
 
 .background {
@@ -65,7 +92,7 @@
     padding: 10px;
     border-radius: 4px;
   }
-  
+
   #btnToTop:hover {
     background-color: #555;
   }

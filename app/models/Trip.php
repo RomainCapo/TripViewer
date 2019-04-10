@@ -19,6 +19,11 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
+
+  public function getName(){
+    return $this->name;
+  }
+
 //Setters
   public function setName($name)
   {
@@ -177,6 +182,33 @@ class Trip extends Model
     return parent::fetchAll('trip', 'Trip');
   }
 
+  public static function getUserTripInfo($id_user)
+  {
+    $statement = App::get('dbh')->prepare('SELECT name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company FROM trip WHERE id_user=:id_user');
+    $statement->bindParam(':id_user', $id_user);
+    $statement->execute();
+
+    $array = array();
+    $i = 0;
+
+    foreach ($statement->fetchAll() as $key => $value) {
+
+      $array[$i] = Destination::getDestInfo($value['id_destination']);
+      $array[$i]['departure'] = Destination::getDestInfo($value['id_departure'])['dest'];
+      $array[$i]['name'] = htmlentities($value['name']);
+      $array[$i]['description'] = htmlentities($value['description']);
+      $array[$i]['departure_date'] = htmlentities($value['departure_date']);
+      $array[$i]['return_date'] = htmlentities($value['return_date']);
+      $array[$i]['km_traveled'] = htmlentities($value['km_traveled']);
+      $array[$i]['total_price'] = htmlentities($value['total_price']);
+      $array[$i]['trip_state'] = htmlentities($value['trip_state']);
+      $array[$i]['number_people'] = htmlentities($value['number_people']);
+
+      $i++;
+    }
+    return $array;
+  }
+
   //@summary sauve les voyages dans la base de données
   public function save()
   {
@@ -196,6 +228,8 @@ class Trip extends Model
     $statement->bindValue(12, $this->number_people);
     $statement->bindValue(13, $this->id_company);
     $statement->execute();
+
+    return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
   }
 
   //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur

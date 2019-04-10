@@ -1,8 +1,6 @@
-    </div>
+    <br>
+    <br>
 
-    <br>
-    <br>
-    
 
     <!--<div class="footer">
         <p class="footer-content">Copyright © TripViewer 2019 - Romain Capocasale et Vincent Moulin</p>
@@ -24,6 +22,5 @@
         document.documentElement.scrollTop = 0;
     }
     </script>
-
 </body>
 </html>

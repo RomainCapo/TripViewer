@@ -13,6 +13,7 @@ require 'app/models/Destination.php';
 require 'app/models/Trip.php';
 require 'app/models/User.php';
 require 'app/models/Transport.php';
+require 'app/models/Photo.php';
 
 session_start();
 

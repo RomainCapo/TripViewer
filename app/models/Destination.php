@@ -85,6 +85,23 @@ class Destination extends Model
     }
   }
 
+  public static function getDestInfo($id)
+  {
+    $statement = App::get('dbh')->prepare('SELECT destination, latitude, longitude, country FROM destination WHERE id=:id');
+    $statement->bindParam(':id', $id);
+    $statement->execute();
+
+    $array = array();
+    $data = $statement->fetchAll()[0];
+
+    $array['dest'] = htmlentities(ucfirst($data['destination']));
+    $array['lat'] = htmlentities($data['latitude']);
+    $array['lng'] = htmlentities($data['longitude']);
+    $array['coun'] = htmlentities($data['country']);
+
+    return $array;
+  }
+
   //@summary retourne la destination a partir d'un id
   //@param $id : id de la destination
   //@return int : id de la destination

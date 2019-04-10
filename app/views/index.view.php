@@ -6,8 +6,8 @@ if(isset($_SESSION['login']))
   require('partials/nav.php');
 }
     require('partials/header.php');
-?>
 
+?>
 <div class="container">
   <br>
   <br>
