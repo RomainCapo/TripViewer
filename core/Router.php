@@ -40,6 +40,7 @@ class Router
                                                  // (fonctions variadiques http://php.net/manual/fr/functions.arguments.php#functions.variable-arg-list)
                                                  // explode (split a string by a string): http://php.net/manual/en/function.explode.php
         );
+        echo 'test';
     }
 
     header('Location: routeNotDefined');

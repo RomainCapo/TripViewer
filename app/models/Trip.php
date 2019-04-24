@@ -126,7 +126,7 @@ class Trip extends Model
       $str .= "' class='card-link'>Read more about ";
       $str .= htmlentities($this->name);
       $str .= "</a><br><br>";
-      $str .= "<form action='tripViewListEdit' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
+      $str .= "<form action='updateForm' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
       $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
       $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
       $str .= "</div></div><br>";
@@ -232,6 +232,27 @@ class Trip extends Model
     return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
   }
 
+  //@summary permet de modifier un voyage dans la base de données
+  public function update()
+  {
+    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=?, id_company=? WHERE id_user=?');
+    $statement->bindValue(1, $this->name);
+    $statement->bindValue(2, $this->description);
+    $statement->bindValue(3, $this->departure_date);
+    $statement->bindValue(4, $this->return_date);
+    $statement->bindValue(5, $this->km_traveled);
+    $statement->bindValue(6, $this->total_price);
+    $statement->bindValue(7, $this->trip_state);
+    $statement->bindValue(8, $this->id_user);
+    $statement->bindValue(9, $this->id_transport_type);
+    $statement->bindValue(10, $this->id_destination);
+    $statement->bindValue(11, $this->id_departure);
+    $statement->bindValue(12, $this->number_people);
+    $statement->bindValue(13, $this->id_company);
+    $statement->bindValue(14, $this->id_user);
+    $statement->execute();
+  }
+
   //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur
   //@param $id_user : id de l'utilisateur
   //@return Trip : objet contentant les informations de voyages
@@ -263,7 +284,7 @@ class Trip extends Model
     }
   }
 
-  public static function fetchById($id, $table, $intoClass)
+  public static function fetchById($id, $table="trip", $intoClass="Trip")
   {
     return parent::fetchById($id, $table, $intoClass);
   }
