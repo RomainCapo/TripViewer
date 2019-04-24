@@ -17,6 +17,7 @@ class TripAddController
     User::userIsConnected();
     if(isset($_POST['editTripId']))
     {
+
       return Helper::view("tripUpdate", ['error' => $this->error, 'id_user' => $id]);//on affiche la vue
     }
     else
