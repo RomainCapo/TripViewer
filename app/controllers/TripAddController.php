@@ -26,63 +26,72 @@ class TripAddController
           if(isset($post['departure_date']) && !empty($post['departure_date']) && $this->validateDate($post['departure_date']))
           {
             //on teste également que la date de debut est plus petite que la date de fin
-            if(isset($post['return_date']) && !empty($post['return_date']) && (strtotime($departure_date) < strtotime($post['return_date'])) && $this->validateDate($post['return_date']))
+            if(isset($post['return_date']) && !empty($post['return_date']) && $this->validateDate($post['return_date']))
             {
-              if(isset($post['trip_state']) && ($post['trip_state'] == 'realized' || $post['trip_state']) == 'reserved' || $post['trip_state'] == 'planned')
+              if(strtotime($departure_date) < strtotime($post['return_date']))
               {
-               //on teste également si le transport est dans la base de données
-                if(isset($post['transport_type']) && !empty($post['transport_type']) && Transport::transportInDb($post['transport_type']))
+                if(isset($post['trip_state']) && ($post['trip_state'] == 'realized' || $post['trip_state']) == 'reserved' || $post['trip_state'] == 'planned')
                 {
-                    if(isset($post['description']) && isset($post['total_price']) && isset($post['number_people']))
-                    {
-                      //no errors
-                    }
-                    else
-                    {
-                      $isProcessingError = true;
-                      $this->error  = 'error with description, total_price or number_people';
-                    }
+                 //on teste également si le transport est dans la base de données
+                  if(isset($post['transport_type']) && !empty($post['transport_type']) && Transport::transportInDb($post['transport_type']))
+                  {
+                      if(isset($post['description']) && isset($post['total_price']) && isset($post['number_people']))
+                      {
+                        //no errors
+
+                      }
+                      else
+                      {
+                        $isProcessingError = true;
+                        $this->error  = 'the description, the total price or the number of people is not valid';
+                      }
+                  }
+                  else
+                  {
+                    $isProcessingError = true;
+                    $this->error = 'the transport type is not valid';
+                  }
                 }
                 else
                 {
                   $isProcessingError = true;
-                  $this->error = 'error with the transport_type';
+                  $this->error = 'the trip state is not valid';
                 }
               }
               else
               {
                 $isProcessingError = true;
-                $this->error = 'error with the trip_state';
+                $this->error  = 'the return must be greater than departure date';
               }
             }
             else
             {
               $isProcessingError = true;
-              $this->error = 'error with the return_date';
+              $this->error = 'the return date is not valid';
             }
           }
           else
           {
             $isProcessingError = true;
-            $this->error = 'error with the departure_date';
+            $this->error = 'the departure date is not valid';
           }
         }
         else
         {
           $isProcessingError = true;
-          $this->error = 'error with the trip name';
+          $this->error = 'the trip name is not valid';
         }
       }
       else
       {
         $isProcessingError = true;
-        $this->error = 'error with the departure';
+        $this->error = 'the departure is not valid';
       }
     }
     else
     {
       $isProcessingError = true;
-      $this->error  = 'error with the destination';
+      $this->error  = 'the destination is not valid';
     }
 
     return $isProcessingError;
