@@ -4,6 +4,7 @@ class Destination extends Model
 {
   //Attributs
   private $id;
+  private $destination;
   private $latitude;
   private $longitude;
   private $country;
@@ -28,6 +29,15 @@ class Destination extends Model
   public function setCountry($cou)
   {
     $this->country= $cou;
+  }
+
+  public static function getDestNameById($id)
+  {
+    $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id=:id');
+    $statement->bindParam(':id', $id);
+    $statement->execute();
+    return $statement->fetchAll()[0]['destination'];
+
   }
 
   //@summary indique la présence ou non de la destination dans la bdd

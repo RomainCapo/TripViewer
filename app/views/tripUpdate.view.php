@@ -1,59 +1,56 @@
 <?php
-    $title = "Trip add";
+    $title = "Trip update";
     require('partials/header.php');
     require('partials/nav.php');
+
+    $trip = Trip::fetchById($id_user);
+
 ?>
 <div class="container">
   <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Update a trip</h2></div>
     <div class="card-body">
       <form action="tripAddParse" method="post" enctype="multipart/form-data">
-        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination"   autocomplete="off"/><br/>
-        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"    autocomplete="off"/><br/>
-        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name"   autocomplete="off"/><br/>
+        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" value="<?php echo ucfirst(Destination::getDestNameById($trip->id_destination)); ?>"  autocomplete="off"/><br/>
+        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  value="<?php echo ucfirst(Destination::getDestNameById($trip->id_departure)); ?>"  autocomplete="off"/><br/>
+        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" value="<?php echo $trip->name; ?>"  autocomplete="off"/><br/>
         <div class="row">
           <div class="col">
-            <label for="departure_date">Departure date : </label><input class="form-control" id="departure_date" type="date" name="departure_date" required autocomplete="off"/>
+            <label for="departure_date">Departure date : </label><input class="form-control" id="departure_date" type="date" name="departure_date" required value="<?php echo $trip->departure_date; ?>" autocomplete="off"/>
           </div>
           <div class="col">
-            <label for="return_date">Return date : </label><input class="form-control" id="return_date" type="date" name="return_date" required autocomplete="off"/><br/>
+            <label for="return_date">Return date : </label><input class="form-control" id="return_date" type="date" name="return_date" required value="<?php echo $trip->return_date; ?>" autocomplete="off"/><br/>
           </div>
         </div>
         <div class="row">
           <div class="col">
-            <label for="number_people">Number of people : </label><input class="form-control" id="number_people" type="number" name="number_people" min="0" value="0" autocomplete="off"/>
+            <label for="number_people">Number of people : </label><input class="form-control" id="number_people" type="number" name="number_people" min="0" value="<?php echo (int)$trip->number_people; ?>" autocomplete="off"/>
           </div>
           <div class="col">
-            <label for="total_price">Total trip price : </label><input class="form-control" id="total_price" type="number" name="total_price" placeholder="Enter the trip total price"  min="0" value="0" autocomplete="off"/><br/>
+            <label for="total_price">Total trip price : </label><input class="form-control" id="total_price" type="number" name="total_price" placeholder="Enter the trip total price"  min="0" value="<?php echo $trip->total_price; ?>" autocomplete="off"/><br/>
           </div>
         </div>
         <div class="row">
           <div class="col">
             <label for="trip_state">Trip state : </label>
             <select class="form-control" id="trip_state" name="trip_state"  autocomplete="off"/>
-              <option value="realized">Realized</option>
-              <option value="reserved">Reserved</option>
-              <option value="planned">Planned</option>
+              <?php echo Trip::fetchAllTripState($trip->trip_state); ?>
             </select>
           </div>
           <div class="col">
             <label for="transport_type">Transport type : </label>
             <select class="form-control" id="transport_type" name="transport_type"   autocomplete="off"/>
-              <?php echo Transport::fetchAllTransportsName(); ?>
+              <?php echo Transport::fetchAllTransportsName($trip->id_transport_type); ?>
             </select><br/>
           </div>
         </div>
         <div class="row">
           <div class="col">
             <label for="description">Trip description : </label>
-            <textarea class="form-control" id="description" name="description" placeholder="Enter your trip description"  autocomplete="off"/></textarea><br/>
-          </div>
-          <div class="col">
-            <label for="photos">Select your 3 best photos : </label><br/>
-            <input id="photos" type="file" name="photos[]" class="form-control-file" multiple accept=".png, .jpeg, .jpg, .gif"/><br/><br/>
+            <textarea class="form-control" id="description" name="description" placeholder="Enter your trip description" value="<?php echo $trip->description; ?>" autocomplete="off"/></textarea><br/>
           </div>
         </div>
-        <button type="submit" class="btn btn-success block-btn" >Add the trip</button>
+        <button type="submit" class="btn btn-warning block-btn" >Update the trip</button>
     </form>
   </div>
 </div>

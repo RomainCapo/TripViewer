@@ -19,6 +19,13 @@ class Trip extends Model
   private $id_departure;
   private $id_company;
 
+  public function __get($property)
+  {
+    if (property_exists($this, $property))
+    {
+      return $this->$property;
+    }
+  }
 
   public function getName(){
     return $this->name;
@@ -126,7 +133,7 @@ class Trip extends Model
       $str .= "' class='card-link'>Read more about ";
       $str .= htmlentities($this->name);
       $str .= "</a><br><br>";
-      $str .= "<form action='updateForm' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-success' type='submit'/>Edit</button></form>";
+      $str .= "<form action='updateForm' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-warning' type='submit'/>Edit</button></form>";
       $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
       $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
       $str .= "</div></div><br>";
@@ -173,6 +180,30 @@ class Trip extends Model
     }
 
     return $str;
+  }
+
+  public static function fetchAllTripState($tripState = 'none')
+  {
+    $arrayTripState = array('Realized', 'Reserved', 'Planned');
+    $id = -1;
+    if($tripState != 'none')
+    {
+        $id = array_search($tripState, $arrayTripState);
+    }
+
+    $string;
+    foreach ($arrayTripState as $key => $value) {
+      if($id == -1 || $id!=$key )
+      {
+        $string .= "<option value='". $value ."'>" . $value . '</option>' . PHP_EOL;
+      }
+      else
+      {
+        $string .= "<option value='". $value ."' selected>" . $value . '</option>' . PHP_EOL;
+      }
+    }
+
+    return $string;
   }
 
   //@summary retourne toutes les voyages de la base de données

@@ -17,7 +17,7 @@ class TripAddController
     User::userIsConnected();
     if(isset($_POST['editTripId']))
     {
-
+      $id = $_POST['editTripId'];
       return Helper::view("tripUpdate", ['error' => $this->error, 'id_user' => $id]);//on affiche la vue
     }
     else
@@ -212,11 +212,6 @@ class TripAddController
     return $d && $d->format($format) === $date;
   }
 
-  public function debug()
-  {
-    var_dump($this->validateDate('2000-53-03'));
-  }
-
   private function fileProcessing($tripId, $destination, $username)
   {
     if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
@@ -284,5 +279,10 @@ class TripAddController
       header('Location: tripViewList');
       exit(0);
     }
+  }
+
+  public function debug()
+  {
+    echo Destination::getDestNameById(1);
   }
 }
