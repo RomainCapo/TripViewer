@@ -27,6 +27,10 @@ class Trip extends Model
     }
   }
 
+  public function setId($id){
+    $this->id = $id;
+  }
+
   public function getName(){
     return $this->name;
   }
@@ -184,7 +188,7 @@ class Trip extends Model
 
   public static function fetchAllTripState($tripState = 'none')
   {
-    $arrayTripState = array('Realized', 'Reserved', 'Planned');
+    $arrayTripState = array('realized', 'reserved', 'planned');
     $id = -1;
     if($tripState != 'none')
     {
@@ -195,11 +199,11 @@ class Trip extends Model
     foreach ($arrayTripState as $key => $value) {
       if($id == -1 || $id!=$key )
       {
-        $string .= "<option value='". $value ."'>" . $value . '</option>' . PHP_EOL;
+        $string .= "<option value='". $value ."'>" . ucfirst($value) . '</option>' . PHP_EOL;
       }
       else
       {
-        $string .= "<option value='". $value ."' selected>" . $value . '</option>' . PHP_EOL;
+        $string .= "<option value='". $value ."' selected>" . ucfirst($value) . '</option>' . PHP_EOL;
       }
     }
 
@@ -266,7 +270,7 @@ class Trip extends Model
   //@summary permet de modifier un voyage dans la base de données
   public function update()
   {
-    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=?, id_company=? WHERE id_user=?');
+    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=?, id_company=? WHERE id=?');
     $statement->bindValue(1, $this->name);
     $statement->bindValue(2, $this->description);
     $statement->bindValue(3, $this->departure_date);
@@ -280,7 +284,7 @@ class Trip extends Model
     $statement->bindValue(11, $this->id_departure);
     $statement->bindValue(12, $this->number_people);
     $statement->bindValue(13, $this->id_company);
-    $statement->bindValue(14, $this->id_user);
+    $statement->bindValue(14, $this->id);
     $statement->execute();
   }
 

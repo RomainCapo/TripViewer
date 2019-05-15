@@ -18,7 +18,7 @@ class TripAddController
     if(isset($_POST['editTripId']))
     {
       $id = $_POST['editTripId'];
-      return Helper::view("tripUpdate", ['error' => $this->error, 'id_user' => $id]);//on affiche la vue
+      return Helper::view("tripUpdate", ['error' => $this->error, 'id_trip' => $id]);//on affiche la vue
     }
     else
     {
@@ -61,7 +61,7 @@ class TripAddController
                         //on créé un objet voyage
                         $Trip = new Trip;
                         $Trip->setName($post['trip_name']);
-                        $Trip->setDescription($post['description']);
+                        $Trip->setDescription((string)$post['description']);
                         $Trip->setDepartureDate($post['departure_date']);
                         $Trip->setReturnDate($post['return_date']);
                         $Trip->setTotalPrice($post['total_price']);
@@ -203,7 +203,10 @@ class TripAddController
   public function tripUpdateParse()
   {
     $Trip = $this->tripCheck($_POST);
+    $Trip->setId($_POST['id_trip']);
     $Trip->update();
+    header('Location: tripViewList');
+    exit(0);
   }
 
   function validateDate($date, $format = 'Y-m-d')
@@ -214,7 +217,7 @@ class TripAddController
 
   private function fileProcessing($tripId, $destination, $username)
   {
-    if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
+    if(isset($_FILES) && !empty($_FILES['photos']['name']))
     {
       $noFileError = true;
 

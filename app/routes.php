@@ -13,6 +13,7 @@ $router->define([
   'tripViewList' => 'TripController',
   'tripViewMap' => 'TripController@mapView',
   'updateForm' => 'TripAddController@updateTrip',
+  'updateParse' => 'TripAddController@tripUpdateParse',
   'profil' => '',
   'debug' => 'TripAddController@debug',
   'ajax' => 'TripController@getAllUserTripCoord',
