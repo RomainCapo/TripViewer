@@ -11,167 +11,161 @@ class TripAddController
     return Helper::view("tripAdd", ['error' => $this->error]);//on affiche la vue
   }
 
-//permet de parser le formulaire d'ajout de voyage
-  public function tripAddParse()
+  public function updateTrip()
   {
-    //Data processing
+    //attention il faut encore tester que le voyages appartienne bien a l'utilisateur
     User::userIsConnected();
+    if(isset($_POST['editTripId']))
+    {
+      $id = $_POST['editTripId'];
+      return Helper::view("tripUpdate", ['error' => $this->error, 'id_trip' => $id]);//on affiche la vue
+    }
+    else
+    {
+      header('Location: tripViewList');
+      exit(0);
+    }
+  }
 
+  private function tripCheck($post)
+  {
     $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
     $this->error = '';//pour stocker le message d'erreur
 
     //on fait des tests sur toute les champs du formulaire d'ajout de voyage
-    if(isset($_POST['destination']) && !empty($_POST['destination']))
+    if(isset($post['destination']) && !empty($post['destination']))
     {
-      $destination = $_POST['destination'];
-
-      if(isset($_POST['departure']) && !empty($_POST['departure']))
+      if(isset($post['departure']) && !empty($post['departure']))
       {
-        $departure = $_POST['departure'];
-
-        if(isset($_POST['trip_name']) && !empty($_POST['trip_name']))
+        if(isset($post['trip_name']) && !empty($post['trip_name']))
         {
-          $name = $_POST['trip_name'];
-
-          if(isset($_POST['departure_date']) && !empty($_POST['departure_date']) && $this->validateDate($_POST['departure_date']))
+          if(isset($post['departure_date']) && !empty($post['departure_date']) && $this->validateDate($post['departure_date']))
           {
-            $departure_date = $_POST['departure_date'];
-
             //on teste également que la date de debut est plus petite que la date de fin
-            if(isset($_POST['return_date']) && !empty($_POST['return_date']) && (strtotime($departure_date) < strtotime($_POST['return_date'])) && $this->validateDate($_POST['return_date']))
+            if(isset($post['return_date']) && !empty($post['return_date']) && $this->validateDate($post['return_date']))
             {
-              $return_date = $_POST['return_date'];
-
-              if(isset($_POST['trip_state']) && ($_POST['trip_state'] == 'realized' || $_POST['trip_state']) == 'reserved' || $_POST['trip_state'] == 'planned')
+              if(strtotime($post['departure_date']) < strtotime($post['return_date']))
               {
-                $trip_state = $_POST['trip_state'];
-
-                //on teste également si le transport est dans la base de données
-                if(isset($_POST['transport_type']) && !empty($_POST['transport_type']) && Transport::transportInDb($_POST['transport_type']))
+                if(isset($post['trip_state']) && ($post['trip_state'] == 'realized' || $post['trip_state']) == 'reserved' || $post['trip_state'] == 'planned')
                 {
-                    $transport_type = $_POST['transport_type'];
-
-                    if(isset($_POST['description']) && isset($_POST['total_price']) && isset($_POST['number_people']))
-                    {
-                      $description = $_POST['description'];
-                      $total_price = $_POST['total_price'];
-                      $number_people = $_POST['number_people'];
-
-                      echo 'data processing okay';
-
-                      //on créé un objet voyage
-                      $Trip = new Trip;
-                      $Trip->setName($name);
-                      $Trip->setDescription($description);
-                      $Trip->setDepartureDate($departure_date);
-                      $Trip->setReturnDate($return_date);
-                      $Trip->setTotalPrice($total_price);
-                      $Trip->setTripState($trip_state);
-                      $Trip->setNumberPeople($number_people);
-
-                      //on géolocalise la destination et le déaprt
-                      $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
-                      $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
-
-                      //selon le status de la requete on effectue différent traitement
-                      if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
+                 //on teste également si le transport est dans la base de données
+                  if(isset($post['transport_type']) && !empty($post['transport_type']) && Transport::transportInDb($post['transport_type']))
+                  {
+                      if(isset($post['description']) && isset($post['total_price']) && isset($post['number_people']))
                       {
-                        //on recupere la distance entre les 2 destinations
-                        $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+                        //no errors
+                        $destination = $post['destination'];
+                        $departure = $post['departure'];
+                        $transport_type = $post['transport_type'];
 
-                        //on sauvegarde les destinations avec leur informations dans l'object voyage
-                        if($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'OK')
-                        {
-                          $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
-                          $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
-                        }
-                        elseif ($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'IN_DATABASE')
-                        {
-                          $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
-                          $Trip->setIdDeparture($depa_gps_coord['id']);
-                        }
-                        elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'OK')
-                        {
-                          $Trip->setIdDestination($dest_gps_coord['id']);
-                          $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
-                        }
-                        elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'IN_DATABASE')
-                        {
-                          $Trip->setIdDestination($dest_gps_coord['id']);
-                          $Trip->setIdDeparture($depa_gps_coord['id']);
-                        }
-                        $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
-                        $Trip->setIdUser($userId);
-                        $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
-                        $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
-                        $idTrip = $Trip->save();
+                        //on créé un objet voyage
+                        $Trip = new Trip;
+                        $Trip->setName($post['trip_name']);
+                        $Trip->setDescription((string)$post['description']);
+                        $Trip->setDepartureDate($post['departure_date']);
+                        $Trip->setReturnDate($post['return_date']);
+                        $Trip->setTotalPrice($post['total_price']);
+                        $Trip->setTripState($post['trip_state']);
+                        $Trip->setNumberPeople($post['number_people']);
 
-                        if($this->fileProcessing($idTrip, $destination, 'Romain'))
+                        //on géolocalise la destination et le déaprt
+                        $dest_gps_coord = GoogleMapsApiHelper::getGPSCoord($destination);
+                        $depa_gps_coord = GoogleMapsApiHelper::getGPSCoord($departure);
+
+                        if($dest_gps_coord['state'] != 'ERROR' && $depa_gps_coord['state'] != 'ERROR')
                         {
-                          echo 'trip added';
+                          //on recupere la distance entre les 2 destinations
+                          $Trip->setKmTraveled(GoogleMapsApiHelper::getDistBetweenTwoGPSPoint($dest_gps_coord['latitude'], $dest_gps_coord['longitude'], $depa_gps_coord['latitude'], $depa_gps_coord['longitude']));
+
+                          //on sauvegarde les destinations avec leur informations dans l'object voyage
+                          if($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'OK')
+                          {
+                            $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
+                            $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
+                          }
+                          elseif ($dest_gps_coord['state'] == 'OK' && $depa_gps_coord['state'] == 'IN_DATABASE')
+                          {
+                            $Trip->setIdDestination(Destination::saveDestination($destination, $dest_gps_coord));
+                            $Trip->setIdDeparture($depa_gps_coord['id']);
+                          }
+                          elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'OK')
+                          {
+                            $Trip->setIdDestination($dest_gps_coord['id']);
+                            $Trip->setIdDeparture(Destination::saveDestination($departure, $depa_gps_coord));
+                          }
+                          elseif($dest_gps_coord['state'] == 'IN_DATABASE' && $depa_gps_coord['state'] == 'IN_DATABASE')
+                          {
+                            $Trip->setIdDestination($dest_gps_coord['id']);
+                            $Trip->setIdDeparture($depa_gps_coord['id']);
+                          }
+
+                          $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
+                          $Trip->setIdUser($userId);
+                          $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
+                          $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
+
+                          return $Trip;
                         }
                         else
                         {
                           $isProcessingError = true;
-                          $this->error = 'error with file processing';
+                          $this->error  = 'error with geocoding API';
                         }
                       }
                       else
                       {
                         $isProcessingError = true;
-                        $this->error = 'error with the geocoding API';
+                        $this->error  = 'the description, the total price or the number of people is not valid';
                       }
-                    }
-                    else
-                    {
-                      $isProcessingError = true;
-                      $this->error  = 'error with description, total_price or number_people';
-                    }
+                  }
+                  else
+                  {
+                    $isProcessingError = true;
+                    $this->error = 'the transport type is not valid';
+                  }
                 }
                 else
                 {
                   $isProcessingError = true;
-                  $this->error = 'error with the transport_type';
+                  $this->error = 'the trip state is not valid';
                 }
               }
               else
               {
                 $isProcessingError = true;
-                $this->error = 'error with the trip_state';
+                $this->error  = 'the return must be greater than departure date';
               }
             }
             else
             {
               $isProcessingError = true;
-              $this->error = 'error with the return_date';
+              $this->error = 'the return date is not valid';
             }
           }
           else
           {
             $isProcessingError = true;
-            $this->error = 'error with the departure_date';
+            $this->error = 'the departure date is not valid';
           }
         }
         else
         {
           $isProcessingError = true;
-          $this->error = 'error with the trip name';
+          $this->error = 'the trip name is not valid';
         }
       }
       else
       {
         $isProcessingError = true;
-        $this->error = 'error with the departure';
+        $this->error = 'the departure is not valid';
       }
     }
     else
     {
       $isProcessingError = true;
-      $this->error  = 'error with the destination';
+      $this->error  = 'the destination is not valid';
     }
 
-    //si il y a eu des erreur on raffiche le formulaire d'ajout de voyage avec le message d'erreur
-    //sinon on redirige vers l'affichage des voyages
     if($isProcessingError)
     {
       return $this->index();
@@ -183,6 +177,38 @@ class TripAddController
     }
   }
 
+//permet de parser le formulaire d'ajout de voyage
+  public function tripAddParse()
+  {
+    //Data processing
+    User::userIsConnected();
+
+      $Trip = $this->tripCheck($_POST);
+
+      $idTrip = $Trip->save();
+
+      if($this->fileProcessing($idTrip, $destination, 'Romain'))
+      {
+        echo 'trip added';
+        header('Location: tripViewList');
+        exit(0);
+      }
+      else
+      {
+        $this->error = 'error with file processing';
+        return $this->index();
+      }
+  }
+
+  public function tripUpdateParse()
+  {
+    $Trip = $this->tripCheck($_POST);
+    $Trip->setId($_POST['id_trip']);
+    $Trip->update();
+    header('Location: tripViewList');
+    exit(0);
+  }
+
   function validateDate($date, $format = 'Y-m-d')
   {
     $d = DateTime::createFromFormat($format, $date);
@@ -191,7 +217,7 @@ class TripAddController
 
   private function fileProcessing($tripId, $destination, $username)
   {
-    if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
+    if(isset($_FILES) && !empty($_FILES['photos']['name']))
     {
       $noFileError = true;
 

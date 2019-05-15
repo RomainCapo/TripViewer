@@ -15,7 +15,7 @@ class Transport extends Model
 
   //@summary retourne tous les moyens de transport disponible dans un élément checkbox html, cette méthode permet de génerer la liste déroulante qui est affiché dans la vue
   //@return string : retourne l'html de la liste déroulante sous forme de string
-  public static function fetchAllTransportsName()
+  public static function fetchAllTransportsName($id = -1)
   {
     $statement = App::get('dbh')->prepare("select transport from transport");
     $statement->execute();
@@ -23,7 +23,14 @@ class Transport extends Model
     $string = '';
     foreach ($statement->fetchAll() as $key => $value)
     {
-      $string.= "<option value='". htmlentities($value[0]) ."'>" . htmlentities($value[0]) . '</option>' . PHP_EOL;
+      if($id == -1 || $id != $key)
+      {
+        $string.= "<option value='". htmlentities($value[0]) ."'>" . htmlentities($value[0]) . '</option>' . PHP_EOL;
+      }
+      else
+      {
+        $string.= "<option value='". htmlentities($value[0]) ."' selected>" . htmlentities($value[0]) . '</option>' . PHP_EOL;
+      }
     }
     return $string;
   }
