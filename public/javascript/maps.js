@@ -9,6 +9,8 @@ function initMap() {
     url: 'ajax',
     dataType: 'json'
   }).done(function(data){
+
+    console.log(data)
     for(let key in data)
     {
       let markerColor;

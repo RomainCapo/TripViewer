@@ -123,14 +123,14 @@ class Trip extends Model
   {
       $str = "";
 
-      $str .= "<div class='card'><div class='card-body'><h1 class='card-title'>";
+      $str .= "<div class='card'><div class='card-body'><h3 class='card-title'>";
       $str .= htmlentities(ucfirst(strtolower(Destination::getDestinationById($this->id_destination))));
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
-      $str .= "</h1><h4 class='card-subtitle mb-2 text-muted'>";
+      $str .= "</h3><h5 class='card-subtitle mb-2 text-muted'>";
       $str .= htmlentities($this->name);
-      $str .= "</h4><p class='card-text'>";
+      $str .= "</h5><p class='card-text'>";
       $str .= htmlentities($this->description);
       $str .= "</p><a href='tripView?id=";
       $str .= urlencode($this->id);
@@ -153,9 +153,9 @@ class Trip extends Model
     $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
     $str .= "</h1><h3 style='color:grey'>";
     $str .= htmlentities($this->name);
-    $str .= "</h3><p style='color:grey'><strong>From</strong><em>";
+    $str .= "</h3><p style='color:grey'><strong>From </strong><em>";
     $str .= htmlentities($this->departure_date);
-    $str .= "</em> <strong>to</strong><em>";
+    $str .= "</em> <strong>to </strong><em>";
     $str .= htmlentities($this->return_date);
     $str .= "</em></p>";
 
@@ -181,6 +181,52 @@ class Trip extends Model
         $str .= "<h3>Description of the trip</h3><hr><p>";
         $str .= htmlentities($this->description);
         $str .= "</p>";
+    }
+
+    $photos = Trip::getURLUpload($this->id);
+
+    if(sizeof($photos) > 0)
+    {
+      $str .= "<div id='carouselExampleIndicators' class='carousel slide' data-ride='carousel'>";
+      $str .= "<ol class='carousel-indicators'>";
+
+
+      $str .= "<li data-target='#carouselExampleIndicators' data-slide-to='0' class='active'></li>";
+
+      for($i = 1; $i < sizeof($photos); $i++)
+      {
+        $str .= "<li data-target='#carouselExampleIndicators' data-slide-to='" . $i . "'></li>";
+      }
+
+
+      $str .= "</ol>";
+
+      $str .= "<div class='carousel-inner'>";
+
+      $i = 0;
+      foreach($photos as $key => $value)
+      {
+        if($i == 0)
+          $str .= "<div class='carousel-item active'>";
+        else
+          $str .= "<div class='carousel-item'>";
+
+        $str .= "<img src='uploads/" . htmlentities($value['file_name']) . "' alt='photo_trip' class='d-block w-100'>";
+        $str .= "</div>";
+        $i++;
+      }
+
+      $str .= "</div>";
+
+      $str .= "<a class='carousel-control-prev' href='#carouselExampleIndicators' role='button' data-slide='prev'>";
+      $str .= "<span class='carousel-control-prev-icon' aria-hidden='true'></span>";
+      $str .= "<span class='sr-only'>Previous</span>";
+      $str .= "</a>";
+      $str .= "<a class='carousel-control-next' href='#carouselExampleIndicators' role='button' data-slide='next'>";
+      $str .= "<span class='carousel-control-next-icon' aria-hidden='true'></span>";
+      $str .= "<span class='sr-only'>Next</span>";
+      $str .= "</a>";
+      $str .= "</div>";
     }
 
     return $str;
@@ -211,6 +257,18 @@ class Trip extends Model
   }
 
   //@summary retourne toutes les voyages de la base de données
+  //@summary retourne les noms d chaque fichier phto lié à un voyage
+  //@return
+  public static function getURLUpload($id_trip)
+  {
+    $statement = App::get('dbh')->prepare('SELECT file_name FROM photo WHERE id_trip = :id_trip');
+    $statement->bindParam(':id_trip', $id_trip);
+    $statement->execute();
+
+    return $statement->fetchAll();
+  }
+
+  //@summary retourne tous les voyages de la base de données
   //@return Trip : objet contenant les informations de voyages
   public static function fetchAllTrips()
   {

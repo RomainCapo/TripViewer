@@ -286,6 +286,6 @@ class TripAddController
 
   public function debug()
   {
-    echo Destination::getDestNameById(1);
+    
   }
 }

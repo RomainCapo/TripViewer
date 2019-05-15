@@ -11,6 +11,7 @@ class TripController
 
   public function mapView()
   {
+    User::userIsConnected();
     return Helper::view("tripMap");
   }
 

@@ -1,19 +1,19 @@
 <?php
-    $title = "Home";
+  $title = "Home";
 
-if(isset($_SESSION['login']))
-{
-  require('partials/nav.php');
-}
-    require('partials/header.php');
-
+  if(isset($_SESSION['login']))
+  {
+    require('partials/nav.php');
+  }
+  require('partials/header.php');
 ?>
+
 <div class="container">
   <br>
   <br>
   <?php if(isset($_SESSION['login'])) { ?>
 
-      <h1>Hi <?php echo unserialize($_SESSION['login'])->getPseudo(); ?> !</h1>
+      <h1>Hi <?php echo htmlentities(unserialize($_SESSION['login'])->getPseudo()); ?> !</h1>
 
   <?php } ?>
 
@@ -33,3 +33,7 @@ if(isset($_SESSION['login']))
   }
   ?>
 </div>
+
+<?php
+  require('partials/footer.php');
+?>
