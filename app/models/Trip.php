@@ -172,10 +172,67 @@ class Trip extends Model
         $str .= "</p>";
     }
 
+    $photos = Trip::getURLUpload($this->id);
+
+    if(sizeof($photos) > 0)
+    {
+      $str .= "<div id='carouselExampleIndicators' class='carousel slide' data-ride='carousel'>";
+      $str .= "<ol class='carousel-indicators'>";
+
+
+      $str .= "<li data-target='#carouselExampleIndicators' data-slide-to='0' class='active'></li>";
+
+      for($i = 1; $i < sizeof($photos); $i++)
+      {
+        $str .= "<li data-target='#carouselExampleIndicators' data-slide-to='" . $i . "'></li>";
+      }
+
+
+      $str .= "</ol>";
+
+      $str .= "<div class='carousel-inner'>";
+
+      $i = 0;
+      foreach($photos as $key => $value)
+      {
+        if($i == 0)
+          $str .= "<div class='carousel-item active'>";
+        else
+          $str .= "<div class='carousel-item'>";
+
+        $str .= "<img src='uploads/" . htmlentities($value['file_name']) . "' alt='photo_trip' class='d-block w-100'>";
+        $str .= "</div>";
+        $i++;
+      }
+
+      $str .= "</div>";
+
+      $str .= "<a class='carousel-control-prev' href='#carouselExampleIndicators' role='button' data-slide='prev'>";
+      $str .= "<span class='carousel-control-prev-icon' aria-hidden='true'></span>";
+      $str .= "<span class='sr-only'>Previous</span>";
+      $str .= "</a>";
+      $str .= "<a class='carousel-control-next' href='#carouselExampleIndicators' role='button' data-slide='next'>";
+      $str .= "<span class='carousel-control-next-icon' aria-hidden='true'></span>";
+      $str .= "<span class='sr-only'>Next</span>";
+      $str .= "</a>";
+      $str .= "</div>";
+    }
+
     return $str;
   }
 
-  //@summary retourne toutes les voyages de la base de données
+  //@summary retourne les noms d chaque fichier phto lié à un voyage
+  //@return
+  public static function getURLUpload($id_trip)
+  {
+    $statement = App::get('dbh')->prepare('SELECT file_name FROM photo WHERE id_trip = :id_trip');
+    $statement->bindParam(':id_trip', $id_trip);
+    $statement->execute();
+
+    return $statement->fetchAll();
+  }
+
+  //@summary retourne tous les voyages de la base de données
   //@return Trip : objet contenant les informations de voyages
   public static function fetchAllTrips()
   {

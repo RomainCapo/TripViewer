@@ -6,6 +6,9 @@
 <div class="container">
     <?php echo $trips->displayInfos(); ?>
 </div>
+
+
+
 <?php
     require('partials/footer.php');
 ?>

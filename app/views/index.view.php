@@ -13,7 +13,7 @@
   <br>
   <?php if(isset($_SESSION['login'])) { ?>
 
-      <h1>Hi <?php echo unserialize($_SESSION['login'])->getPseudo(); ?> !</h1>
+      <h1>Hi <?php echo htmlentities(unserialize($_SESSION['login'])->getPseudo()); ?> !</h1>
 
   <?php } ?>
 

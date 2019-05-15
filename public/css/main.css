@@ -32,6 +32,13 @@ html, body {
     display:inline;
 }
 
+/* Img responsive */
+
+.responsive-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+}
 
 /* LOGIN - REGISTER */
 

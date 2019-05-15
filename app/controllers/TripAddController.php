@@ -189,11 +189,6 @@ class TripAddController
     return $d && $d->format($format) === $date;
   }
 
-  public function debug()
-  {
-    var_dump($this->validateDate('2000-53-03'));
-  }
-
   private function fileProcessing($tripId, $destination, $username)
   {
     if(!empty($_FILES['photos']['name'][0]) && isset($_FILES))
@@ -261,5 +256,10 @@ class TripAddController
       header('Location: tripViewList');
       exit(0);
     }
+  }
+
+  public function debug()
+  {
+    
   }
 }

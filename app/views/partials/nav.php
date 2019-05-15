@@ -21,7 +21,6 @@
 				</li>
 			</ul>
 			<div class="my-2 my-lg-0">
-				<a class="btn btn-primary" href="profil" role="button">Profil</a>
 				<a class="btn btn-secondary" href="logout" role="button">Logout</a>
 			</div>
 		</div>
