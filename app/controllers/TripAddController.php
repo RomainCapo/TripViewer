@@ -184,10 +184,10 @@ class TripAddController
     User::userIsConnected();
 
       $Trip = $this->tripCheck($_POST);
-
+      $id_user = $Trip->id_user;
       $idTrip = $Trip->save();
 
-      if($this->fileProcessing($idTrip, $destination, 'Romain'))
+      if($this->fileProcessing($idTrip, $destination, $id_user))
       {
         echo 'trip added';
         header('Location: tripViewList');
@@ -215,7 +215,7 @@ class TripAddController
     return $d && $d->format($format) === $date;
   }
 
-  private function fileProcessing($tripId, $destination, $username)
+  private function fileProcessing($tripId, $destination, $id_user)
   {
     if(isset($_FILES) && !empty($_FILES['photos']['name']))
     {
@@ -231,7 +231,7 @@ class TripAddController
         if(move_uploaded_file($tmpFilePath, $newFilePath))
         {
           //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
-          $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+          $filename = $id_user . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
           $definitiveFilePath = $target_dir . $filename;
           rename($newFilePath, $definitiveFilePath);
 
@@ -282,10 +282,5 @@ class TripAddController
       header('Location: tripViewList');
       exit(0);
     }
-  }
-
-  public function debug()
-  {
-    
   }
 }
