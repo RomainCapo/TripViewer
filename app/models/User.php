@@ -35,11 +35,11 @@ class User extends Model
   {
       $this->pseudo = $value;
   }
-
+  
   public function setEmail($value)
   {
       $this->email = $value;
-  }
+  } 
 
   public function setCreationDate($value)
   {
@@ -65,10 +65,10 @@ class User extends Model
   public function getCreationDate()
   {
       return $this->creation_date;
-  }
+  }  
 
   //@summary Vérifie que le pseudo et le mot de passe sont bien liés dans la base de données
-  //@param $pseudo, $password
+  //@param $pseudo, $password  
   //@return true ou false : selon le résultat de la fonction password_verify()
   //@return false : si aucune ligne contenant le pseudo est trouvé
   public static function userPassLinked($pseudo, $password)
@@ -104,7 +104,7 @@ class User extends Model
 
   //@summary fonction d'ajout à la base de données
   //@param $pseudo, $email, $password
-  //@return le résultat de la fonction execute(), donc 0 ou 1
+  //@return le résultat de la fonction execute(), donc 0 ou 1 
   public static function registerUser($pseudo, $email, $password)
   {
       $hash_pass = password_hash($password, PASSWORD_DEFAULT); // on hash le password pour plus de sécurité

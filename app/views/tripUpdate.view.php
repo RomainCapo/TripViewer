@@ -64,5 +64,4 @@
 </div>
 <?php } ?>
 </div>
-<script type="text/javascript" src="public/javascript/addForm.js"></script>
 <?php require('partials/footer.php') ?>

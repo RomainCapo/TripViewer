@@ -7,18 +7,17 @@ function initMap() {
     zoom: 2
   });
 
-/**
- * Requete ajx permettant de requperer tous les voyages d'un utilisateur
- */
+  /**
+   * Requete ajx permettant de requperer tous les voyages d'un utilisateur
+   */
   $.ajax({
     type: 'POST',
     url: 'ajax',
     dataType: 'json'
   }).done(function(data){//si la requete a résussit on rentre dans cette fonction
-    //on parcourt chaque resultats de la requetes
+        //on parcourt chaque resultats de la requetes
     for(let key in data)
     {
-      //on applique une image différentes au marker selon le status du voyage
       let markerColor;
       if(data[key]['trip_state'] == "realized")
       {
@@ -51,14 +50,14 @@ function initMap() {
           content: contentString
         });
 
-        //coresponds au marker sur la carte
+      //coresponds au marker sur la carte
       let marker = new google.maps.Marker({
           position: new google.maps.LatLng(data[key]['lat'], data[key]['lng']),
           map: map,
           animation:google.maps.Animation.DROP,
           icon: markerColor
         });
-        
+
         //ajout de l'evenement lors d'un clic sur un marker
         marker.addListener('click', function() {
           infoWindow.open(map, marker);
