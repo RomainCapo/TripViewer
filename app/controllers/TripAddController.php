@@ -189,7 +189,6 @@ class TripAddController
 
       if($this->fileProcessing($idTrip, $destination, 'Romain'))
       {
-        echo 'trip added';
         header('Location: tripViewList');
         exit(0);
       }
@@ -286,6 +285,6 @@ class TripAddController
 
   public function debug()
   {
-    
+
   }
 }
