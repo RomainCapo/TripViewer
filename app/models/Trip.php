@@ -346,6 +346,13 @@ class Trip extends Model
     $statement->execute();
   }
 
+  public function delete()
+  {
+    $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id=:id');
+    $statement->bindValue(':id', $this->id);
+    $statement->execute();
+  }
+
   //@summary retourne toutes les informations de voyage a partir d'un id d'utilisateur
   //@param $id_user : id de l'utilisateur
   //@return Trip : objet contentant les informations de voyages

@@ -17,9 +17,9 @@
     <div class="card-header"><h2>Add a trip</h2></div>
     <div class="card-body">
       <form action="tripAddParse" method="post" enctype="multipart/form-data">
-        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination"   autocomplete="off"/><br/>
-        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"    autocomplete="off"/><br/>
-        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name"   autocomplete="off"/><br/>
+        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" required  autocomplete="off"/><br/>
+        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  required  autocomplete="off"/><br/>
+        <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" required  autocomplete="off"/><br/>
         <div class="row">
           <div class="col">
             <label for="departure_date">Departure date : </label><input class="form-control" id="departure_date" type="date" name="departure_date" required autocomplete="off"/>
@@ -47,7 +47,7 @@
           </div>
           <div class="col">
             <label for="transport_type">Transport type : </label>
-            <select class="form-control" id="transport_type" name="transport_type"   autocomplete="off"/>
+            <select class="form-control" id="transport_type" name="transport_type" autocomplete="off"/>
               <?php echo Transport::fetchAllTransportsName(); ?>
             </select><br/>
           </div>
