@@ -36,6 +36,4 @@ class Helper
         header("Location: /{$path}");
         exit();
     }
-
-
 }

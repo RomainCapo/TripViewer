@@ -241,7 +241,7 @@ class Trip extends Model
         $id = array_search($tripState, $arrayTripState);
     }
 
-    $string;
+    $string = "";
     foreach ($arrayTripState as $key => $value) {
       if($id == -1 || $id!=$key )
       {

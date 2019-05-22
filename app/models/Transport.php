@@ -13,15 +13,39 @@ class Transport extends Model
     return parent::fetchAll('transport', 'Transport');
   }
 
+  private static function getIdFromTransportName($transports, $name)
+  {
+    //var_dump($transports);
+    $id = -1;
+    foreach ($transports as $key => $value)
+    {
+      if($value[0] == $name)
+      {
+        $id = $key;
+      }
+    }
+    return $id;
+  }
+
   //@summary retourne tous les moyens de transport disponible dans un élément checkbox html, cette méthode permet de génerer la liste déroulante qui est affiché dans la vue
   //@return string : retourne l'html de la liste déroulante sous forme de string
   public static function fetchAllTransportsName($id = -1)
   {
     $statement = App::get('dbh')->prepare("select transport from transport");
     $statement->execute();
+    $transports = $statement->fetchAll();
+
+    //var_dump($transports);
+
+    if(is_string($id))
+    {
+      $id = Transport::getIdFromTransportName($transports, $id);
+    }
+
+    echo $id;
 
     $string = '';
-    foreach ($statement->fetchAll() as $key => $value)
+    foreach ($transports as $key => $value)
     {
       if($id == -1 || $id != $key)
       {

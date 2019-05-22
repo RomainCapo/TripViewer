@@ -49,7 +49,7 @@
           <div class="col">
             <label for="transport_type">Transport type : </label>
             <select class="form-control" id="transport_type" name="transport_type"   autocomplete="off"/>
-              <?php echo Transport::fetchAllTransportsName($trip->id_transport_type); ?>
+              <?php echo Transport::fetchAllTransportsName((int)$trip->id_transport_type); ?>
             </select><br/>
           </div>
         </div>
