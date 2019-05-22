@@ -33,6 +33,9 @@
   }
   ?>
 </div>
+<script type="text/javascript">
+  updateNavMenu("Home");
+</script>
 
 <?php
   require('partials/footer.php');

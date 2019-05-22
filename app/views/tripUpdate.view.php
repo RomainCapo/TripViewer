@@ -63,6 +63,8 @@
     </form>
   </div>
 </div>
-
 </div>
+<script type="text/javascript">
+  updateNavMenu("AddTrip");
+</script>
 <?php require('partials/footer.php') ?>

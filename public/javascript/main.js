@@ -21,3 +21,12 @@ function topFunction() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
+
+/**
+ * Ajoute la classe active sur le menu de la navbar
+ * @param  {string} menu id du menu du string
+ */
+function updateNavMenu(menu){
+  let element = document.getElementById(menu);
+  element.classList.add("active");
+}

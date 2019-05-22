@@ -22,4 +22,7 @@ else
 
 ?>
 </div>
+<script type="text/javascript">
+  updateNavMenu("ViewTrips");
+</script>
 <?php require('partials/footer.php') ?>

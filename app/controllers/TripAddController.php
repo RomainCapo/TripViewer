@@ -25,9 +25,9 @@ class TripAddController
    */
   public function updateTrip()
   {
-    //TODO:attention il faut encore tester que le voyages appartienne bien a l'utilisateur
+    //on controle que l'utilisateur est bien connecté  et que le voyage lui appartienne bien
     User::userIsConnected();
-    if(isset($_POST['editTripId']))
+    if(isset($_POST['editTripId']) && (Trip::getIdUserByTripId($_POST['editTripId']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_POST['editTripId'];
       return Helper::view("tripUpdate", ['error' => $this->error, 'id_trip' => $id]);//on affiche la vue
@@ -40,7 +40,7 @@ class TripAddController
   }
 
   /**
-   * permet de verifier qu'un voyage est bien valide et peut etre ajouté dans la BDD en toute securité
+   * permet de verifier qu'un voyage est bien valide et peut etre ajouté ou modifié dans la BDD en toute securité, s'occupe aussi d'afficher les bonnes erreurs
    * @param  array $post tableau $_POST recu de la vue
    * @return boolean, Trip       false en cas d'erreur, le voyage en cas de succès
    */
@@ -221,11 +221,23 @@ class TripAddController
       }
   }
 
+  /**
+   * permet d'effectuer le parsing quand on modifie un voyage
+   * @return view retourne la vue en cas d'erreur
+   */
   public function tripUpdateParse()
   {
     $Trip = $this->tripCheck($_POST);
+
+    //si il y a une erreur on redirige sur l'index pour l'afficher
+    if(!$Trip)
+    {
+      return $this->index();
+    }
+
     $Trip->setId($_POST['id_trip']);
     $Trip->update();
+
     header('Location: tripViewList');
     exit(0);
   }
