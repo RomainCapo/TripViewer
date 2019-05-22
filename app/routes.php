@@ -19,5 +19,6 @@ $router->define([
   'tripView' => 'TripController@showTrip',
   'tripViewListUpdate' => 'TripAddController@updateTrip',
   'tripViewListDelete' => 'TripAddController@deleteTrip',
-  'routeNotDefined' => 'IndexController@routeNotDefined'
+  'routeNotDefined' => 'IndexController@routeNotDefined',
+  'debug' => 'TripAddController@debug'
 ]);
