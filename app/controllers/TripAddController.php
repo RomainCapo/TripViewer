@@ -336,6 +336,6 @@ class TripAddController
 
   public function debug()
   {
-    Transport::fetchAllTransportsName();
+    echo Transport::getTransportById(2);
   }
 }

@@ -13,9 +13,16 @@ class Transport extends Model
     return parent::fetchAll('transport', 'Transport');
   }
 
+  public static function getTransportById($id)
+  {
+    $statement = App::get('dbh')->prepare("select transport from transport where id=:id");
+    $statement->bindValue(':id', $id);
+    $statement->execute();
+    return $statement->fetchAll()[0]['transport'];
+  }
+
   private static function getIdFromTransportName($transports, $name)
   {
-    //var_dump($transports);
     $id = -1;
     foreach ($transports as $key => $value)
     {
@@ -34,8 +41,6 @@ class Transport extends Model
     $statement = App::get('dbh')->prepare("select transport from transport");
     $statement->execute();
     $transports = $statement->fetchAll();
-
-    //var_dump($transports);
 
     if(is_string($id))
     {

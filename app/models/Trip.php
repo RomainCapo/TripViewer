@@ -174,6 +174,9 @@ class Trip extends Model
     $str .= "</li>";
     $str .= "<li>Trip state : ";
     $str .= htmlentities($this->trip_state);
+    $str .= "<li>Transport : ";
+    $str .= htmlentities(Transport::getTransportById($this->id_transport_type));
+    $str .= "</li>";
     $str .= "</li></ul>";
 
     if(!empty($this->description))
