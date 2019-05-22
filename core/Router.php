@@ -29,6 +29,14 @@ class Router
       }
     }
 
+    //permet de rediriger vers la page 404 si la route contient plus d'un niveau hiérarchique
+    $uriExplosed = explode("/", $uri);
+    if(sizeof($uriExplosed) > 1)
+    {
+      $path = App::get('config')['install_prefix'];
+      Helper::redirect($path.'/routeNotDefined');
+    }
+
     if(array_key_exists ($uri, $this->routes))
     {
         // En PHP 5.6 et suivants, la liste des arguments peut inclure
@@ -40,13 +48,10 @@ class Router
                                                  // (fonctions variadiques http://php.net/manual/fr/functions.arguments.php#functions.variable-arg-list)
                                                  // explode (split a string by a string): http://php.net/manual/en/function.explode.php
         );
-        echo 'test';
     }
 
     header('Location: routeNotDefined');
     exit(0);
-    //throw new Exception("Not routes defined for this URI.", 1);
-
   }
 
   // call a specific action (method) of a controller
