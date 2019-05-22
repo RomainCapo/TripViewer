@@ -109,7 +109,7 @@ class TripAddController
                         else
                         {
                           $isProcessingError = true;
-                          $this->error  = 'error with geocoding API';
+                          $this->error  = 'the location is not found';
                         }
                       }
                       else
@@ -133,7 +133,7 @@ class TripAddController
               else
               {
                 $isProcessingError = true;
-                $this->error  = 'the return must be greater than departure date';
+                $this->error  = 'the return date must be greater than departure date';
               }
             }
             else
@@ -168,12 +168,7 @@ class TripAddController
 
     if($isProcessingError)
     {
-      return $this->index();
-    }
-    else
-    {
-      header('Location: tripViewList');
-      exit(0);
+      return false;
     }
   }
 
@@ -185,17 +180,25 @@ class TripAddController
 
       $Trip = $this->tripCheck($_POST);
 
+      //si il y a une erreur on redirige sur l'index pour l'afficher
+      if(!$Trip)
+      {
+        return $this->index();
+      }
+
       $idTrip = $Trip->save();
 
-      if($this->fileProcessing($idTrip, $destination, 'Romain'))
+    if($this->fileProcessing($idTrip, 'Romain'))
       {
-        header('Location: tripViewList');
-        exit(0);
+        echo 'bon';
+        //header('Location: tripViewList');
+        //exit(0);
       }
       else
       {
-        $this->error = 'error with file processing';
-        return $this->index();
+        echo 'ko';
+        //$this->error = 'error with file processing';
+        //return $this->index();
       }
   }
 
@@ -214,9 +217,9 @@ class TripAddController
     return $d && $d->format($format) === $date;
   }
 
-  private function fileProcessing($tripId, $destination, $username)
+  private function fileProcessing($tripId, $username)
   {
-    if(isset($_FILES) && !empty($_FILES['photos']['name']))
+    if(isset($_FILES) && $_FILES['photos']['name'][0] != "")
     {
       $noFileError = true;
 
@@ -230,7 +233,7 @@ class TripAddController
         if(move_uploaded_file($tmpFilePath, $newFilePath))
         {
           //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
-          $filename = $username . '_' .  $destination . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
+          $filename = $username . '_' .  $tripId . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
           $definitiveFilePath = $target_dir . $filename;
           rename($newFilePath, $definitiveFilePath);
 
@@ -267,12 +270,12 @@ class TripAddController
 
       if($statement->execute())
       {
-        header('Location: tripViewList'); // TODO add success messages
+        header('Location: tripViewList');
         exit(0);
       }
       else
       {
-        header('Location: tripViewList'); // TODO add errors messages
+        header('Location: tripViewList');
         exit(0);
       }
     }

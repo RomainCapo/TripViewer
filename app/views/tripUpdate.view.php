@@ -6,6 +6,15 @@
     $trip = Trip::fetchById($id_trip);
 ?>
 <div class="container">
+  <?php if(isset($error) && $error != '')
+        { ?>
+
+
+  <div class="alert alert-dismissible alert-danger">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Error : </strong> <?php echo $error; ?>
+  </div>
+  <?php } ?>
   <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Update a trip</h2></div>
     <div class="card-body">
@@ -54,14 +63,6 @@
     </form>
   </div>
 </div>
-<?php if(isset($error) && $error != '')
-      { ?>
 
-
-<div class="alert alert-dismissible alert-danger">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <strong>Error : </strong> <?php echo $error; ?>
-</div>
-<?php } ?>
 </div>
 <?php require('partials/footer.php') ?>
