@@ -52,19 +52,6 @@ html, body {
     background-repeat: no-repeat;
 }
 
-.card-form {
-    position: absolute;
-    margin: auto;
-    margin-top: 5%;
-    width: 30%;
-}
-
-.card-form-add {
-    position: absolute;
-    margin: auto;
-    width: 100%;
-}
-
 /* FOOTER */
 
 .footer {

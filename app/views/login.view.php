@@ -2,7 +2,9 @@
     $title = "Login";
     require('partials/header.php')
 ?>
-  <div class="background">
+<div class="background">
+  <br><br>
+  <div class="col-12 col-sm-8 col-lg-5">
     <div class="card border-secondary mb-3 card-form">
       <div class="card-header"><h2>Login</h2></div>
       <div class="card-body">
@@ -25,4 +27,5 @@
         </form>
       </div>
     </div>
+  </div>
 </div>
