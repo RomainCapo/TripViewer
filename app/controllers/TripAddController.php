@@ -27,7 +27,7 @@ class TripAddController
   {
     //on controle que l'utilisateur est bien connecté  et que le voyage lui appartienne bien
     User::userIsConnected();
-    if(isset($_POST['editTripId']) && (Trip::getIdUserByTripId($_POST['editTripId']) == unserialize($_SESSION['login'])->getId()))
+    if(isset($_POST['editTripId'])  &&(Trip::getIdUserByTripId($_POST['editTripId']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_POST['editTripId'];
       return Helper::view("tripUpdate", ['error' => $this->error, 'id_trip' => $id]);//on affiche la vue
@@ -232,7 +232,7 @@ class TripAddController
     //si il y a une erreur on redirige sur l'index pour l'afficher
     if(!$Trip)
     {
-      return $this->index();
+      return $this->updateTrip();
     }
 
     $Trip->setId($_POST['id_trip']);

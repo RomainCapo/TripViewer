@@ -16,7 +16,7 @@
   </div>
   <?php } ?>
   <div class="card border-secondary mb-3 card-form-add">
-    <div class="card-header"><h2>Update a trip</h2></div>
+    <div class="card-header"><h2>Update the trip to <strong><?php echo ucfirst(Destination::getDestNameById($trip->id_destination)); ?> </strong></h2></div>
     <div class="card-body">
       <form action="updateParse" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id_trip" value="<?php echo $id_trip; ?>">
@@ -59,6 +59,7 @@
             <textarea class="form-control" id="description" name="description" placeholder="Enter your trip description" autocomplete="off"/><?php echo $trip->description; ?></textarea><br/>
           </div>
         </div>
+        <input type="hidden" name="editTripId" value="<?php echo $id_trip; ?>">
         <button type="submit" class="btn btn-warning block-btn" >Update the trip</button>
     </form>
   </div>
