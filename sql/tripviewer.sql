@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mer. 27 mars 2019 à 09:23
+-- Généré le :  mer. 22 mai 2019 à 16:08
 -- Version du serveur :  5.7.17
 -- Version de PHP :  7.1.3
 
@@ -253,10 +253,10 @@ INSERT INTO `transport` (`id`, `transport`) VALUES
 
 CREATE TABLE `trip` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_bin NOT NULL,
   `description` text COLLATE utf8_bin,
-  `departure_date` datetime NOT NULL,
-  `return_date` datetime NOT NULL,
+  `departure_date` date NOT NULL,
+  `return_date` date NOT NULL,
   `km_traveled` int(11) DEFAULT NULL,
   `total_price` int(11) DEFAULT NULL,
   `trip_state` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -341,12 +341,12 @@ ALTER TABLE `company`
 -- AUTO_INCREMENT pour la table `destination`
 --
 ALTER TABLE `destination`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT pour la table `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT pour la table `transport`
 --
@@ -356,12 +356,12 @@ ALTER TABLE `transport`
 -- AUTO_INCREMENT pour la table `trip`
 --
 ALTER TABLE `trip`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- Contraintes pour les tables déchargées
 --
