@@ -17,7 +17,6 @@ class Trip extends Model
   private $id_transport_type;
   private $id_destination;
   private $id_departure;
-  private $id_company;
 
   public function __get($property)
   {
@@ -112,11 +111,6 @@ class Trip extends Model
     $this->id_departure = $id;
   }
 
-  public function setIdCompany($id)
-  {
-    $this->id_company = $id;
-  }
-
   //@summary retourne les informations d'un voyage dans le but d'être affiché dans une vue
   //@return string : retourne l'html contenant les informations de voyage sous forme de string
   public function asCardShow()
@@ -149,6 +143,7 @@ class Trip extends Model
   {
     $str = "";
 
+    $str .= "<form action='tripViewList'><button type='submit' class='btn btn-outline-success'> Back to your trips</button></form><br><br>";
     $str .= "<h1>";
     $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
     $str .= "</h1><h3 style='color:grey'>";
@@ -280,7 +275,7 @@ class Trip extends Model
 
   public static function getUserTripInfo($id_user)
   {
-    $statement = App::get('dbh')->prepare('SELECT name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company FROM trip WHERE id_user=:id_user');
+    $statement = App::get('dbh')->prepare('SELECT name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people FROM trip WHERE id_user=:id_user');
     $statement->bindParam(':id_user', $id_user);
     $statement->execute();
 
@@ -308,8 +303,8 @@ class Trip extends Model
   //@summary sauve les voyages dans la base de données
   public function save()
   {
-    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $statement->bindValue(1, $this->name);
     $statement->bindValue(2, $this->description);
     $statement->bindValue(3, $this->departure_date);
@@ -322,7 +317,6 @@ class Trip extends Model
     $statement->bindValue(10, $this->id_destination);
     $statement->bindValue(11, $this->id_departure);
     $statement->bindValue(12, $this->number_people);
-    $statement->bindValue(13, $this->id_company);
     $statement->execute();
 
     return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
@@ -331,7 +325,7 @@ class Trip extends Model
   //@summary permet de modifier un voyage dans la base de données
   public function update()
   {
-    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=?, id_company=? WHERE id=?');
+    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=? WHERE id=?');
     $statement->bindValue(1, $this->name);
     $statement->bindValue(2, $this->description);
     $statement->bindValue(3, $this->departure_date);
@@ -344,8 +338,7 @@ class Trip extends Model
     $statement->bindValue(10, $this->id_destination);
     $statement->bindValue(11, $this->id_departure);
     $statement->bindValue(12, $this->number_people);
-    $statement->bindValue(13, $this->id_company);
-    $statement->bindValue(14, $this->id);
+    $statement->bindValue(13, $this->id);
     $statement->execute();
   }
 

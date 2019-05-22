@@ -119,7 +119,6 @@ class TripAddController
                           $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
                           $Trip->setIdUser($userId);
                           $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
-                          $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
 
                           return $Trip;
                         }
@@ -332,10 +331,5 @@ class TripAddController
       header('Location: tripViewList');
       exit(0);
     }
-  }
-
-  public function debug()
-  {
-    echo Transport::getTransportById(2);
   }
 }

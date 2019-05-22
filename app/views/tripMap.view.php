@@ -5,6 +5,7 @@ require('partials/nav.php');
 ?>
 <div class="container" style="height:70%; width:100%;" id="map_container">
   <h1>Trips maps view</h1><br/>
+  <h5 class='card-subtitle mb-2 text-muted'>Clic on marker to display trip infos !</h5><br>
   <div id="map"></div>
   <p>
     <ul id="markerInfo">
