@@ -13,6 +13,16 @@ class Transport extends Model
     return parent::fetchAll('transport', 'Transport');
   }
 
+  //@summary retourne le nom du transport par rapport a son id
+  //@param integer : id du transport
+  //@return string : retourne le transport
+  public static function getTransportById($id)
+  {
+    $statement = App::get('dbh')->prepare("select transport from transport where id=:id");
+    $statement->bindParam(':id', $id);
+    $statement->execute();
+    return $statement->fetchAll()[0]['transport'];
+  }
 
   //@summary retourne tous les moyens de transport disponible dans un élément checkbox html, cette méthode permet de génerer la liste déroulante qui est affiché dans la vue
   //@param integer or string : on indique sois l'id du transport, sois le nom du transport dans le but de selectionner l'élément de la liste en conséquence, si on indique rien aucune éléments n'est selectionné

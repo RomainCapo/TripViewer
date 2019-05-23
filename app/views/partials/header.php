@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title><?= htmlentities($title) ?></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="public/css/main.css">
 		<link rel="stylesheet" type="text/css" href="public/bootstrap/bootstrap.min.css">
 		<link rel="icon" href="public/img/icon.ico">

@@ -5,7 +5,7 @@
  */
 class Destination extends Model
 {
-  
+
 
   /**
   * Variable qui stocke l'id
@@ -218,7 +218,7 @@ class Destination extends Model
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO destination (destination, latitude, longitude, country) VALUES (?, ?, ?, ?)');
-    $statement->bindParam(1, $this->destination);
+    $statement->bindParam(1, utf8_encode($this->destination));
     $statement->bindParam(2, $this->latitude);
     $statement->bindParam(3, $this->longitude);
     $statement->bindParam(4, $this->country);

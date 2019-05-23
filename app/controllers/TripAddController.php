@@ -11,12 +11,10 @@ class TripAddController
 
 public function debug()
 {
-  echo Transport::getTransportId("Car");
 
-  $statement = App::get('dbh')->prepare("select transport from transport");
-    $statement->execute();
-    $transports = $statement->fetchAll();
-    echo Transport::getIdFromTransportName($transports, "Car");
+  $statement = App::get('dbh')->prepare("insert into test values (?)");
+  $statement->bindValue(1, "Genève");
+  $statement->execute();
 }
 
 /**
@@ -56,6 +54,7 @@ public function debug()
    */
   private function tripCheck($post)
   {
+
     $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
     $this->error = '';//pour stocker le message d'erreur
 
@@ -204,6 +203,8 @@ public function debug()
  */
   public function tripAddParse()
   {
+
+
 
     User::userIsConnected();//Si l'utilisateur est connecté
     $Trip = $this->tripCheck($_POST);//on parse les données recus
