@@ -792,7 +792,6 @@
             "time": "2016-01-25T15:43:01+00:00"
         },
         {
-<<<<<<< HEAD
             "name": "kherge/version",
             "version": "1.0.1",
             "source": {
@@ -804,19 +803,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/kherge-abandoned/Version/zipball/f07cf83f8ce533be8f93d2893d96d674bbeb7e30",
                 "reference": "f07cf83f8ce533be8f93d2893d96d674bbeb7e30",
-=======
-            "name": "phpunit/phpunit",
-            "version": "7.5.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "64cb33f5b520da490a7b13149d39b43cf3c890c6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/64cb33f5b520da490a7b13149d39b43cf3c890c6",
-                "reference": "64cb33f5b520da490a7b13149d39b43cf3c890c6",
->>>>>>> 3db3e896d8bc99f6bc2ab8ebedbb1b64594fbff0
                 "shasum": ""
             },
             "require": {
@@ -843,21 +829,10 @@
                     "email": "me@kevingh.com"
                 }
             ],
-<<<<<<< HEAD
             "description": "A parsing and comparison library for semantic versioning.",
             "homepage": "http://github.com/kherge/Version",
             "abandoned": true,
             "time": "2012-08-16T17:13:03+00:00"
-=======
-            "description": "The PHP Unit Testing framework.",
-            "homepage": "https://phpunit.de/",
-            "keywords": [
-                "phpunit",
-                "testing",
-                "xunit"
-            ],
-            "time": "2019-05-14T04:53:02+00:00"
->>>>>>> 3db3e896d8bc99f6bc2ab8ebedbb1b64594fbff0
         },
         {
             "name": "monolog/monolog",
