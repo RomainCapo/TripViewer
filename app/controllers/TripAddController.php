@@ -11,10 +11,12 @@ class TripAddController
 
 public function debug()
 {
-  $value = 'üèéöàä';
-  $statement = App::get('dbh')->prepare('INSERT INTO test(fes) VALUES (?) ');
-  $statement->bindParam(1, $value);
-  $statement->execute();
+  echo Transport::getTransportId("Car");
+
+  $statement = App::get('dbh')->prepare("select transport from transport");
+    $statement->execute();
+    $transports = $statement->fetchAll();
+    echo Transport::getIdFromTransportName($transports, "Car");
 }
 
 /**

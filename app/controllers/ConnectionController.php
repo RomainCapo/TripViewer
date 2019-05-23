@@ -1,3 +1,4 @@
+
 <?php
 
 class ConnectionController
@@ -44,7 +45,7 @@ class ConnectionController
                 header('Location: index');
                 exit(0);
             }
-            else 
+            else
             {
                 $isProcessingError_login = true;
                 $this->error_login['user'] = "User invalid or incorrect password";

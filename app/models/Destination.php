@@ -31,6 +31,9 @@ class Destination extends Model
     $this->country= $cou;
   }
 
+  //@summary retourne la destination par rapport a un id
+  //@param integer $id : id de la destination
+  //@return string : la detination
   public static function getDestNameById($id)
   {
     $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id=:id');
@@ -95,6 +98,9 @@ class Destination extends Model
     }
   }
 
+  //@summary retourne les informations d'un voyage selon l'id d'une destination
+  //@param integer $id : id du voyage
+  //@return array : tableau contenant les informations d'un voyage
   public static function getDestInfo($id)
   {
     $statement = App::get('dbh')->prepare('SELECT destination, latitude, longitude, country FROM destination WHERE id=:id');

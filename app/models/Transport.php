@@ -13,28 +13,9 @@ class Transport extends Model
     return parent::fetchAll('transport', 'Transport');
   }
 
-  public static function getTransportById($id)
-  {
-    $statement = App::get('dbh')->prepare("select transport from transport where id=:id");
-    $statement->bindValue(':id', $id);
-    $statement->execute();
-    return $statement->fetchAll()[0]['transport'];
-  }
-
-  private static function getIdFromTransportName($transports, $name)
-  {
-    $id = -1;
-    foreach ($transports as $key => $value)
-    {
-      if($value[0] == $name)
-      {
-        $id = $key;
-      }
-    }
-    return $id;
-  }
 
   //@summary retourne tous les moyens de transport disponible dans un élément checkbox html, cette méthode permet de génerer la liste déroulante qui est affiché dans la vue
+  //@param integer or string : on indique sois l'id du transport, sois le nom du transport dans le but de selectionner l'élément de la liste en conséquence, si on indique rien aucune éléments n'est selectionné
   //@return string : retourne l'html de la liste déroulante sous forme de string
   public static function fetchAllTransportsName($id = -1)
   {
@@ -44,15 +25,13 @@ class Transport extends Model
 
     if(is_string($id))
     {
-      $id = Transport::getIdFromTransportName($transports, $id);
+      $id = Transport::getTransportId($id)- 1; //on doit shift l'index de -1 car l'ide dans la bdd commence à 1 et l'id du tableau commence a 0
     }
-
-    echo $id;
 
     $string = '';
     foreach ($transports as $key => $value)
     {
-      if($id == -1 || $id != $key)
+      if($id == -1 || ($id - 1) != $key)
       {
         $string.= "<option value='". htmlentities($value[0]) ."'>" . htmlentities($value[0]) . '</option>' . PHP_EOL;
       }
@@ -95,7 +74,7 @@ class Transport extends Model
     return $statement->fetchAll()[0]['id'];
   }
 
-  //Pour l'insatnt nous n'avons pas besoin d'enregistrer des transports dans la base de données mais nous sommes
+  //Pour l'instant nous n'avons pas besoin d'enregistrer des transports dans la base de données mais nous sommes
   //obligé de réimplémenter la méthode
   public function save()
   {

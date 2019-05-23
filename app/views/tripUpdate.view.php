@@ -3,7 +3,7 @@
     require('partials/header.php');
     require('partials/nav.php');
 
-    $trip = Trip::fetchById($id_trip);
+    $trip = Trip::fetchById($id_trip);//on recupere les voyages avec l'id recu
 ?>
 <div class="container">
   <?php if(isset($error) && $error != '')

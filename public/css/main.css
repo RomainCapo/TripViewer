@@ -6,9 +6,14 @@
   text-align: center;
 }
 
-/* Trip Add Form */
-#photos {
 
+/*Index*/
+a[href="login"]{
+  margin-left : 100px;
+}
+
+#space{
+  width: 20px;
 }
 
 /* Trip Map View*/
