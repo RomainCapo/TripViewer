@@ -13,6 +13,13 @@ class Destination extends Model
   */
   private $id;
 
+
+  /**
+  * Variable qui stocke la destination
+  * @var float
+  */
+  private $destination;
+
   /**
   * Variable qui stocke la latitude
   * @var float
@@ -81,9 +88,25 @@ class Destination extends Model
   }
 
   /**
-  * Fonction qui retourne la présence ou non de la destination dans la bdd
+  * Fonction qui retourne le nom d'une destination selon un id
   *
-  * @param string $dest, c'est un string qui contient une destination
+  * @param int $id, c'est un int qui caractérise l'id d'une destination
+  *
+  * @return string : nom de la destination selon un id
+  */
+  public static function getDestNameById($id)
+  {
+    $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id=:id');
+    $statement->bindParam(':id', $id);
+    $statement->execute();
+    return $statement->fetchAll()[0]['destination'];
+
+  }
+
+  /**
+  * Fonction qui indique la présence ou non de la destination dans la bdd
+  *
+  * @param string $dest : nom de la destination
   *
   * @return boolean : présence ou non de la destination dans la bdd
   */

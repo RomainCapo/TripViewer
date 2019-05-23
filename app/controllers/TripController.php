@@ -17,7 +17,6 @@ class TripController
 
   public function getAllUserTripCoord()
   {
-    //ne pas oublier de changer l'id de l'utilisateur
     User::userIsConnected();
     $userId = unserialize($_SESSION['login'])->getId();
     echo json_encode(Trip::getUserTripInfo($userId));
