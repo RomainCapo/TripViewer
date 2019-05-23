@@ -12,9 +12,9 @@ class TripAddController
 public function debug()
 {
 
-  $statement = App::get('dbh')->prepare("insert into test values (?)");
+  /*$statement = App::get('dbh')->prepare("insert into test values (?)");
   $statement->bindValue(1, "Genève");
-  $statement->execute();
+  $statement->execute();*/
 }
 
 /**
@@ -203,8 +203,6 @@ public function debug()
  */
   public function tripAddParse()
   {
-
-
 
     User::userIsConnected();//Si l'utilisateur est connecté
     $Trip = $this->tripCheck($_POST);//on parse les données recus

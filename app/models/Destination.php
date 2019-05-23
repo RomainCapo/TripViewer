@@ -114,7 +114,7 @@ class Destination extends Model
   public static function destinationInDb($dest)
   {
     $statement = App::get('dbh')->prepare('SELECT id FROM destination WHERE LOWER(destination)=:destination');
-    $dest = strtolower($dest);
+    $dest = mb_strtolower($dest, 'UTF-8');
     $statement->bindParam(':destination', $dest);
     $statement->execute();
 
@@ -149,7 +149,7 @@ class Destination extends Model
   public static function getLatLngCouFromDest($dest)
   {
     $statement = App::get('dbh')->prepare('SELECT id, latitude, longitude, country FROM destination WHERE LOWER(destination)=:destination');
-    $dest = strtolower($dest);
+    $dest = mb_strtolower($dest, 'UTF-8');
     $statement->bindParam(':destination', $dest);
     $statement->execute();
 
@@ -186,7 +186,7 @@ class Destination extends Model
     $array = array();
     $data = $statement->fetchAll()[0];
 
-    $array['dest'] = htmlentities(ucfirst($data['destination']));
+    $array['dest'] = htmlentities(Helper::mb_ucfirst($data['destination'], 'UTF-8'));
     $array['lat'] = htmlentities($data['latitude']);
     $array['lng'] = htmlentities($data['longitude']);
     $array['coun'] = htmlentities($data['country']);
@@ -218,7 +218,7 @@ class Destination extends Model
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO destination (destination, latitude, longitude, country) VALUES (?, ?, ?, ?)');
-    $statement->bindParam(1, utf8_encode($this->destination));
+    $statement->bindParam(1, $this->destination);
     $statement->bindParam(2, $this->latitude);
     $statement->bindParam(3, $this->longitude);
     $statement->bindParam(4, $this->country);
@@ -237,7 +237,7 @@ class Destination extends Model
   public static function saveDestination($destName, $arrayDest)
   {
     $dest = new Destination;
-    $dest->setDestination(strtolower($destName));
+    $dest->setDestination(mb_strtolower($destName, 'UTF-8'));
     $dest->setLatitude($arrayDest['latitude']);
     $dest->setLongitude($arrayDest['longitude']);
     $dest->setCountry($arrayDest['country']);

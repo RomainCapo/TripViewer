@@ -16,7 +16,7 @@
   <div class="card border-secondary mb-3 card-form-add">
     <div class="card-header"><h2>Add a trip</h2></div>
     <div class="card-body">
-      <form action="tripAddParse" method="post" enctype="multipart/form-data">
+      <form action="tripAddParse" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
         <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" required  autocomplete="off" value="<?php if(isset($_POST['destination'])){echo $_POST['destination'];} ?>"/><br/>
         <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  required  autocomplete="off" value="<?php if(isset($_POST['departure'])){echo $_POST['departure'];} ?>"/><br/>
         <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" required  autocomplete="off" value="<?php if(isset($_POST['trip_name'])){echo $_POST['trip_name'];} ?>"/><br/>

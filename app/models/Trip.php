@@ -119,7 +119,7 @@ class Trip extends Model
       $str = "";
 
       $str .= "<div class='card'><div class='card-body'><h3 class='card-title'>";
-      $str .= htmlentities(ucfirst(strtolower(Destination::getDestinationById($this->id_destination))));
+      $str .= htmlentities(Helper::mb_ucfirst(mb_strtolower(Destination::getDestinationById($this->id_destination), 'UTF-8'), 'UTF-8'));
       $str .= " <span style='font-size:15px'><strong>From</strong> <em>";
       $str .= htmlentities($this->departure_date) . "</em> <strong>to</strong> <em>" . htmlentities($this->return_date);
       $str .= "</em></span>";
@@ -148,7 +148,7 @@ class Trip extends Model
 
     $str .= "<form action='tripViewList'><button type='submit' class='btn btn-outline-success'> Back to your trips</button></form><br><br>";
     $str .= "<h1>";
-    $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
+    $str .= htmlentities(mb_strtoupper(Destination::getDestinationById($this->id_destination), 'UTF-8'));
     $str .= "</h1><h3 style='color:grey'>";
     $str .= htmlentities($this->name);
     $str .= "</h3><p style='color:grey'><strong>From </strong><em>";
@@ -249,11 +249,11 @@ class Trip extends Model
     foreach ($arrayTripState as $key => $value) {
       if($id == -1 || $id!=$key )
       {
-        $string .= "<option value='". $value ."'>" . ucfirst($value) . '</option>' . PHP_EOL;
+        $string .= "<option value='". $value ."'>" . Helper::mb_ucfirst($value, 'UTF-8') . '</option>' . PHP_EOL;
       }
       else
       {
-        $string .= "<option value='". $value ."' selected>" . ucfirst($value) . '</option>' . PHP_EOL;
+        $string .= "<option value='". $value ."' selected>" . Helper::mb_ucfirst($value, 'UTF-8') . '</option>' . PHP_EOL;
       }
     }
 

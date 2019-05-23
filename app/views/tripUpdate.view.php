@@ -16,12 +16,12 @@
   </div>
   <?php } ?>
   <div class="card border-secondary mb-3 card-form-add">
-    <div class="card-header"><h2>Update the trip to <strong><?php echo ucfirst(Destination::getDestNameById($trip->id_destination)); ?> </strong></h2></div>
+    <div class="card-header"><h2>Update the trip to <strong><?php echo Helper::mb_ucfirst(Destination::getDestNameById($trip->id_destination), 'UTF-8'); ?> </strong></h2></div>
     <div class="card-body">
       <form action="updateParse" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id_trip" value="<?php echo $id_trip; ?>">
-        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" value="<?php echo ucfirst(Destination::getDestNameById($trip->id_destination)); ?>"  autocomplete="off"/><br/>
-        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  value="<?php echo ucfirst(Destination::getDestNameById($trip->id_departure)); ?>"  autocomplete="off"/><br/>
+        <label for="destination">Destination : </label><input class="form-control" id="destination" type="text" name="destination" placeholder="Enter your destination" value="<?php echo Helper::mb_ucfirst(Destination::getDestNameById($trip->id_destination), 'UTF-8'); ?>"  autocomplete="off"/><br/>
+        <label for="departure">Departure : </label><input class="form-control" id="departure" type="text" name="departure" placeholder="Enter your departure"  value="<?php echo Helper::mb_ucfirst(Destination::getDestNameById($trip->id_departure), 'UTF-8'); ?>"  autocomplete="off"/><br/>
         <label for="trip_name">Trip name : </label><input class="form-control" id="trip_name" type="text" name="trip_name" placeholder="Enter your trip name" value="<?php echo $trip->name; ?>"  autocomplete="off"/><br/>
         <div class="row">
           <div class="col">
