@@ -134,7 +134,7 @@ class Trip extends Model
       $str .= "</a><br><br>";
       $str .= "<form action='updateForm' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-warning' type='submit'/>Edit</button></form>";
       $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
-      $str .= "<form action='tripViewListDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
+      $str .= "<form action='tripDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
       $str .= "</div></div><br>";
 
       return $str;

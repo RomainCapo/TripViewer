@@ -9,14 +9,6 @@ class TripAddController
    */
   private $error;
 
-public function debug()
-{
-
-  /*$statement = App::get('dbh')->prepare("insert into test values (?)");
-  $statement->bindValue(1, "Genève");
-  $statement->execute();*/
-}
-
 /**
  * affiche la vue d'ajout de voyage avec l'erreur correspondante si il y en a une
  * @return string erreur

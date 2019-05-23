@@ -12,7 +12,7 @@ function initMap() {
    */
   $.ajax({
     type: 'POST',
-    url: 'ajax',
+    url: 'getTripInfos',
     dataType: 'json'
   }).done(function(data){//si la requete a résussit on rentre dans cette fonction
         //on parcourt chaque resultats de la requetes

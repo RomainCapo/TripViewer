@@ -16,15 +16,6 @@ class Photo extends Model
     $this->id_trip = $idTrip;
   }
 
-  public static function getPhotosFromTrip($idTrip)
-  {
-    $statement = App::get('dbh')->prepare('SELECT file_name FROM trip WHERE id_trip=:id_trip');
-    $statement->bindValue(':id_trip', $idTrip);
-    $statement->execute();
-    var_dump($statement->fetchAll());
-  }
-
-
   public function save()
   {
     $statement = App::get('dbh')->prepare('INSERT INTO photo(file_name, id_trip) VALUES (?, ?)');

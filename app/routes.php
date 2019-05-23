@@ -14,11 +14,8 @@ $router->define([
   'tripViewMap' => 'TripController@mapView',
   'updateForm' => 'TripAddController@updateTrip',
   'updateParse' => 'TripAddController@tripUpdateParse',
-  'profil' => '',
-  'ajax' => 'TripController@getAllUserTripCoord',
+  'getTripInfos' => 'TripController@getAllUserTripCoord',
   'tripView' => 'TripController@showTrip',
-  'tripViewListUpdate' => 'TripAddController@updateTrip',
-  'tripViewListDelete' => 'TripAddController@deleteTrip',
-  'routeNotDefined' => 'IndexController@routeNotDefined',
-  'debug' => 'TripAddController@debug'
+  'tripDelete' => 'TripAddController@deleteTrip',
+  'routeNotDefined' => 'IndexController@routeNotDefined'
 ]);

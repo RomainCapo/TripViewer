@@ -87,23 +87,6 @@ class Destination extends Model
     $this->country= $cou;
   }
 
-
-  /**
-  * Fonction qui retourne le nom d'une destination selon un id
-  *
-  * @param int $id, c'est un int qui caractérise l'id d'une destination
-  *
-  * @return string : nom de la destination selon un id
-  */
-  public static function getDestNameById($id)
-  {
-    $statement = App::get('dbh')->prepare('SELECT destination FROM destination WHERE id=:id');
-    $statement->bindParam(':id', $id);
-    $statement->execute();
-    return $statement->fetchAll()[0]['destination'];
-
-  }
-
   /**
   * Fonction qui indique la présence ou non de la destination dans la bdd
   *
