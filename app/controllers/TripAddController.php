@@ -3,19 +3,41 @@
 class TripAddController
 {
 
+  /**
+   * contient l'erreur a afficher
+   * @var string
+   */
   private $error;
 
+public function debug()
+{
+  echo Transport::getTransportId("Car");
+
+  $statement = App::get('dbh')->prepare("select transport from transport");
+    $statement->execute();
+    $transports = $statement->fetchAll();
+    echo Transport::getIdFromTransportName($transports, "Car");
+}
+
+/**
+ * affiche la vue d'ajout de voyage avec l'erreur correspondante si il y en a une
+ * @return string erreur
+ */
   public function index()
   {
     User::userIsConnected();//on teste si le user est connecté
     return Helper::view("tripAdd", ['error' => $this->error]);//on affiche la vue
   }
 
+  /**
+   * permet l'affiche de la vue de modification de voyage
+   * @return view retourne la vue de modification de voyage
+   */
   public function updateTrip()
   {
-    //attention il faut encore tester que le voyages appartienne bien a l'utilisateur
+    //on controle que l'utilisateur est bien connecté  et que le voyage lui appartienne bien
     User::userIsConnected();
-    if(isset($_POST['editTripId']))
+    if(isset($_POST['editTripId'])  &&(Trip::getIdUserByTripId($_POST['editTripId']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_POST['editTripId'];
       return Helper::view("tripUpdate", ['error' => $this->error, 'id_trip' => $id]);//on affiche la vue
@@ -27,6 +49,11 @@ class TripAddController
     }
   }
 
+  /**
+   * permet de verifier qu'un voyage est bien valide et peut etre ajouté ou modifié dans la BDD en toute securité, s'occupe aussi d'afficher les bonnes erreurs
+   * @param  array $post tableau $_POST recu de la vue
+   * @return boolean, Trip       false en cas d'erreur, le voyage en cas de succès
+   */
   private function tripCheck($post)
   {
     $isProcessingError = false;//indique si il y a eu des erreurs dans le traitement des données
@@ -102,7 +129,6 @@ class TripAddController
                           $userId = unserialize($_SESSION['login'])->getId();//on récupére l'id de l'utilisateur
                           $Trip->setIdUser($userId);
                           $Trip->setIdTransportType(Transport::getTransportId($transport_type));//on definit l'id du type de transport
-                          $Trip->setIdCompany(1);//pour l'instant l'id de la company aérien est défini à 1
 
                           return $Trip;
                         }
@@ -172,13 +198,15 @@ class TripAddController
     }
   }
 
-//permet de parser le formulaire d'ajout de voyage
+/**
+ * permet d'effectuer le parsing dans le cas d'un ajout de voyage
+ * @return view retourne la vue en cas d'erreur
+ */
   public function tripAddParse()
   {
-    //Data processing
-    User::userIsConnected();
 
-      $Trip = $this->tripCheck($_POST);
+    User::userIsConnected();//Si l'utilisateur est connecté
+    $Trip = $this->tripCheck($_POST);//on parse les données recus
 
       //si il y a une erreur on redirige sur l'index pour l'afficher
       if(!$Trip)
@@ -186,60 +214,88 @@ class TripAddController
         return $this->index();
       }
 
-      $idTrip = $Trip->save();
+      $idTrip = $Trip->save();//on sauve le voyage et on recupère l'id
 
+      //on ajoute le fichier si il y'en a et on redirige sur la vue des voyages
     if($this->fileProcessing($idTrip, 'Romain'))
       {
-        echo 'bon';
-        //header('Location: tripViewList');
-        //exit(0);
+        header('Location: tripViewList');
+        exit(0);
       }
-      else
+      else// si y a une erreur on supprime le voyage et on affiche l'erreur a l'utilisateur
       {
-        echo 'ko';
-        //$this->error = 'error with file processing';
-        //return $this->index();
+        $this->error = 'error with file(s) upload';
+        $Trip->delete();
+        return $this->index();
       }
   }
 
+  /**
+   * permet d'effectuer le parsing quand on modifie un voyage
+   * @return view retourne la vue en cas d'erreur
+   */
   public function tripUpdateParse()
   {
     $Trip = $this->tripCheck($_POST);
+
+    //si il y a une erreur on redirige sur l'index pour l'afficher
+    if(!$Trip)
+    {
+      return $this->updateTrip();
+    }
+
     $Trip->setId($_POST['id_trip']);
     $Trip->update();
+
     header('Location: tripViewList');
     exit(0);
   }
 
+/**
+ * permet de valider une date
+ * @param  string $date   date a valider
+ * @param  string $format format de validation
+ * @return boolean         indique si la date est valide ou non
+ */
   function validateDate($date, $format = 'Y-m-d')
   {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) === $date;
   }
 
+/**
+ * permet d'uploader les fichier sur le serveur si il y en a
+ * @param  interger $tripId   id du voyage des photos
+ * @param  string $username nom de l'utilisateur
+ * @return boolean           true si l'uplaud des fichier s'est bien passé ou si il y aucun fichier a uplauder, false si une erreur
+ */
   private function fileProcessing($tripId, $username)
   {
-    if(isset($_FILES) && $_FILES['photos']['name'][0] != "")
+    if(isset($_FILES) && ($_FILES['photos']['name'][0] != "" || empty($_FILES['photos']['name'])))
     {
       $noFileError = true;
 
       $target_dir = "uploads/";
-      $total = count($_FILES['photos']['name']);
+      $total = count($_FILES['photos']['name']);//nombre total de fichier
+
+      //pour chaqun des fichiers
       for($i = 0; $i < $total; $i++)
       {
-        $tmpFilePath = $_FILES['photos']['tmp_name'][$i];
-        $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);
+        $tmpFilePath = $_FILES['photos']['tmp_name'][$i];//chemin actuel des images
+        $newFilePath = $target_dir . basename($_FILES['photos']['name'][$i]);//future chemin des images
 
+        //on deplace les images au bon endroit
         if(move_uploaded_file($tmpFilePath, $newFilePath))
         {
-          //format de stockage de l'image : uploads/username_destination_day-month-Year_hour-minute-seconde_numeroPhoto.extension
+          //format de stockage de l'image : uploads/username_idTrip_day-month-Year_hour-minute-seconde_numeroPhoto.extension
           $filename = $username . '_' .  $tripId . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
           $definitiveFilePath = $target_dir . $filename;
-          rename($newFilePath, $definitiveFilePath);
+          rename($newFilePath, $definitiveFilePath);//on renomme le fichier
 
+          //on créé un objet photo pour l'enregistrer dans la BDD
           $photo = new Photo;
           $photo->setFileName($filename);
-          $photo->setIdTrip($tripId);
+          $photo->setIdTrip($tripId);//on garde la reference au voyage
           $photo->save();
         }
         else
@@ -247,7 +303,6 @@ class TripAddController
           $noFileError = false;
         }
       }
-
       return $noFileError;
     }
     else
@@ -256,7 +311,9 @@ class TripAddController
     }
   }
 
-//permet de supprimer un voyage
+/**
+ * permet de supprimer un voyage et de rediriger l'utilisateur en conséquence
+ */
   public function deleteTrip()
   {
     User::userIsConnected();
@@ -284,10 +341,5 @@ class TripAddController
       header('Location: tripViewList');
       exit(0);
     }
-  }
-
-  public function debug()
-  {
-
   }
 }

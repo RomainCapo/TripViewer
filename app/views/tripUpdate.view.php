@@ -3,7 +3,7 @@
     require('partials/header.php');
     require('partials/nav.php');
 
-    $trip = Trip::fetchById($id_trip);
+    $trip = Trip::fetchById($id_trip);//on recupere les voyages avec l'id recu
 ?>
 <div class="container">
   <?php if(isset($error) && $error != '')
@@ -16,7 +16,7 @@
   </div>
   <?php } ?>
   <div class="card border-secondary mb-3 card-form-add">
-    <div class="card-header"><h2>Update a trip</h2></div>
+    <div class="card-header"><h2>Update the trip to <strong><?php echo ucfirst(Destination::getDestNameById($trip->id_destination)); ?> </strong></h2></div>
     <div class="card-body">
       <form action="updateParse" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id_trip" value="<?php echo $id_trip; ?>">
@@ -49,7 +49,7 @@
           <div class="col">
             <label for="transport_type">Transport type : </label>
             <select class="form-control" id="transport_type" name="transport_type"   autocomplete="off"/>
-              <?php echo Transport::fetchAllTransportsName($trip->id_transport_type); ?>
+              <?php echo Transport::fetchAllTransportsName((int)$trip->id_transport_type); ?>
             </select><br/>
           </div>
         </div>
@@ -59,10 +59,13 @@
             <textarea class="form-control" id="description" name="description" placeholder="Enter your trip description" autocomplete="off"/><?php echo $trip->description; ?></textarea><br/>
           </div>
         </div>
+        <input type="hidden" name="editTripId" value="<?php echo $id_trip; ?>">
         <button type="submit" class="btn btn-warning block-btn" >Update the trip</button>
     </form>
   </div>
 </div>
-
 </div>
+<script type="text/javascript">
+  updateNavMenu("AddTrip");
+</script>
 <?php require('partials/footer.php') ?>

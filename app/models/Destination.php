@@ -87,6 +87,7 @@ class Destination extends Model
     $this->country= $cou;
   }
 
+
   /**
   * Fonction qui retourne le nom d'une destination selon un id
   *
@@ -168,7 +169,6 @@ class Destination extends Model
       return false;
     }
   }
-
 
   /**
   * Fonction qui retourne un tableau d'informations (destination, latitude, longitude et pays) selon un id

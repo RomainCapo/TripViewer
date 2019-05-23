@@ -15,10 +15,10 @@ $router->define([
   'updateForm' => 'TripAddController@updateTrip',
   'updateParse' => 'TripAddController@tripUpdateParse',
   'profil' => '',
-  'debug' => 'TripAddController@debug',
   'ajax' => 'TripController@getAllUserTripCoord',
   'tripView' => 'TripController@showTrip',
   'tripViewListUpdate' => 'TripAddController@updateTrip',
   'tripViewListDelete' => 'TripAddController@deleteTrip',
-  'routeNotDefined' => 'IndexController@routeNotDefined'
+  'routeNotDefined' => 'IndexController@routeNotDefined',
+  'debug' => 'TripAddController@debug'
 ]);

@@ -25,14 +25,16 @@
     <footer class="blockquote-footer">Samuel Johnson</footer>
   </blockquote>
   <br><br>
-  <?php
-  if(!isset($_SESSION['login']))
-  {
-    echo '<a href="login">Login here</a><br>';
-    echo '<a href="register">Register here</a>';
-  }
-  ?>
+  <div class="row">
+    <?php if(!isset($_SESSION['login'])){
+      echo '<a class="btn btn-success " href="login">Login here</a><span id="space"></span>';
+      echo '<a class="btn btn-success " href="register">Register here</a>';
+    }?>
+  </div>
 </div>
+<script type="text/javascript">
+  updateNavMenu("Home");
+</script>
 
 <?php
   require('partials/footer.php');

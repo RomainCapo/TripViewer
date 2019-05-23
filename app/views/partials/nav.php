@@ -7,17 +7,17 @@
 
 		<div class="collapse navbar-collapse" id="navbarColor02">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="index">Home <span class="sr-only">(current)</span></a>
+				<li class="nav-item" id="Home">
+					<a class="nav-link" href="index">Home</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tripAdd">Add Trip</a>
+					<a class="nav-link" href="tripAdd" id="AddTrip">Add Trip</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tripViewList">View Trips</a>
+					<a class="nav-link" href="tripViewList" id="ViewTrips">View Trips</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="tripViewMap">Maps</a>
+					<a class="nav-link" href="tripViewMap" id="Maps">Maps</a>
 				</li>
 			</ul>
 			<div class="my-2 my-lg-0">

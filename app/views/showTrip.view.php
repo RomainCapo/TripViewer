@@ -6,8 +6,9 @@
 <div class="container">
     <?php echo $trips->displayInfos(); ?>
 </div>
-
-
+<script type="text/javascript">
+  updateNavMenu("ViewTrips");
+</script>
 
 <?php
     require('partials/footer.php');

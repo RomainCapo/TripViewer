@@ -2,19 +2,30 @@
 
 class TripController
 {
-  //@summary Affiche la liste des voyages, selon l'id de l'utilisateur
+  /**
+   * Affiche la liste des voyages, selon l'id de l'utilisateur
+   * @return view vue des voyages sous formes de listes
+   */
   public function index()
   {
     User::userIsConnected();
     return Helper::view("viewList", ['trips' => Trip::fetchTripById(unserialize($_SESSION['login'])->getId())]);
   }
 
+  /**
+   * affiche la vue de la map
+   * @return view vue de la map
+   */
   public function mapView()
   {
     User::userIsConnected();
     return Helper::view("tripMap");
   }
 
+  /**
+   * Retourne un json avec tous les voyages de l'utilisateur
+   * @return json voyage de l'utilisateur
+   */
   public function getAllUserTripCoord()
   {
     User::userIsConnected();
@@ -22,8 +33,10 @@ class TripController
     echo json_encode(Trip::getUserTripInfo($userId));
   }
 
-  //@summary permet d'afficher un voyage sur une page individuelle
-  //@return la vue pour visualiser le voyage, on redirection s'il y a une erreur
+  /**
+   * permet d'afficher un voyage sur une page individuelle
+   * @return view la vue pour visualiser le voyage, on redirection s'il y a une erreur
+   */
   public function showTrip()
   {
     User::userIsConnected();

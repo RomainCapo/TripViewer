@@ -17,8 +17,8 @@ class Trip extends Model
   private $id_transport_type;
   private $id_destination;
   private $id_departure;
-  private $id_company;
 
+//Getters
   public function __get($property)
   {
     if (property_exists($this, $property))
@@ -27,15 +27,15 @@ class Trip extends Model
     }
   }
 
-  public function setId($id){
-    $this->id = $id;
-  }
-
   public function getName(){
     return $this->name;
   }
 
 //Setters
+  public function setId($id){
+    $this->id = $id;
+  }
+
   public function setName($name)
   {
     $this->name = $name;
@@ -112,11 +112,6 @@ class Trip extends Model
     $this->id_departure = $id;
   }
 
-  public function setIdCompany($id)
-  {
-    $this->id_company = $id;
-  }
-
   //@summary retourne les informations d'un voyage dans le but d'être affiché dans une vue
   //@return string : retourne l'html contenant les informations de voyage sous forme de string
   public function asCardShow()
@@ -145,10 +140,13 @@ class Trip extends Model
       return $str;
   }
 
+  //@summary retourne les informations détaillé d'un voyage dans le but d'être affiché dans une vue
+  //@return string : retourne l'html contenant les informations de voyage sous forme de string
   public function displayInfos()
   {
     $str = "";
 
+    $str .= "<form action='tripViewList'><button type='submit' class='btn btn-outline-success'> Back to your trips</button></form><br><br>";
     $str .= "<h1>";
     $str .= htmlentities(strtoupper(Destination::getDestinationById($this->id_destination)));
     $str .= "</h1><h3 style='color:grey'>";
@@ -174,6 +172,9 @@ class Trip extends Model
     $str .= "</li>";
     $str .= "<li>Trip state : ";
     $str .= htmlentities($this->trip_state);
+    $str .= "<li>Transport : ";
+    $str .= htmlentities(Transport::getTransportById($this->id_transport_type));
+    $str .= "</li>";
     $str .= "</li></ul>";
 
     if(!empty($this->description))
@@ -232,6 +233,9 @@ class Trip extends Model
     return $str;
   }
 
+  //@summary retourne sous forme de liste deroulante html les différents transports
+  //@param  $tripState string  : le nom du transport dans le but de selectionner l'élément de la liste en conséquence, si on indique rien aucune éléments n'est selectionné
+  //@return string : retourne l'html de la liste deroulante
   public static function fetchAllTripState($tripState = 'none')
   {
     $arrayTripState = array('realized', 'reserved', 'planned');
@@ -241,7 +245,7 @@ class Trip extends Model
         $id = array_search($tripState, $arrayTripState);
     }
 
-    $string;
+    $string = "";
     foreach ($arrayTripState as $key => $value) {
       if($id == -1 || $id!=$key )
       {
@@ -275,9 +279,12 @@ class Trip extends Model
     return parent::fetchAll('trip', 'Trip');
   }
 
+  //@summary retourne un tableau contenant tous les voyages d'un utilisateur avec notamment les coordonnées GPS des destinations
+  //@param $id integer :  id de l'utilisateur
+  //@return Trip : tableau avec toutes les voyages de l'utilisateur
   public static function getUserTripInfo($id_user)
   {
-    $statement = App::get('dbh')->prepare('SELECT name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company FROM trip WHERE id_user=:id_user');
+    $statement = App::get('dbh')->prepare('SELECT name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people FROM trip WHERE id_user=:id_user');
     $statement->bindParam(':id_user', $id_user);
     $statement->execute();
 
@@ -305,8 +312,8 @@ class Trip extends Model
   //@summary sauve les voyages dans la base de données
   public function save()
   {
-    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people, id_company)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $statement = App::get('dbh')->prepare('INSERT INTO trip(name, description, departure_date, return_date, km_traveled, total_price, trip_state, id_user, id_transport_type, id_destination, id_departure, number_people)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
     $statement->bindValue(1, $this->name);
     $statement->bindValue(2, $this->description);
     $statement->bindValue(3, $this->departure_date);
@@ -319,7 +326,6 @@ class Trip extends Model
     $statement->bindValue(10, $this->id_destination);
     $statement->bindValue(11, $this->id_departure);
     $statement->bindValue(12, $this->number_people);
-    $statement->bindValue(13, $this->id_company);
     $statement->execute();
 
     return App::get('dbh')->lastInsertId(); //recupére l'id de la dernière destination ajoutée
@@ -328,7 +334,7 @@ class Trip extends Model
   //@summary permet de modifier un voyage dans la base de données
   public function update()
   {
-    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=?, id_company=? WHERE id=?');
+    $statement = App::get('dbh')->prepare('Update trip SET name=?, description=?, departure_date=?, return_date=?, km_traveled=?, total_price=?, trip_state=?, id_user=?, id_transport_type=?, id_destination=?, id_departure=?, number_people=? WHERE id=?');
     $statement->bindValue(1, $this->name);
     $statement->bindValue(2, $this->description);
     $statement->bindValue(3, $this->departure_date);
@@ -341,8 +347,15 @@ class Trip extends Model
     $statement->bindValue(10, $this->id_destination);
     $statement->bindValue(11, $this->id_departure);
     $statement->bindValue(12, $this->number_people);
-    $statement->bindValue(13, $this->id_company);
-    $statement->bindValue(14, $this->id);
+    $statement->bindValue(13, $this->id);
+    $statement->execute();
+  }
+
+  //@summary permet de supprimer un voyage
+  public function delete()
+  {
+    $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id=:id');
+    $statement->bindValue(':id', $this->id);
     $statement->execute();
   }
 
@@ -377,6 +390,9 @@ class Trip extends Model
     }
   }
 
+  //@summary retourne tous les voyages pour un id donné
+  //@param $id integer : id du voyage
+  //@return Trip : object voyage
   public static function fetchById($id, $table="trip", $intoClass="Trip")
   {
     return parent::fetchById($id, $table, $intoClass);
