@@ -7,8 +7,9 @@
 *.o
 *.so
 
-# Vendor
+# folder
 vendor/
+uploads/
 
 # Packages #
 ############
