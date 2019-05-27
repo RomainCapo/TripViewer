@@ -208,7 +208,7 @@ class TripAddController
       $idTrip = $Trip->save();//on sauve le voyage et on recupère l'id
 
       //on ajoute le fichier si il y'en a et on redirige sur la vue des voyages
-    if($this->fileProcessing($idTrip, 'Romain'))
+    if($this->fileProcessing($idTrip, unserialize($_SESSION['login'])->getPseudo()))
       {
         header('Location: tripViewList');
         exit(0);
@@ -281,8 +281,8 @@ class TripAddController
           //format de stockage de l'image : uploads/username_idTrip_day-month-Year_hour-minute-seconde_numeroPhoto.extension
           $filename = $username . '_' .  $tripId . '_' . date("d-m-Y_h-i-s") . '_'. $i .'.'.pathinfo($_FILES['photos']['name'][$i], PATHINFO_EXTENSION);
           $definitiveFilePath = $target_dir . $filename;
-          rename($newFilePath, $definitiveFilePath);//on renomme le fichier
 
+          rename($newFilePath, $definitiveFilePath);//on renomme le fichier
           //on créé un objet photo pour l'enregistrer dans la BDD
           $photo = new Photo;
           $photo->setFileName($filename);
@@ -302,6 +302,8 @@ class TripAddController
     }
   }
 
+
+
 /**
  * permet de supprimer un voyage et de rediriger l'utilisateur en conséquence
  */
@@ -312,6 +314,13 @@ class TripAddController
     if(isset($_POST['deleteTripId']) && (Trip::getIdUserByTripId($_POST['deleteTripId']) == unserialize($_SESSION['login'])->getId()))
     {
       $id = $_POST['deleteTripId'];
+
+      //permet de récupérer les photos de l'utilisateur et de les supprimer quand on supprime un voyage
+      $photos = Photo::getURLUpload($id);
+      foreach($photos as $key => $value)
+      {
+        unlink("uploads/" . htmlentities($value['file_name']));
+      }
 
       $statement = App::get('dbh')->prepare('DELETE FROM trip WHERE id = ?');
       $statement->bindValue(1, $id);

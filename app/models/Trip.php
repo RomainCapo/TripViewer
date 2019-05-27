@@ -184,7 +184,7 @@ class Trip extends Model
         $str .= "</p>";
     }
 
-    $photos = Trip::getURLUpload($this->id);
+    $photos = Photo::getURLUpload($this->id);
 
     if(sizeof($photos) > 0)
     {
@@ -258,18 +258,6 @@ class Trip extends Model
     }
 
     return $string;
-  }
-
-  //@summary retourne toutes les voyages de la base de données
-  //@summary retourne les noms d chaque fichier phto lié à un voyage
-  //@return
-  public static function getURLUpload($id_trip)
-  {
-    $statement = App::get('dbh')->prepare('SELECT file_name FROM photo WHERE id_trip = :id_trip');
-    $statement->bindParam(':id_trip', $id_trip);
-    $statement->execute();
-
-    return $statement->fetchAll();
   }
 
   //@summary retourne tous les voyages de la base de données
