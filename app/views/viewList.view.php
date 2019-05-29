@@ -14,6 +14,7 @@ if(empty($trips))
 else
 {
     echo "<h3>That's all your trips...</h3><a href=\"tripAdd\">Add an another trip !</a><br><br>";
+    echo "<form action='exportAllToPdf' method='post' style='display:inline-block'><button class='btn btn-dark' type='submit'/>Export all trip to PDF</button></form><br><br>";
     foreach($trips as $trip)
     {
         echo $trip->asCardShow();

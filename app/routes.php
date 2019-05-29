@@ -17,5 +17,7 @@ $router->define([
   'getTripInfos' => 'TripController@getAllUserTripCoord',
   'tripView' => 'TripController@showTrip',
   'tripDelete' => 'TripAddController@deleteTrip',
+  'exportToPdf' => 'TripController@exportToPdf',
+  'exportAllToPdf' => 'TripController@exportAllToPdf',
   'routeNotDefined' => 'IndexController@routeNotDefined'
 ]);

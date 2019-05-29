@@ -135,6 +135,8 @@ class Trip extends Model
       $str .= "<form action='updateForm' method='post' style='display:inline-block'><input name='editTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-warning' type='submit'/>Edit</button></form>";
       $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
       $str .= "<form action='tripDelete' method='post' style='display:inline-block'><input name='deleteTripId' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-danger' type='submit'/>Delete</button></form>";
+      $str .= "<span>&nbsp;&nbsp;&nbsp;</span>";
+      $str .= "<form action='exportToPdf' method='post' style='display:inline-block'><input name='exportToPdf' type='hidden' value='" . htmlentities($this->id) . "'/><button class='btn btn-dark' type='submit'/>Export to PDF</button></form>";
       $str .= "</div></div><br>";
 
       return $str;
@@ -231,6 +233,54 @@ class Trip extends Model
     }
 
     return $str;
+  }
+
+  //@summary permet d'initialiser l'écriture sur le pdf avec l'en-tête correcte
+  //@return object : retourne un objet pdf avec l'en-tête
+  public static function initPdf()
+  {
+    $pdf = new FPDF();
+    $pdf->AddPage();
+
+    $pdf->Image('public/img/logo.png',10,6,30, 30);
+    $pdf->SetFont('Helvetica','BI',48);
+    $pdf->SetX(60);
+    $pdf->Cell(0,22, 'Trip Viewer', 0, 1);
+    $pdf->Cell(0,15, '', 0, 1);
+    return $pdf;
+  }
+
+  //@summary permet d'exporter un voyage sous forme de pdf
+  //@param  $pdf object : objet pdf préceddement initialisé
+  //@param  $pageBreaker boolean : indique si un saut de page doit être effectué ou non
+  //@return object : retourne lôbjet pdf courant
+  public function exportToPdf($pdf, $pageBreaker)
+  {
+    if($pageBreaker)
+    {
+      $pdf->AddPage();
+    }
+
+    $pdf->SetFont('Arial','B',32);
+    $pdf->Cell(0,15,'Trip name : '  . htmlentities(Helper::mb_ucfirst(mb_strtolower(Destination::getDestinationById($this->id_destination), 'UTF-8'), 'UTF-8')), 0, 1);
+
+    $pdf->SetFont('Helvetica','I',15);
+    $pdf->Cell(0, 10, 'Departure from : ' . htmlentities(Helper::mb_ucfirst(mb_strtolower(Destination::getDestinationById($this->id_departure), 'UTF-8'), 'UTF-8')), 0, 1);
+    $pdf->Cell(0, 10, 'Trip name : ' . htmlentities($this->name), 0, 1);
+    $pdf->Cell(0, 10, 'From : ' . htmlentities($this->departure_date) . ' to : ' . htmlentities($this->return_date), 0, 1);
+    $pdf->Cell(0, 10, 'Price : ' . htmlentities($this->total_price), 0, 1);
+    $pdf->Cell(0, 10, 'Number of people : ' . htmlentities($this->number_people), 0, 1);
+    $pdf->Cell(0, 10, 'Number of km travelled : ' . htmlentities($this->km_traveled), 0, 1);
+    $pdf->Cell(0, 10, 'Trip state : ' . htmlentities($this->trip_state), 0, 1);
+    $pdf->Cell(0, 10, 'Transport : ' . Transport::getTransportById($this->id_transport_type), 0, 1);
+
+    if(!empty($this->description))
+    {
+      $pdf->Cell(0,10, 'Description : ' . htmlentities($this->description), 0,1);
+    }
+    $pdf->Cell(0, 10, '',0,1);
+
+    return $pdf;
   }
 
   //@summary retourne sous forme de liste deroulante html les différents transports
@@ -383,6 +433,6 @@ class Trip extends Model
   //@return Trip : object voyage
   public static function fetchById($id, $table="trip", $intoClass="Trip")
   {
-    return parent::fetchById($id, $table, $intoClass);
+    return parent::fetchById($id, "trip", "Trip");
   }
 }
