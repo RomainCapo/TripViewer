@@ -276,7 +276,7 @@ class Trip extends Model
 
     if(!empty($this->description))
     {
-      $pdf->Cell(0,10, 'Description : ' . htmlspecialchars($this->description, ENT_QUOTES, "UTF-8"), 0,1);
+      $pdf->Cell(0,10, 'Description : ' . utf8_decode(htmlspecialchars($this->description, ENT_QUOTES, "UTF-8")), 0,1);
     }
     $pdf->Cell(0, 10, '',0,1);
 
