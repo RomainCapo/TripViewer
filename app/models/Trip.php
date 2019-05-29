@@ -262,11 +262,11 @@ class Trip extends Model
     }
 
     $pdf->SetFont('Arial','B',32);
-    $pdf->Cell(0,15,'Trip name : '  . htmlentities(Helper::mb_ucfirst(mb_strtolower(Destination::getDestinationById($this->id_destination), 'UTF-8'), 'UTF-8')), 0, 1);
+    $pdf->Cell(0,15,'Trip name : '  . utf8_decode(Helper::mb_ucfirst(mb_strtolower(htmlspecialchars(Destination::getDestinationById($this->id_destination), ENT_QUOTES, "UTF-8"), "UTF-8"), "UTF-8")), 0, 1);
 
     $pdf->SetFont('Helvetica','I',15);
-    $pdf->Cell(0, 10, 'Departure from : ' . htmlentities(Helper::mb_ucfirst(mb_strtolower(Destination::getDestinationById($this->id_departure), 'UTF-8'), 'UTF-8')), 0, 1);
-    $pdf->Cell(0, 10, 'Trip name : ' . htmlentities($this->name), 0, 1);
+    $pdf->Cell(0, 10, 'Departure from : ' . utf8_decode(Helper::mb_ucfirst(mb_strtolower(htmlspecialchars(Destination::getDestinationById($this->id_departure), ENT_QUOTES, "UTF-8"), 'UTF-8'), 'UTF-8')), 0, 1);
+    $pdf->Cell(0, 10, 'Trip name : ' . utf8_decode(htmlspecialchars($this->name, ENT_QUOTES, "UTF-8")), 0, 1);
     $pdf->Cell(0, 10, 'From : ' . htmlentities($this->departure_date) . ' to : ' . htmlentities($this->return_date), 0, 1);
     $pdf->Cell(0, 10, 'Price : ' . htmlentities($this->total_price), 0, 1);
     $pdf->Cell(0, 10, 'Number of people : ' . htmlentities($this->number_people), 0, 1);
@@ -276,7 +276,7 @@ class Trip extends Model
 
     if(!empty($this->description))
     {
-      $pdf->Cell(0,10, 'Description : ' . htmlentities($this->description), 0,1);
+      $pdf->Cell(0,10, 'Description : ' . htmlspecialchars($this->description, ENT_QUOTES, "UTF-8"), 0,1);
     }
     $pdf->Cell(0, 10, '',0,1);
 
