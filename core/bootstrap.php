@@ -15,6 +15,8 @@ require 'app/models/User.php';
 require 'app/models/Transport.php';
 require 'app/models/Photo.php';
 
+require('pdf/fpdf.php');
+
 session_start();
 
 App::load_config("config.php");
