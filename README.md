@@ -1,9 +1,18 @@
 # TripViewer
-Le but du projet est de réaliser un site web permettant à l'utilisateur d'avoir une vue d'ensemble sur ces différents voyages.
 
-L'utilisateur peut rentrer les destinations où il s'est déjà rendu, celles resérvées et celles qu'il prévoit de faire.
+The goal of the project is to create a website allowing the user to have an overview of these different trips.
 
-Pour les différentes destinations, il peut également indiquer quel moyen de transport il a utilisé pour ce rendre sur les lieux (aussi compagnie aérienne : si vol en avion), la date de départ et d'arrivée sur les lieux, le prix, et ajouter une description du voyage ainsi qu'une liste de bonnes adresses (restaurants, hôtels, etc...).
+The user can enter the destinations he has already been to, those booked and those he plans to make.
 
-L'utilisateur a la possibilité de voir ces différents voyages sur une carte interactive (Google Maps API), il a la possibilité de cliquer sur une de ces destinations sur la carte pour avoir des informations sur son voyage.
-il a encore la possibilité de créer un compte afin d'enregistrer ces différents voyage.
+For the different destinations, he can also indicate which means of transport he used to get to the place (also airline company: if flight by plane), the date of departure and arrival on the place, the price, and add a description of the trip and a list of good addresses (restaurants, hotels, etc...).
+
+The user has the possibility to see these different trips on an interactive map (Google Maps API), he has the possibility to click on one of these destinations on the map to get information about his trip. he still has the possibility to create an account in order to save these different trips.
+
+## Contexte
+
+Project done during the 4th Bachelor semester in web course.
+
+## Team 
+
+* Romain Capocasale [@RomainCapo](https://github.com/RomainCapo)
+* Vincent Moulin [@dicksor](https://github.com/dicksor)
